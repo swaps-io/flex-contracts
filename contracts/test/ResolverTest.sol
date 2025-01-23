@@ -1,0 +1,13 @@
+// SPDX-License-Identifier: MIT
+
+pragma solidity ^0.8.28;
+
+import {IERC1271} from "@openzeppelin/contracts/interfaces/IERC1271.sol";
+
+contract ResolverTest is IERC1271 {
+    receive() external payable {}
+
+    function isValidSignature(bytes32, bytes calldata) external pure returns (bytes4 magicValue) {
+        return IERC1271.isValidSignature.selector;
+    }
+}

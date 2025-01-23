@@ -1,0 +1,13 @@
+// SPDX-License-Identifier: BUSL-1.1
+
+pragma solidity ^0.8.28;
+
+interface IFlexReceiveNative {
+    event FlexReceiveNative(bytes32 indexed orderHash);
+
+    function flexReceiveNative(
+        bytes32 paramBundle, // Content: deadline (48), nonce (32), group (16), receiver (160)
+        bytes32[] calldata componentBranch,
+        bytes calldata receiverSignature
+    ) external payable;
+}
