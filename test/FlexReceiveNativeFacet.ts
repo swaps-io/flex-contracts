@@ -1,9 +1,9 @@
 import { viem } from 'hardhat';
 import { loadFixture } from '@nomicfoundation/hardhat-toolbox-viem/network-helpers';
 import { AccessList, Address, bytesToHex, concat, getAbiItem, Hex, keccak256, pad, slice, stringToHex, toFunctionSelector, toFunctionSignature, zeroAddress } from 'viem';
+import { expect } from 'chai';
 
 import { encodeFlexReceiveNativeParamBundle } from '../lib/encode/flexReceiveNative';
-import { expect } from 'chai';
 
 const COMPONENT_BRANCH_WORDS = 2;
 const RECEIVER_SIGNATURE_BYTES = 65;
