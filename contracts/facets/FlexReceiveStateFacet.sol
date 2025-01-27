@@ -9,8 +9,7 @@ import {FlexReceiveStateAccess} from "../storages/FlexReceiveStateAccess.sol";
 
 contract FlexReceiveStateFacet is IFlexReceiveState {
     function flexReceiveState(address receiver_, uint96 nonce_) external view override returns (FlexReceiveState) {
-        bytes32 bucketState = FlexReceiveStateStorage.data()[FlexReceiveStateAccess.bucket(receiver_, nonce_)];
-        uint8 offsetState = FlexReceiveStateAccess.bits(bucketState, FlexReceiveStateAccess.offset(nonce_));
-        return FlexReceiveState(offsetState);
+        bytes32 bucketState = FlexReceiveStateStorage.data()[FlexReceiveStateAccess.calcBucket(receiver_, nonce_)];
+        return FlexReceiveStateAccess.readState(bucketState, FlexReceiveStateAccess.calcOffset(nonce_));
     }
 }
