@@ -1,0 +1,9 @@
+// SPDX-License-Identifier: BUSL-1.1
+
+pragma solidity ^0.8.28;
+
+import {FlexReceiveState} from "./FlexReceiveState.sol";
+
+interface IFlexReceiveState {
+    function flexReceiveState(address receiver, uint96 nonce) external view returns (FlexReceiveState);
+}
