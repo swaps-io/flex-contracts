@@ -28,8 +28,8 @@ contract FlexConfirmNativeFacet is IFlexConfirmNative {
         bytes32 receiveData1_, // Content: amount (256)
         bytes32 confirmData0_, // Content: key hash (256)
         bytes32 confirmKey_,
-        bytes32[] calldata componentBranch_,
-        bool[] calldata componentBranchFlags_,
+        bytes32[] calldata componentBranches_,
+        bool[] calldata componentFlags_,
         bytes20 receiveHashBefore_,
         bytes32[] calldata receiveOrderHashesAfter_
     ) external override {
@@ -38,7 +38,7 @@ contract FlexConfirmNativeFacet is IFlexConfirmNative {
         bytes32[] memory componentHashes = new bytes32[](2);
         componentHashes[0] = keccak256(abi.encode(_receiveDomain, receiveData0_, receiveData1_)); // Receive native component
         componentHashes[1] = keccak256(abi.encode(_domain, confirmData0_)); // Confirm native component
-        bytes32 orderHash = MerkleProof.processMultiProofCalldata(componentBranch_, componentBranchFlags_, componentHashes);
+        bytes32 orderHash = MerkleProof.processMultiProofCalldata(componentBranches_, componentFlags_, componentHashes);
 
         address receiver = address(uint160(uint256(receiveData0_)));
         uint96 nonce = uint48(uint256(receiveData0_) >> 160);
