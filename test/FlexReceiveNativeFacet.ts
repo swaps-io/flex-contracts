@@ -21,6 +21,7 @@ describe('FlexReceiveNativeFacet', function () {
     const [walletClient] = await viem.getWalletClients();
 
     const flexReceiveNativeDomain = '0xc0ffeec0ffeec0ffeec0ffeec0ffeec0ffeec0ffeec0ffeec0ffeec0ffeec0ff';
+    const flexConfirmNativeDomain = '0xdeadbeefdeadbeefdeadbeefdeadbeefdeadbeefdeadbeefdeadbeefdeadbeef'; // For standalone
 
     let flex: { address: Address };
     let flexReceiveNativeFacet: ContractTypesMap['FlexReceiveNativeFacet'];
@@ -97,7 +98,7 @@ describe('FlexReceiveNativeFacet', function () {
         ],
       });
     } else {
-      flex = await viem.deployContract('FlexReceiveStandalone', [flexReceiveNativeDomain]);
+      flex = await viem.deployContract('FlexReceiveStandalone', [flexReceiveNativeDomain, flexConfirmNativeDomain]);
 
       flexReceiveNativeFacet = flex as ContractTypesMap['FlexReceiveNativeFacet'];
       flexReceiveNativeDomainFacet = flex as ContractTypesMap['FlexReceiveNativeDomainFacet'];

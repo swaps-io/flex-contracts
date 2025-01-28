@@ -12,6 +12,7 @@ import {FlexStateError} from "../interfaces/FlexStateError.sol";
 
 import {FlexReceiveStateStorage} from "../storages/FlexReceiveStateStorage.sol";
 import {FlexReceiveStateAccess, FlexReceiveState} from "../storages/FlexReceiveStateAccess.sol";
+import {FlexHashAccumulator} from "../storages/FlexHashAccumulator.sol";
 
 contract FlexReceiveNativeFacet is IFlexReceiveNative {
     bytes32 private immutable _domain;
@@ -42,9 +43,9 @@ contract FlexReceiveNativeFacet is IFlexReceiveNative {
         require(FlexReceiveStateAccess.readState(bucketState, offset) == FlexReceiveState.None, FlexStateError());
         bucketState = FlexReceiveStateAccess.writeState(bucketState, offset, FlexReceiveState.Received);
 
-        bytes20 stateHash = FlexReceiveStateAccess.readHash(bucketState);
-        stateHash = bytes20(keccak256(abi.encodePacked(stateHash, orderHash)));
-        bucketState = FlexReceiveStateAccess.writeHash(bucketState, stateHash);
+        bytes20 receiveHash = FlexReceiveStateAccess.readHash(bucketState);
+        receiveHash = FlexHashAccumulator.accumulate(receiveHash, orderHash);
+        bucketState = FlexReceiveStateAccess.writeHash(bucketState, receiveHash);
 
         FlexReceiveStateStorage.data()[bucket] = bucketState;
 
