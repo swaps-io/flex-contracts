@@ -1,12 +1,26 @@
 import { viem } from 'hardhat';
 import { loadFixture } from '@nomicfoundation/hardhat-toolbox-viem/network-helpers';
 import { ContractTypesMap } from 'hardhat/types/artifacts';
-import { AccessList, Address, bytesToHex, concat, getAbiItem, Hex, keccak256, pad, slice, sliceHex, stringToHex, toFunctionSelector, toFunctionSignature, zeroAddress } from 'viem';
 import { expect } from 'chai';
+import {
+  AccessList,
+  Address,
+  bytesToHex,
+  concat,
+  getAbiItem,
+  Hex,
+  keccak256,
+  numberToHex,
+  pad,
+  slice,
+  sliceHex,
+  stringToHex,
+  toFunctionSelector,
+  toFunctionSignature,
+  zeroAddress,
+} from 'viem';
 
-import { encodeFlexReceiveNativeParamBundle } from '../lib/encode/flexReceiveNative';
-import { commutativeKeccak256 } from '../lib/viem/commutativeKeccak256';
-import { bih } from '../lib/core/bih';
+import { encodeFlexReceiveNativeData0, commutativeKeccak256 } from '../@swaps-io/flex-sdk';
 
 const COMPONENT_BRANCH_WORDS = 2;
 const RECEIVER_SIGNATURE_BYTES = 65;
@@ -247,7 +261,7 @@ describe('FlexReceiveNativeFacet', function () {
   }
   //
 
-  it('Should receive native from user', async function () {
+  it('Should receive native', async function () {
     const {
       flex,
       flexReceiveNativeFacet,
@@ -264,7 +278,7 @@ describe('FlexReceiveNativeFacet', function () {
     const receiver = resolver.address;
     const amount = 123_456_789n;
 
-    const paramBundle = encodeFlexReceiveNativeParamBundle({
+    const receiveData0 = encodeFlexReceiveNativeData0({
       deadline,
       nonce,
       receiver,
@@ -276,7 +290,7 @@ describe('FlexReceiveNativeFacet', function () {
       componentBranch.push(bytesToHex(crypto.getRandomValues(new Uint8Array(32))));
     }
 
-    const calcOrderHash = async (paramBundleOverride?: Hex): Promise<Hex> => {
+    const calcOrderHash = async (receiveData0Override?: Hex): Promise<Hex> => {
       const receiveNativeDomain = await publicClient.readContract({
         abi: flexReceiveNativeDomainFacet.abi,
         address: flex.address,
@@ -286,8 +300,8 @@ describe('FlexReceiveNativeFacet', function () {
 
       const receiveNativeHash = keccak256(concat([
         receiveNativeDomain,
-        paramBundleOverride ?? paramBundle,
-        bih(amount),
+        receiveData0Override ?? receiveData0,
+        numberToHex(amount, { size: 32 }),
       ]));
 
       let orderHash = receiveNativeHash;
@@ -372,7 +386,7 @@ describe('FlexReceiveNativeFacet', function () {
         address: flex.address,
         functionName: 'flexReceiveNative',
         args: [
-          paramBundle,
+          receiveData0,
           componentBranch,
           receiverSignature,
         ],
@@ -419,7 +433,7 @@ describe('FlexReceiveNativeFacet', function () {
         address: flex.address,
         functionName: 'flexReceiveNative',
         args: [
-          paramBundle,
+          receiveData0,
           componentBranch,
           receiverSignature,
         ],
@@ -457,20 +471,20 @@ describe('FlexReceiveNativeFacet', function () {
         expect(hash).equal(expectedReceiveHash);
       }
 
-      const newParamBundle = encodeFlexReceiveNativeParamBundle({
+      const newReceiveData0 = encodeFlexReceiveNativeData0({
         deadline,
         nonce: newNonce,
         receiver,
       });
 
-      const newOrderHash = await calcOrderHash(newParamBundle);
+      const newOrderHash = await calcOrderHash(newReceiveData0);
 
       const hash = await walletClient.writeContract({
         abi: flexReceiveNativeFacet.abi,
         address: flex.address,
         functionName: 'flexReceiveNative',
         args: [
-          newParamBundle,
+          newReceiveData0,
           componentBranch,
           receiverSignature,
         ],

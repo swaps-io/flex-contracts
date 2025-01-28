@@ -1,10 +1,9 @@
 import { viem } from 'hardhat';
 import { loadFixture } from '@nomicfoundation/hardhat-toolbox-viem/network-helpers';
-import { AccessList, bytesToHex, concat, getCreateAddress, Hex, keccak256 } from 'viem';
+import { AccessList, bytesToHex, concat, getCreateAddress, Hex, keccak256, numberToHex } from 'viem';
 import { expect } from 'chai';
 
-import { commutativeKeccak256 } from '../lib/viem/commutativeKeccak256';
-import { bih } from '../lib/core/bih';
+import { commutativeKeccak256 } from '../@swaps-io/flex-sdk';
 
 const COMPONENT_BRANCH_WORDS = 2;
 const ACCESS_LIST_PREDICTED_BOX = true; // 2000 gas loss
@@ -49,11 +48,11 @@ describe('FlexReceiveNativeFactory', function () {
       confirmBranch.push(bytesToHex(crypto.getRandomValues(new Uint8Array(32))));
     }
 
-    const paramBundle0 = bih(BigInt(confirmReceiver));
-    const paramBundle2 = bytesToHex(crypto.getRandomValues(new Uint8Array(32)));
-    const paramBundle1 = keccak256(paramBundle2);
+    const confirmData0 = numberToHex(BigInt(confirmReceiver), { size: 32 });
+    const confirmData1 = bytesToHex(crypto.getRandomValues(new Uint8Array(32)));
+    const confirmData2 = keccak256(confirmData1);
 
-    const confirmHash = keccak256(concat([flexConfirmNativeDomain, paramBundle0, paramBundle1]))
+    const confirmHash = keccak256(concat([flexConfirmNativeDomain, confirmData0, confirmData2]))
 
     let orderHash = confirmHash;
     for (const branchNode of confirmBranch) {
@@ -90,9 +89,9 @@ describe('FlexReceiveNativeFactory', function () {
         address: factory.address,
         functionName: 'flexConfirmNative',
         args: [
-          paramBundle0,
-          paramBundle1,
-          paramBundle2,
+          confirmData0,
+          confirmData2,
+          confirmData1,
           confirmBranch,
         ],
         accessList,
