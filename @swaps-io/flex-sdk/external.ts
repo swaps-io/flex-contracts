@@ -6,5 +6,4 @@
  */
 
 export type { Hex, ByteArray } from 'viem';
-export { isHex, toHex, concatHex, hexToBigInt, keccak256 } from 'viem';
-export { assertSize } from 'viem/utils/encoding/fromHex';
+export { isHex, toHex, concatHex, hexToBigInt, padHex, keccak256 } from 'viem';
