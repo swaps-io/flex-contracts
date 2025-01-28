@@ -22,20 +22,20 @@ contract FlexReceiveNativeFacet is IFlexReceiveNative {
     }
 
     function flexReceiveNative(
-        bytes32 paramBundle_, // Content: deadline (48), nonce (48), receiver (160)
+        bytes32 receiveData0_, // Content: deadline (48), nonce (48), receiver (160)
         bytes32[] calldata componentBranch_,
         bytes calldata receiverSignature_
     ) external payable override {
-        uint48 deadline = uint48(uint256(paramBundle_) >> 208);
+        uint48 deadline = uint48(uint256(receiveData0_) >> 208);
         require(block.timestamp <= deadline, FlexDeadlineError());
 
-        bytes32 componentHash = keccak256(abi.encode(_domain, paramBundle_, msg.value));
+        bytes32 componentHash = keccak256(abi.encode(_domain, receiveData0_, msg.value));
         bytes32 orderHash = MerkleProof.processProofCalldata(componentBranch_, componentHash);
 
-        address receiver = address(uint160(uint256(paramBundle_)));
+        address receiver = address(uint160(uint256(receiveData0_)));
         require(SignatureChecker.isValidERC1271SignatureNow(receiver, orderHash, receiverSignature_), FlexSignatureError());
 
-        uint96 nonce = uint48(uint256(paramBundle_) >> 160);
+        uint96 nonce = uint48(uint256(receiveData0_) >> 160);
         bytes32 bucket = FlexReceiveStateAccess.calcBucket(receiver, nonce);
         bytes32 bucketState = FlexReceiveStateStorage.data()[bucket];
 
