@@ -286,7 +286,7 @@ describe('FlexConfirmNativeFacet', function () {
       receiveNativeHash: receiveHash,
     });
     const confirmComponentMultiBranch = calcFlexConfirmNativeMultiBranch({
-      tree: orderHash,
+      tree: orderTree,
       receiveNativeHash: receiveHash,
       confirmNativeHash: confirmHash,
     });
@@ -370,7 +370,7 @@ describe('FlexConfirmNativeFacet', function () {
       });
 
       const receipt = await publicClient.getTransactionReceipt({ hash });
-      console.log(`flexReceiveNative gas (1st): ${receipt.gasUsed}`);
+      console.log(`flexConfirmNative gas: ${receipt.gasUsed}`);
 
       {
         const balance = await publicClient.getBalance({ address: flex.address });
