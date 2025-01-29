@@ -278,7 +278,7 @@ describe('FlexConfirmNativeFacet', function () {
     }
 
     const componentHashes = [receiveHash, confirmHash, ...imaginaryComponentHashes];
-    const orderTree = buildFlexTree({ componentHashes });
+    const orderTree = buildFlexTree({ leaves: componentHashes });
     const orderHash = calcFlexTreeHash({ tree: orderTree });
 
     const receiveComponentBranch = calcFlexReceiveNativeBranch({
