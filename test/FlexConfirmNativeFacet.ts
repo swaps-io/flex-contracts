@@ -12,7 +12,7 @@ import {
   calcFlexConfirmNativeHash,
   calcFlexTree,
   calcFlexTreeHash,
-  calcFlexConfirmNativeBranches,
+  calcFlexConfirmNativeMultiBranch,
   calcFlexReceiveNativeBranch,
 } from '../@swaps-io/flex-sdk';
 
@@ -285,7 +285,7 @@ describe('FlexConfirmNativeFacet', function () {
       tree: orderTree,
       receiveNativeHash: receiveHash,
     });
-    const [confirmComponentBranches, confirmComponentFlags] = calcFlexConfirmNativeBranches({
+    const confirmComponentMultiBranch = calcFlexConfirmNativeMultiBranch({
       tree: orderHash,
       receiveNativeHash: receiveHash,
       confirmNativeHash: confirmHash,
@@ -301,8 +301,8 @@ describe('FlexConfirmNativeFacet', function () {
           receiveData1,
           confirmData0,
           confirmKey,
-          confirmComponentBranches,
-          confirmComponentFlags,
+          confirmComponentMultiBranch.branch,
+          confirmComponentMultiBranch.flags,
           zeroAddress, // receiveHashBefore
           [], // receiveOrderHashesAfter
         ],
@@ -362,8 +362,8 @@ describe('FlexConfirmNativeFacet', function () {
           receiveData1,
           confirmData0,
           confirmKey,
-          confirmComponentBranches,
-          confirmComponentFlags,
+          confirmComponentMultiBranch.branch,
+          confirmComponentMultiBranch.flags,
           zeroAddress, // receiveHashBefore
           [], // receiveOrderHashesAfter
         ],
