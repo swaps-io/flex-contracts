@@ -1,6 +1,7 @@
 import { expect } from 'chai';
+import { Hex } from 'viem';
 
-import { calcFlexBranch, calcFlexBranchHash, calcFlexTreeHash, FlexError } from '../../@swaps-io/flex-sdk';
+import { calcFlexBranch, calcFlexBranchHash, calcFlexTreeHash, FlexError, FlexTree } from '../../@swaps-io/flex-sdk';
 
 describe('flex-sdk/calcFlexBranch', function () {
   it('Should not calc branch of tree with 1 mismatching leaf', function () {
@@ -154,7 +155,7 @@ describe('flex-sdk/calcFlexBranch', function () {
   });
 
   it('Should calc every branch of tree with 11 leaves', function () {
-    const leaves = [
+    const leaves: Hex[] = [
       '0x1111111111111111111111111111111111111111111111111111111111111111',
       '0x2222222222222222222222222222222222222222222222222222222222222222',
       '0x3333333333333333333333333333333333333333333333333333333333333333',
@@ -166,9 +167,9 @@ describe('flex-sdk/calcFlexBranch', function () {
       '0x9999999999999999999999999999999999999999999999999999999999999999',
       '0xAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA',
       '0xBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB',
-    ] as const;
+    ];
 
-    const tree = [
+    const tree: FlexTree = [
       [
         [
           [
@@ -198,7 +199,7 @@ describe('flex-sdk/calcFlexBranch', function () {
         ],
       ],
       leaves[0],
-    ] as const;
+    ];
 
     const treeHash = calcFlexTreeHash({ tree });
 
