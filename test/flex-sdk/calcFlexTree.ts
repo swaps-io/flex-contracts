@@ -1,18 +1,18 @@
 import { expect } from 'chai';
 
-import { buildFlexTree, FlexError } from '../../@swaps-io/flex-sdk';
+import { calcFlexTree, FlexError } from '../../@swaps-io/flex-sdk';
 
-describe('flex-sdk/buildFlexTree', function () {
-  it('Should not allow to build tree from 0 leaves', function () {
+describe('flex-sdk/calcFlexTree', function () {
+  it('Should not calc tree from 0 leaves', function () {
     expect(() => {
-      buildFlexTree({
+      calcFlexTree({
         leaves: [],
       });
     }).throws(FlexError);
   });
 
-  it('Should build tree from 1 leaf', function () {
-    const tree = buildFlexTree({
+  it('Should calc tree from 1 leaf', function () {
+    const tree = calcFlexTree({
       leaves: [
         '0x1111111111111111111111111111111111111111111111111111111111111111',
       ],
@@ -22,8 +22,8 @@ describe('flex-sdk/buildFlexTree', function () {
     );
   });
 
-  it('Should build tree from 2 leaves', function () {
-    const tree = buildFlexTree({
+  it('Should calc tree from 2 leaves', function () {
+    const tree = calcFlexTree({
       leaves: [
         '0x1111111111111111111111111111111111111111111111111111111111111111',
         '0x2222222222222222222222222222222222222222222222222222222222222222',
@@ -35,8 +35,8 @@ describe('flex-sdk/buildFlexTree', function () {
     ]);
   });
 
-  it('Should build tree from 3 leaves', function () {
-    const tree = buildFlexTree({
+  it('Should calc tree from 3 leaves', function () {
+    const tree = calcFlexTree({
       leaves: [
         '0x1111111111111111111111111111111111111111111111111111111111111111',
         '0x2222222222222222222222222222222222222222222222222222222222222222',
@@ -52,8 +52,8 @@ describe('flex-sdk/buildFlexTree', function () {
     ]);
   });
 
-  it('Should build tree from 4 leaves', function () {
-    const tree = buildFlexTree({
+  it('Should calc tree from 4 leaves', function () {
+    const tree = calcFlexTree({
       leaves: [
         '0x1111111111111111111111111111111111111111111111111111111111111111',
         '0x2222222222222222222222222222222222222222222222222222222222222222',
@@ -73,8 +73,8 @@ describe('flex-sdk/buildFlexTree', function () {
     ]);
   });
 
-  it('Should build tree from 5 leaves', function () {
-    const tree = buildFlexTree({
+  it('Should calc tree from 5 leaves', function () {
+    const tree = calcFlexTree({
       leaves: [
         '0x1111111111111111111111111111111111111111111111111111111111111111',
         '0x2222222222222222222222222222222222222222222222222222222222222222',
@@ -98,8 +98,8 @@ describe('flex-sdk/buildFlexTree', function () {
     ]);
   });
 
-  it('Should build tree from 11 leaves', function () {
-    const tree = buildFlexTree({
+  it('Should calc tree from 11 leaves', function () {
+    const tree = calcFlexTree({
       leaves: [
         '0x1111111111111111111111111111111111111111111111111111111111111111',
         '0x2222222222222222222222222222222222222222222222222222222222222222',

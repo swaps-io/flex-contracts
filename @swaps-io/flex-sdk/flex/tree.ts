@@ -3,11 +3,11 @@ import { FlexError } from '../utils';
 
 export type FlexTree = Hex | [FlexTree, FlexTree];
 
-export interface BuildFlexTreeParams {
+export interface CalcFlexTreeParams {
   leaves: readonly Hex[];
 }
 
-export function buildFlexTree(params: BuildFlexTreeParams): FlexTree {
+export function calcFlexTree(params: CalcFlexTreeParams): FlexTree {
   if (params.leaves.length < 1) {
     throw new FlexError('Flex tree must have at least one leaf');
   }
@@ -18,7 +18,7 @@ export function buildFlexTree(params: BuildFlexTreeParams): FlexTree {
 
   const center = Math.ceil(params.leaves.length / 2);
   return [
-    buildFlexTree({ leaves: params.leaves.slice(0, center) }),
-    buildFlexTree({ leaves: params.leaves.slice(center) }),
+    calcFlexTree({ leaves: params.leaves.slice(0, center) }),
+    calcFlexTree({ leaves: params.leaves.slice(center) }),
   ];
 }

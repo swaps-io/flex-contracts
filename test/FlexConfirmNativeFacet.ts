@@ -1,7 +1,7 @@
 import { viem } from 'hardhat';
 import { loadFixture } from '@nomicfoundation/hardhat-toolbox-viem/network-helpers';
 import { ContractTypesMap } from 'hardhat/types/artifacts';
-import { Address, bytesToHex, concat, getAbiItem, Hex, keccak256, numberToHex, sliceHex, toFunctionSelector, toFunctionSignature, zeroAddress } from 'viem';
+import { Address, bytesToHex, concat, getAbiItem, Hex, keccak256, sliceHex, toFunctionSelector, toFunctionSignature, zeroAddress } from 'viem';
 import { expect } from 'chai';
 
 import {
@@ -10,11 +10,11 @@ import {
   encodeFlexConfirmNativeData0,
   calcFlexReceiveNativeHash,
   calcFlexConfirmNativeHash,
-  buildFlexTree,
+  calcFlexTree,
+  calcFlexTreeHash,
   calcFlexConfirmNativeBranches,
   calcFlexReceiveNativeBranch,
 } from '../@swaps-io/flex-sdk';
-import { calcFlexTreeHash } from '../@swaps-io/flex-sdk/flex/hash';
 
 const IMAGINARY_COMPONENTS = 2; // Implied in order, but not used here
 const IMAGINARY_RECEIVER_SIGNATURE_BYTES = 65; // Not verified, dummy contract call
@@ -278,7 +278,7 @@ describe('FlexConfirmNativeFacet', function () {
     }
 
     const componentHashes = [receiveHash, confirmHash, ...imaginaryComponentHashes];
-    const orderTree = buildFlexTree({ leaves: componentHashes });
+    const orderTree = calcFlexTree({ leaves: componentHashes });
     const orderHash = calcFlexTreeHash({ tree: orderTree });
 
     const receiveComponentBranch = calcFlexReceiveNativeBranch({

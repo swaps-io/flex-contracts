@@ -1,7 +1,7 @@
 import { Hex } from '../external';
 
 import { FlexTree } from '../flex/tree';
-import { calcFlexTreeBranches, FlexTreeBranches } from '../flex/branches';
+import { calcFlexBranches, FlexBranches } from '../flex/branches';
 
 export interface CalcFlexConfirmNativeBranchesParams {
   tree: FlexTree;
@@ -9,8 +9,8 @@ export interface CalcFlexConfirmNativeBranchesParams {
   confirmNativeHash: Hex;
 }
 
-export function calcFlexConfirmNativeBranches(params: CalcFlexConfirmNativeBranchesParams): FlexTreeBranches {
-  return calcFlexTreeBranches({
+export function calcFlexConfirmNativeBranches(params: CalcFlexConfirmNativeBranchesParams): FlexBranches {
+  return calcFlexBranches({
     tree: params.tree,
     leaves: [
       params.receiveNativeHash,
