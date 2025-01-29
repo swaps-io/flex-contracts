@@ -16,7 +16,7 @@ export interface CalcFlexBranchesParams {
   leaves: readonly Hex[];
 }
 
-export function calcFlexMultiBranch(params: CalcFlexBranchesParams): FlexMultiBranch {
+export function calcFlexMultiBranch({ tree, leaves }: CalcFlexBranchesParams): FlexMultiBranch {
   const branch: Hex[] = [];
   const flags: boolean[] = [];
 
@@ -30,11 +30,11 @@ export function calcFlexMultiBranch(params: CalcFlexBranchesParams): FlexMultiBr
     leafParents.set(hash1, hash);
   }
 
-  const root = calcFlexTreeHash({ tree: params.tree, onHash });
+  const root = calcFlexTreeHash({ tree, onHash });
 
-  const leafIndexes = new Map(calcFlexLeaves({ tree: params.tree }).map((leaf, index) => [leaf, index]));
+  const leafIndexes = new Map(calcFlexLeaves({ tree }).map((leaf, index) => [leaf, index]));
 
-  function leafIndex(leaf: Hex): number {
+  function getLeafIndex(leaf: Hex): number {
     const index = leafIndexes.get(leaf);
     if (index === undefined) {
       throw new FlexError('Flex tree does not contain specified multi branch leaf');
@@ -42,7 +42,7 @@ export function calcFlexMultiBranch(params: CalcFlexBranchesParams): FlexMultiBr
     return index;
   }
 
-  const leafStack = [...params.leaves].sort((a, b) => leafIndex(b) - leafIndex(a));
+  const leafStack = [...leaves].sort((a, b) => getLeafIndex(b) - getLeafIndex(a));
   while (leafStack.length > 0 && leafStack[0] !== root) {
     const leaf = leafStack.shift()!; // Stack is not empty - `while` check
     const siblingLeaf = leafSiblings.get(leaf)!; // Only root don't have sibling - `while` check
@@ -53,7 +53,7 @@ export function calcFlexMultiBranch(params: CalcFlexBranchesParams): FlexMultiBr
       leafStack.shift();
     } else {
       flags.push(false);
-      leafStack.push(siblingLeaf);
+      branch.push(siblingLeaf);
     }
     leafStack.push(parentLeaf);
   }

@@ -9,16 +9,16 @@ export interface CalcFlexTreeHashParams {
   onHash?: (hash: Hex, hash0: Hex, hash1: Hex) => void;
 }
 
-export function calcFlexTreeHash(params: CalcFlexTreeHashParams): Hex {
-  if (isHex(params.tree)) {
-    return params.tree;
+export function calcFlexTreeHash({ tree, onHash }: CalcFlexTreeHashParams): Hex {
+  if (isHex(tree)) {
+    return tree;
   }
 
-  const hash0 = calcFlexTreeHash({ tree: params.tree[0] });
-  const hash1 = calcFlexTreeHash({ tree: params.tree[1] });
+  const hash0 = calcFlexTreeHash({ tree: tree[0], onHash });
+  const hash1 = calcFlexTreeHash({ tree: tree[1], onHash });
   const hash = commutativeKeccak256(hash0, hash1);
 
-  params.onHash?.(hash, hash0, hash1);
+  onHash?.(hash, hash0, hash1);
 
   return hash;
 }
