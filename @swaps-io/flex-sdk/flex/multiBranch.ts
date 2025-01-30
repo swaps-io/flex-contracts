@@ -7,6 +7,7 @@ import { calcFlexLeaves } from './leaves';
 import { calcFlexTreeHash } from './treeHash';
 
 export interface FlexMultiBranch {
+  leaves: Hex[];
   branch: FlexBranch;
   flags: boolean[];
 }
@@ -42,7 +43,9 @@ export function calcFlexMultiBranch({ tree, leaves }: CalcFlexBranchesParams): F
     return index;
   }
 
-  const leafStack = [...leaves].sort((a, b) => getLeafIndex(b) - getLeafIndex(a));
+  const sortedLeaves = [...leaves].sort((a, b) => getLeafIndex(b) - getLeafIndex(a));
+
+  const leafStack = [...sortedLeaves];
   while (leafStack.length > 0 && leafStack[0] !== root) {
     const leaf = leafStack.shift()!; // Stack is not empty - `while` check
     const siblingLeaf = leafSiblings.get(leaf)!; // Only root don't have sibling - `while` check
@@ -58,5 +61,18 @@ export function calcFlexMultiBranch({ tree, leaves }: CalcFlexBranchesParams): F
     leafStack.push(parentLeaf);
   }
 
-  return { branch, flags };
+  if (leaves.length === 0) {
+    branch.push(root);
+  }
+
+  if (leaves.length + branch.length !== flags.length + 1) {
+    throw new FlexError('Flex multi branch calc failed');
+  }
+
+  const multiBranch: FlexMultiBranch = {
+    leaves: sortedLeaves,
+    branch,
+    flags,
+  };
+  return multiBranch;
 }
