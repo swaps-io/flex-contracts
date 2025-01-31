@@ -29,6 +29,7 @@ describe('FlexConfirmNativeFacet', function () {
     const flexReceiveNativeDomain = '0xc0ffeec0ffeec0ffeec0ffeec0ffeec0ffeec0ffeec0ffeec0ffeec0ffeec0ff';
     const flexConfirmNativeDomain = '0xdeadbeefdeadbeefdeadbeefdeadbeefdeadbeefdeadbeefdeadbeefdeadbeef';
     const flexSendNativeDomain = '0xabababababababababababababababababababababababababababababababab'; // For standalone
+    const flexSendTokenDomain = '0xcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcd'; // For standalone
 
     let flex: { address: Address };
     let flexReceiveNativeFacet: ContractTypesMap['FlexReceiveNativeFacet'];
@@ -139,6 +140,7 @@ describe('FlexConfirmNativeFacet', function () {
           flexReceiveNativeDomain,
           flexConfirmNativeDomain,
           flexSendNativeDomain,
+          flexSendTokenDomain,
         ],
       );
 
