@@ -39,7 +39,7 @@ contract FlexSendNativeFacet is IFlexSendNative {
         bytes32 componentHash = keccak256(abi.encode(_domain, sendData0_, sendData1_, msg.value));
         bytes32 orderHash = MerkleProof.processProofCalldata(componentBranch_, componentHash);
 
-        uint48 group = uint48(uint256(sendData0_) >> 208);
+        uint48 group = uint48(uint256(sendData1_) >> 208);
         bytes32 bucket = FlexSendStateAccess.calcBucket(sender, group);
         bytes32 bucketState = FlexSendStateStorage.data()[bucket];
         require(FlexSendStateAccess.readTime(bucketState) <= start, FlexChronologyError());
