@@ -2,8 +2,7 @@ import { viem } from 'hardhat';
 import { loadFixture } from '@nomicfoundation/hardhat-toolbox-viem/network-helpers';
 import { AccessList, bytesToHex, concat, getCreateAddress, Hex, keccak256, numberToHex } from 'viem';
 import { expect } from 'chai';
-
-import { commutativeKeccak256 } from '../@swaps-io/flex-sdk';
+import { standardNodeHash } from '@openzeppelin/merkle-tree/dist/hashes';
 
 const COMPONENT_BRANCH_WORDS = 2;
 const ACCESS_LIST_PREDICTED_BOX = true; // 2000 gas loss
@@ -56,7 +55,7 @@ describe('FlexReceiveNativeFactory', function () {
 
     let orderHash = confirmHash;
     for (const branchNode of confirmBranch) {
-      orderHash = commutativeKeccak256(orderHash, branchNode);
+      orderHash = standardNodeHash(orderHash, branchNode) as Hex;
     }
 
     const predictedBox = await factory.read.flexPredictNativeBox([orderHash]);

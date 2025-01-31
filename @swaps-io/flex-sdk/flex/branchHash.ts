@@ -1,5 +1,4 @@
-import { Hex } from '../external';
-import { commutativeKeccak256 } from '../utils';
+import { Hex, processProof } from '../external';
 
 import { FlexBranch } from './branch';
 
@@ -8,10 +7,7 @@ export interface CalcFlexBranchHashParams {
   branch: Readonly<FlexBranch>;
 }
 
-export function calcFlexBranchHash(params: CalcFlexBranchHashParams): Hex {
-  let hash = params.leaf;
-  for (const node of params.branch) {
-    hash = commutativeKeccak256(hash, node);
-  }
-  return hash;
+export function calcFlexBranchHash({ leaf, branch }: CalcFlexBranchHashParams): Hex {
+  const hash = processProof(leaf, branch as FlexBranch);
+  return hash as Hex;
 }

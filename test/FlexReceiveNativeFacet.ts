@@ -10,7 +10,6 @@ import {
   getAbiItem,
   Hex,
   keccak256,
-  numberToHex,
   pad,
   slice,
   sliceHex,
@@ -20,10 +19,10 @@ import {
   zeroAddress,
 } from 'viem';
 
-import { encodeFlexReceiveNativeData0, commutativeKeccak256 } from '../@swaps-io/flex-sdk';
+import { calcFlexReceiveNativeBranch, calcFlexReceiveNativeHash, calcFlexTree, calcFlexTreeHash, encodeFlexReceiveNativeData0, encodeFlexReceiveNativeData1 } from '../@swaps-io/flex-sdk';
 
-const COMPONENT_BRANCH_WORDS = 2;
-const RECEIVER_SIGNATURE_BYTES = 65;
+const IMAGINARY_COMPONENTS = 3; // Implied in order, but not used here
+const IMAGINARY_RECEIVER_SIGNATURE_BYTES = 65;
 const INSIDE_DIAMOND = false; // Diamond or standalone
 const ACCESS_LIST_DIAMOND = false; // Needs INSIDE_DIAMOND
 const ACCESS_LIST_DIAMOND_GOOD_ONLY = true; // Needs ACCESS_LIST_DIAMOND
@@ -278,43 +277,43 @@ describe('FlexReceiveNativeFacet', function () {
     const receiver = resolver.address;
     const amount = 123_456_789n;
 
+    const receiveDomain = await publicClient.readContract({
+      abi: flexReceiveNativeDomainFacet.abi,
+      address: flex.address,
+      functionName: 'flexReceiveNativeDomain',
+      args: [],
+    });
     const receiveData0 = encodeFlexReceiveNativeData0({
       deadline,
       nonce,
       receiver,
     });
-
-    // Imaginary data. Each node adds 700 gas approximately (512 (16*32) is calldata)
-    const componentBranch: Hex[] = [];
-    for (let i = 0; i < COMPONENT_BRANCH_WORDS; i++) {
-      componentBranch.push(bytesToHex(crypto.getRandomValues(new Uint8Array(32))));
-    }
-
-    const calcOrderHash = async (receiveData0Override?: Hex): Promise<Hex> => {
-      const receiveNativeDomain = await publicClient.readContract({
-        abi: flexReceiveNativeDomainFacet.abi,
-        address: flex.address,
-        functionName: 'flexReceiveNativeDomain',
-        args: [],
-      });
-
-      const receiveNativeHash = keccak256(concat([
-        receiveNativeDomain,
-        receiveData0Override ?? receiveData0,
-        numberToHex(amount, { size: 32 }),
-      ]));
-
-      let orderHash = receiveNativeHash;
-      for (const branchNode of componentBranch) {
-        orderHash = commutativeKeccak256(orderHash, branchNode);
-      }
-      return orderHash;
-    };
-
-    const orderHash = await calcOrderHash();
+    const receiveData1 = encodeFlexReceiveNativeData1({
+      amount,
+    });
+    const receiveHash = calcFlexReceiveNativeHash({
+      domain: receiveDomain,
+      data0: receiveData0,
+      data1: receiveData1,
+    });
 
     // Imaginary data. Gas doesn't include signature check implementation by resolver (like ECDSA recover)
-    const receiverSignature = bytesToHex(crypto.getRandomValues(new Uint8Array(RECEIVER_SIGNATURE_BYTES)));
+    const receiverSignature = bytesToHex(crypto.getRandomValues(new Uint8Array(IMAGINARY_RECEIVER_SIGNATURE_BYTES)));
+
+    const imaginaryComponentHashes: Hex[] = [];
+    for (let i = 0; i < IMAGINARY_COMPONENTS; i++) {
+      const imaginaryComponentHash = bytesToHex(crypto.getRandomValues(new Uint8Array(32)));
+      imaginaryComponentHashes.push(imaginaryComponentHash);
+    }
+
+    const componentHashes = [receiveHash, ...imaginaryComponentHashes];
+    const orderTree = calcFlexTree({ leaves: componentHashes });
+    const orderHash = calcFlexTreeHash({ tree: orderTree });
+
+    const receiveComponentBranch = calcFlexReceiveNativeBranch({
+      tree: orderTree,
+      receiveNativeHash: receiveHash,
+    });
 
     let accessList: AccessList[number][] | undefined;
     if (ACCESS_LIST_DIAMOND && INSIDE_DIAMOND) {
@@ -387,7 +386,7 @@ describe('FlexReceiveNativeFacet', function () {
         functionName: 'flexReceiveNative',
         args: [
           receiveData0,
-          componentBranch,
+          receiveComponentBranch,
           receiverSignature,
         ],
         value: amount,
@@ -434,7 +433,7 @@ describe('FlexReceiveNativeFacet', function () {
         functionName: 'flexReceiveNative',
         args: [
           receiveData0,
-          componentBranch,
+          receiveComponentBranch,
           receiverSignature,
         ],
         value: amount,
@@ -476,8 +475,20 @@ describe('FlexReceiveNativeFacet', function () {
         nonce: newNonce,
         receiver,
       });
+      const newReceiveHash = calcFlexReceiveNativeHash({
+        domain: receiveDomain,
+        data0: newReceiveData0,
+        data1: receiveData1,
+      });
 
-      const newOrderHash = await calcOrderHash(newReceiveData0);
+      const newComponentHashes = [newReceiveHash, ...imaginaryComponentHashes];
+      const newOrderTree = calcFlexTree({ leaves: newComponentHashes });
+      const newOrderHash = calcFlexTreeHash({ tree: newOrderTree });
+
+      const receiveComponentBranch = calcFlexReceiveNativeBranch({
+        tree: newOrderTree,
+        receiveNativeHash: newReceiveHash,
+      });
 
       const hash = await walletClient.writeContract({
         abi: flexReceiveNativeFacet.abi,
@@ -485,7 +496,7 @@ describe('FlexReceiveNativeFacet', function () {
         functionName: 'flexReceiveNative',
         args: [
           newReceiveData0,
-          componentBranch,
+          receiveComponentBranch,
           receiverSignature,
         ],
         value: amount,

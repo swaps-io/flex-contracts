@@ -1,24 +1,49 @@
-import { Hex } from '../external';
-import { FlexError } from '../utils';
+import { Hex, SimpleMerkleTree } from '../external';
 
-export type FlexTree = Hex | [FlexTree, FlexTree];
+export interface FlexTreeData {
+  tree: Hex[],
+  values: Record<Hex, number>,
+}
+
+export class FlexTree {
+  public readonly inner: SimpleMerkleTree;
+
+  public constructor(inner: SimpleMerkleTree) {
+    this.inner = inner;
+  }
+
+  public dump(): FlexTreeData {
+    const dump = this.inner.dump();
+    const data: FlexTreeData = {
+      tree: dump.tree as Hex[],
+      values: Object.fromEntries(dump.values.map(({ value, treeIndex }) => [value, treeIndex])),
+    };
+    return data;
+  }
+
+  public static load(data: FlexTreeData): FlexTree {
+    const dump = {
+      format: 'simple-v1' as const,
+      tree: data.tree,
+      values: Object.entries(data.values).map(([value, treeIndex]) => ({ value, treeIndex })),
+    };
+    const inner = SimpleMerkleTree.load(dump);
+    const tree = new FlexTree(inner);
+    return tree;
+  }
+}
 
 export interface CalcFlexTreeParams {
   leaves: readonly Hex[];
 }
 
-export function calcFlexTree(params: CalcFlexTreeParams): FlexTree {
-  if (params.leaves.length < 1) {
-    throw new FlexError('Flex tree must have at least one leaf');
+export function calcFlexTree({ leaves }: CalcFlexTreeParams): FlexTree {
+  const uniqueLeaves = new Set(leaves.map((leaf) => leaf.toLowerCase()));
+  if (uniqueLeaves.size < leaves.length) {
+    throw new Error('Flex tree must have unique leaves');
   }
 
-  if (params.leaves.length === 1) {
-    return params.leaves[0];
-  }
-
-  const center = Math.ceil(params.leaves.length / 2);
-  return [
-    calcFlexTree({ leaves: params.leaves.slice(0, center) }),
-    calcFlexTree({ leaves: params.leaves.slice(center) }),
-  ];
+  const inner = SimpleMerkleTree.of([...leaves], { sortLeaves: true });
+  const tree = new FlexTree(inner);
+  return tree;
 }

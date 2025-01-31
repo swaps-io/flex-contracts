@@ -9,9 +9,11 @@ export interface CalcFlexReceiveNativeHashParams {
 }
 
 export function calcFlexReceiveNativeHash(params: CalcFlexReceiveNativeHashParams): Hex {
-  return keccak256(concatHex([
-    asHex(params.domain, 32),
-    asHex(params.data0, 32),
-    asHex(params.data1, 32),
-  ]));
+  return keccak256(
+    concatHex([
+      asHex(params.domain, 32),
+      asHex(params.data0, 32),
+      asHex(params.data1, 32),
+    ]),
+  );
 }

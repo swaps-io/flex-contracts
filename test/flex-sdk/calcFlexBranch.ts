@@ -1,21 +1,29 @@
 import { expect } from 'chai';
 import { Hex } from 'viem';
 
-import { calcFlexBranch, calcFlexBranchHash, calcFlexTreeHash, FlexError, FlexTree } from '../../@swaps-io/flex-sdk';
+import { calcFlexBranch, calcFlexBranchHash, calcFlexTree, calcFlexTreeHash } from '../../@swaps-io/flex-sdk';
 
 describe('flex-sdk/calcFlexBranch', function () {
   it('Should not calc branch of tree with 1 mismatching leaf', function () {
     expect(() => {
       calcFlexBranch({
-        tree: '0x1111111111111111111111111111111111111111111111111111111111111111',
+        tree: calcFlexTree({
+          leaves: [
+            '0x1111111111111111111111111111111111111111111111111111111111111111',
+          ],
+        }),
         leaf: '0x2222222222222222222222222222222222222222222222222222222222222222',
       });
-    }).throws(FlexError);
+    }).throws(Error);
   });
 
   it('Should calc branch of tree with 1 leaf', function () {
     const branch = calcFlexBranch({
-      tree: '0x1111111111111111111111111111111111111111111111111111111111111111',
+      tree: calcFlexTree({
+        leaves: [
+          '0x1111111111111111111111111111111111111111111111111111111111111111',
+        ],
+      }),
       leaf: '0x1111111111111111111111111111111111111111111111111111111111111111',
     });
     expect(branch).deep.equal([]);
@@ -24,21 +32,25 @@ describe('flex-sdk/calcFlexBranch', function () {
   it('Should not calc branch of tree with 2 mismatching leaves', function () {
     expect(() => {
       calcFlexBranch({
-        tree: [
-          '0x1111111111111111111111111111111111111111111111111111111111111111',
-          '0x2222222222222222222222222222222222222222222222222222222222222222',
-        ],
+        tree: calcFlexTree({
+          leaves: [
+            '0x1111111111111111111111111111111111111111111111111111111111111111',
+            '0x2222222222222222222222222222222222222222222222222222222222222222',
+          ],
+        }),
         leaf: '0x3333333333333333333333333333333333333333333333333333333333333333',
       });
-    }).throws(FlexError);
+    }).throws(Error);
   });
 
   it('Should calc branch of tree with 2 leaves', function () {
     const branch = calcFlexBranch({
-      tree: [
-        '0x1111111111111111111111111111111111111111111111111111111111111111',
-        '0x2222222222222222222222222222222222222222222222222222222222222222',
-      ],
+      tree: calcFlexTree({
+        leaves: [
+          '0x1111111111111111111111111111111111111111111111111111111111111111',
+          '0x2222222222222222222222222222222222222222222222222222222222222222',
+        ],
+      }),
       leaf: '0x1111111111111111111111111111111111111111111111111111111111111111',
     });
     expect(branch).deep.equal([
@@ -48,10 +60,12 @@ describe('flex-sdk/calcFlexBranch', function () {
 
   it('Should calc 2nd branch of tree with 2 leaves', function () {
     const branch = calcFlexBranch({
-      tree: [
-        '0x1111111111111111111111111111111111111111111111111111111111111111',
-        '0x2222222222222222222222222222222222222222222222222222222222222222',
-      ],
+      tree: calcFlexTree({
+        leaves: [
+          '0x1111111111111111111111111111111111111111111111111111111111111111',
+          '0x2222222222222222222222222222222222222222222222222222222222222222',
+        ],
+      }),
       leaf: '0x2222222222222222222222222222222222222222222222222222222222222222',
     });
     expect(branch).deep.equal([
@@ -62,27 +76,27 @@ describe('flex-sdk/calcFlexBranch', function () {
   it('Should not calc branch of tree with 3 mismatching leaves', function () {
     expect(() => {
       calcFlexBranch({
-        tree: [
-          [ // 0x3e92e0db88d6afea9edc4eedf62fffa4d92bcdfc310dccbe943747fe8302e871
+        tree: calcFlexTree({
+          leaves: [
             '0x1111111111111111111111111111111111111111111111111111111111111111',
             '0x2222222222222222222222222222222222222222222222222222222222222222',
+            '0x3333333333333333333333333333333333333333333333333333333333333333',
           ],
-          '0x3333333333333333333333333333333333333333333333333333333333333333',
-        ],
+        }),
         leaf: '0x4444444444444444444444444444444444444444444444444444444444444444',
       });
-    }).throws(FlexError);
+    }).throws(Error);
   });
 
   it('Should calc branch of tree with 3 leaves', function () {
     const branch = calcFlexBranch({
-      tree: [
-        [ // 0x3e92e0db88d6afea9edc4eedf62fffa4d92bcdfc310dccbe943747fe8302e871
+      tree: calcFlexTree({
+        leaves: [
           '0x1111111111111111111111111111111111111111111111111111111111111111',
           '0x2222222222222222222222222222222222222222222222222222222222222222',
+          '0x3333333333333333333333333333333333333333333333333333333333333333',
         ],
-        '0x3333333333333333333333333333333333333333333333333333333333333333',
-      ],
+      }),
       leaf: '0x1111111111111111111111111111111111111111111111111111111111111111',
     });
     expect(branch).deep.equal([
@@ -93,13 +107,13 @@ describe('flex-sdk/calcFlexBranch', function () {
 
   it('Should calc 2nd branch of tree with 3 leaves', function () {
     const branch = calcFlexBranch({
-      tree: [
-        [ // 0x3e92e0db88d6afea9edc4eedf62fffa4d92bcdfc310dccbe943747fe8302e871
+      tree: calcFlexTree({
+        leaves: [
           '0x1111111111111111111111111111111111111111111111111111111111111111',
           '0x2222222222222222222222222222222222222222222222222222222222222222',
+          '0x3333333333333333333333333333333333333333333333333333333333333333',
         ],
-        '0x3333333333333333333333333333333333333333333333333333333333333333',
-      ],
+      }),
       leaf: '0x2222222222222222222222222222222222222222222222222222222222222222',
     });
     expect(branch).deep.equal([
@@ -110,13 +124,13 @@ describe('flex-sdk/calcFlexBranch', function () {
 
   it('Should calc 3rd branch of tree with 3 leaves', function () {
     const branch = calcFlexBranch({
-      tree: [
-        [ // 0x3e92e0db88d6afea9edc4eedf62fffa4d92bcdfc310dccbe943747fe8302e871
+      tree: calcFlexTree({
+        leaves: [
           '0x1111111111111111111111111111111111111111111111111111111111111111',
           '0x2222222222222222222222222222222222222222222222222222222222222222',
+          '0x3333333333333333333333333333333333333333333333333333333333333333',
         ],
-        '0x3333333333333333333333333333333333333333333333333333333333333333',
-      ],
+      }),
       leaf: '0x3333333333333333333333333333333333333333333333333333333333333333',
     });
     expect(branch).deep.equal([
@@ -126,31 +140,23 @@ describe('flex-sdk/calcFlexBranch', function () {
 
   it('Should calc branch of tree with 7 leaves', function () {
     const branch = calcFlexBranch({
-      tree: [
-        [ // 0x60c25b70d66af589f985b3cf4732585b8f7ecea5df88cb12368650edfe7e6f50
-          '0x5555555555555555555555555555555555555555555555555555555555555555',
+      tree: calcFlexTree({
+        leaves: [
+          '0x1111111111111111111111111111111111111111111111111111111111111111',
+          '0x2222222222222222222222222222222222222222222222222222222222222222',
+          '0x3333333333333333333333333333333333333333333333333333333333333333',
           '0x4444444444444444444444444444444444444444444444444444444444444444',
+          '0x5555555555555555555555555555555555555555555555555555555555555555',
+          '0x6666666666666666666666666666666666666666666666666666666666666666',
+          '0x7777777777777777777777777777777777777777777777777777777777777777',
         ],
-        [ // 0x71c4c1dce220219d1703abc1b300f8f08e2dbe269e71bec1611970de65fd73f5
-          [ // 0x812df6275efe49d72dced5ea25dba563eec3f57da8e4a891db7e1444a53fc181
-            [ // 0x37df8a86dbd0a06a5a6720079d9a4ce5a5a5c93198607ca71402d78b7db2869e
-              '0x6666666666666666666666666666666666666666666666666666666666666666',
-              '0x7777777777777777777777777777777777777777777777777777777777777777',
-            ],
-            '0x3333333333333333333333333333333333333333333333333333333333333333',
-          ],
-          [ // 0x3e92e0db88d6afea9edc4eedf62fffa4d92bcdfc310dccbe943747fe8302e871
-            '0x2222222222222222222222222222222222222222222222222222222222222222',
-            '0x1111111111111111111111111111111111111111111111111111111111111111',
-          ],
-        ],
-      ],
+      }),
       leaf: '0x3333333333333333333333333333333333333333333333333333333333333333',
     });
     expect(branch).deep.equal([
-      '0x37df8a86dbd0a06a5a6720079d9a4ce5a5a5c93198607ca71402d78b7db2869e',
-      '0x3e92e0db88d6afea9edc4eedf62fffa4d92bcdfc310dccbe943747fe8302e871',
-      '0x60c25b70d66af589f985b3cf4732585b8f7ecea5df88cb12368650edfe7e6f50',
+      '0x4444444444444444444444444444444444444444444444444444444444444444',
+      '0xee673dead18e0bd840c75d973babf38f2a3527cf5b86621d5ed7a30b62d247c7',
+      '0xa66456f46c4e6e9c788dbeac5963cc72bdb924c97324d99c55988193e65e92fe',
     ]);
   });
 
@@ -169,37 +175,7 @@ describe('flex-sdk/calcFlexBranch', function () {
       '0xBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB',
     ];
 
-    const tree: FlexTree = [
-      [
-        [
-          [
-            leaves[8],
-            leaves[6],
-          ],
-          [
-            [
-              leaves[2],
-              [
-                leaves[7],
-                leaves[10],
-              ],
-            ],
-            leaves[4],
-          ],
-        ],
-        [
-          leaves[3],
-          [
-            [
-              leaves[5],
-              leaves[9],
-            ],
-            leaves[1],
-          ],
-        ],
-      ],
-      leaves[0],
-    ];
+    const tree = calcFlexTree({ leaves });
 
     const treeHash = calcFlexTreeHash({ tree });
 

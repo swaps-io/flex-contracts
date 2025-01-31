@@ -8,8 +8,10 @@ export interface CalcFlexConfirmNativeHashParams {
 }
 
 export function calcFlexConfirmNativeHash(params: CalcFlexConfirmNativeHashParams): Hex {
-  return keccak256(concatHex([
-    asHex(params.domain, 32),
-    asHex(params.data0, 32),
-  ]));
+  return keccak256(
+    concatHex([
+      asHex(params.domain, 32),
+      asHex(params.data0, 32),
+    ]),
+  );
 }
