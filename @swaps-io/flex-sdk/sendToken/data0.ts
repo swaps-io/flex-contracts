@@ -1,0 +1,17 @@
+import { Hex, concatHex } from '../external';
+
+import { AsHexValue, asHex } from '../utils/asHex';
+
+export interface EncodeFlexSendTokenData0Params {
+  start: AsHexValue;
+  duration: AsHexValue;
+  sender: AsHexValue;
+}
+
+export function encodeFlexSendTokenData0(params: EncodeFlexSendTokenData0Params): Hex {
+  return concatHex([
+    asHex(params.start, 6),
+    asHex(params.duration, 6),
+    asHex(params.sender, 20),
+  ]);
+}
