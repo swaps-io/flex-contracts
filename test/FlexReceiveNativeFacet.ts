@@ -250,7 +250,7 @@ describe('FlexReceiveNativeFacet', function () {
       const { publicClient, flex } = await loadFixture(deployFixture);
 
       const code = await publicClient.getCode({ address: flex.address });
-      console.log(`flexReceiveStandalone code: ${code}`);
+      console.log(`FlexReceiveStandalone code: ${code}`);
     });
 
     it('Should show FlexReceiveStandalone function selectors', async function () {
