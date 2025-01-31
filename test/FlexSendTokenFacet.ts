@@ -290,8 +290,9 @@ describe('FlexSendTokenFacet', function () {
     const receiver = walletClient.account.address;
     const amount = 123_456_789n;
 
-    const remainingAmount = 111_222n;
-    const remainingAllowance = 55_777n;
+    const remainingSenderAmount = 111_222n;
+    const remainingSenderAllowance = 55_777n;
+    const existingReceiverAmount = 2_496n;
 
     await resolverClient.writeContract({
       abi: token.abi,
@@ -299,7 +300,7 @@ describe('FlexSendTokenFacet', function () {
       functionName: 'mint',
       args: [
         resolverClient.account.address,
-        amount + amount + remainingAmount,
+        amount + amount + remainingSenderAmount,
       ],
     });
     await resolverClient.writeContract({
@@ -308,7 +309,16 @@ describe('FlexSendTokenFacet', function () {
       functionName: 'approve',
       args: [
         flex.address,
-        amount + amount + remainingAllowance,
+        amount + amount + remainingSenderAllowance,
+      ],
+    });
+    await walletClient.writeContract({
+      abi: token.abi,
+      address: token.address,
+      functionName: 'mint',
+      args: [
+        receiver,
+        existingReceiverAmount,
       ],
     });
 
