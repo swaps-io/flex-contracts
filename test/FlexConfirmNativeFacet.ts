@@ -28,6 +28,7 @@ describe('FlexConfirmNativeFacet', function () {
 
     const flexReceiveNativeDomain = '0xc0ffeec0ffeec0ffeec0ffeec0ffeec0ffeec0ffeec0ffeec0ffeec0ffeec0ff';
     const flexConfirmNativeDomain = '0xdeadbeefdeadbeefdeadbeefdeadbeefdeadbeefdeadbeefdeadbeefdeadbeef';
+    const flexSendNativeDomain = '0xabababababababababababababababababababababababababababababababab'; // For standalone
 
     let flex: { address: Address };
     let flexReceiveNativeFacet: ContractTypesMap['FlexReceiveNativeFacet'];
@@ -132,7 +133,14 @@ describe('FlexConfirmNativeFacet', function () {
         ],
       });
     } else {
-      flex = await viem.deployContract('FlexReceiveStandalone', [flexReceiveNativeDomain, flexConfirmNativeDomain]);
+      flex = await viem.deployContract(
+        'FlexReceiveStandalone',
+        [
+          flexReceiveNativeDomain,
+          flexConfirmNativeDomain,
+          flexSendNativeDomain,
+        ],
+      );
 
       flexReceiveNativeFacet = flex as ContractTypesMap['FlexReceiveNativeFacet'];
       flexReceiveNativeDomainFacet = flex as ContractTypesMap['FlexReceiveNativeDomainFacet'];
