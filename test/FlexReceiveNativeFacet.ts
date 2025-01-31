@@ -19,7 +19,14 @@ import {
   zeroAddress,
 } from 'viem';
 
-import { calcFlexReceiveNativeBranch, calcFlexReceiveNativeHash, calcFlexTree, calcFlexTreeHash, encodeFlexReceiveNativeData0, encodeFlexReceiveNativeData1 } from '../@swaps-io/flex-sdk';
+import {
+  calcFlexReceiveNativeBranch,
+  calcFlexReceiveNativeHash,
+  calcFlexTree,
+  calcFlexTreeHash,
+  encodeFlexReceiveNativeData0,
+  encodeFlexReceiveNativeData1,
+} from '../@swaps-io/flex-sdk';
 
 const IMAGINARY_COMPONENTS = 3; // Implied in order, but not used here
 const IMAGINARY_RECEIVER_SIGNATURE_BYTES = 65;
@@ -35,8 +42,6 @@ describe('FlexReceiveNativeFacet', function () {
 
     const flexReceiveNativeDomain = '0xc0ffeec0ffeec0ffeec0ffeec0ffeec0ffeec0ffeec0ffeec0ffeec0ffeec0ff';
     const flexConfirmNativeDomain = '0xdeadbeefdeadbeefdeadbeefdeadbeefdeadbeefdeadbeefdeadbeefdeadbeef'; // For standalone
-    const flexSendNativeDomain = '0xabababababababababababababababababababababababababababababababab'; // For standalone
-    const flexSendTokenDomain = '0xcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcd'; // For standalone
 
     let flex: { address: Address };
     let flexReceiveNativeFacet: ContractTypesMap['FlexReceiveNativeFacet'];
@@ -118,8 +123,6 @@ describe('FlexReceiveNativeFacet', function () {
         [
           flexReceiveNativeDomain,
           flexConfirmNativeDomain,
-          flexSendNativeDomain,
-          flexSendTokenDomain,
         ],
       );
 

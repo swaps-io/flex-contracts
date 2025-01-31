@@ -8,12 +8,6 @@ import {FlexReceiveStateFacet} from "../facets/FlexReceiveStateFacet.sol";
 import {FlexReceiveHashFacet} from "../facets/FlexReceiveHashFacet.sol";
 import {FlexConfirmNativeFacet} from "../facets/FlexConfirmNativeFacet.sol";
 import {FlexConfirmNativeDomainFacet} from "../facets/FlexConfirmNativeDomainFacet.sol";
-import {FlexSendNativeFacet} from "../facets/FlexSendNativeFacet.sol";
-import {FlexSendNativeDomainFacet} from "../facets/FlexSendNativeDomainFacet.sol";
-import {FlexSendTokenFacet} from "../facets/FlexSendTokenFacet.sol";
-import {FlexSendTokenDomainFacet} from "../facets/FlexSendTokenDomainFacet.sol";
-import {FlexSendTimeFacet} from "../facets/FlexSendTimeFacet.sol";
-import {FlexSendHashFacet} from "../facets/FlexSendHashFacet.sol";
 
 contract FlexReceiveStandalone is
     FlexReceiveNativeFacet,
@@ -21,27 +15,15 @@ contract FlexReceiveStandalone is
     FlexReceiveStateFacet,
     FlexReceiveHashFacet,
     FlexConfirmNativeFacet,
-    FlexConfirmNativeDomainFacet,
-    FlexSendNativeFacet,
-    FlexSendNativeDomainFacet,
-    FlexSendTokenFacet,
-    FlexSendTokenDomainFacet,
-    FlexSendTimeFacet,
-    FlexSendHashFacet
+    FlexConfirmNativeDomainFacet
 {
     constructor(
         bytes32 receiveNativeDomain_,
-        bytes32 confirmNativeDomain_,
-        bytes32 sendNativeDomain_,
-        bytes32 sendTokenDomain_
+        bytes32 confirmNativeDomain_
     )
         FlexReceiveNativeFacet(receiveNativeDomain_)
         FlexReceiveNativeDomainFacet(receiveNativeDomain_)
         FlexConfirmNativeFacet(confirmNativeDomain_, receiveNativeDomain_)
         FlexConfirmNativeDomainFacet(confirmNativeDomain_)
-        FlexSendNativeFacet(sendNativeDomain_)
-        FlexSendNativeDomainFacet(sendNativeDomain_)
-        FlexSendTokenFacet(sendTokenDomain_)
-        FlexSendTokenDomainFacet(sendTokenDomain_)
     {}
 }
