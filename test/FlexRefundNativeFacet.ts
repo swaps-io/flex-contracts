@@ -7,12 +7,13 @@ import { expect } from 'chai';
 import {
   encodeFlexReceiveNativeData0,
   encodeFlexReceiveNativeData1,
-  encodeFlexConfirmNativeData0,
+  encodeFlexRefundNativeData0,
+  encodeFlexRefundNativeData1,
   calcFlexReceiveNativeHash,
-  calcFlexConfirmNativeHash,
+  calcFlexRefundNativeHash,
   calcFlexTree,
   calcFlexTreeHash,
-  calcFlexConfirmNativeMultiBranch,
+  calcFlexRefundNativeMultiBranch,
   calcFlexReceiveNativeBranch,
 } from '../@swaps-io/flex-sdk';
 
@@ -20,23 +21,23 @@ const IMAGINARY_COMPONENTS = 2; // Implied in order, but not used here
 const IMAGINARY_RECEIVER_SIGNATURE_BYTES = 65; // Not verified, dummy contract call
 const INSIDE_DIAMOND = false; // Diamond or standalone
 
-describe('FlexConfirmNativeFacet', function () {
+describe('FlexRefundNativeFacet', function () {
   async function deployFixture() {
     const publicClient = await viem.getPublicClient();
 
     const [walletClient] = await viem.getWalletClients();
 
     const flexReceiveNativeDomain = '0xc0ffeec0ffeec0ffeec0ffeec0ffeec0ffeec0ffeec0ffeec0ffeec0ffeec0ff';
-    const flexConfirmNativeDomain = '0xdeadbeefdeadbeefdeadbeefdeadbeefdeadbeefdeadbeefdeadbeefdeadbeef';
-    const flexRefundNativeDomain = '0x4e4e4e4e4e4e4e4e4e4e4e4e4e4e4e4e4e4e4e4e4e4e4e4e4e4e4e4e4e4e4e4e'; // For standalone
+    const flexConfirmNativeDomain = '0xdeadbeefdeadbeefdeadbeefdeadbeefdeadbeefdeadbeefdeadbeefdeadbeef'; // For standalone
+    const flexRefundNativeDomain = '0x4e4e4e4e4e4e4e4e4e4e4e4e4e4e4e4e4e4e4e4e4e4e4e4e4e4e4e4e4e4e4e4e';
 
     let flex: { address: Address };
     let flexReceiveNativeFacet: ContractTypesMap['FlexReceiveNativeFacet'];
     let flexReceiveNativeDomainFacet: ContractTypesMap['FlexReceiveNativeDomainFacet'];
     let flexReceiveStateFacet: ContractTypesMap['FlexReceiveStateFacet'];
     let flexReceiveHashFacet: ContractTypesMap['FlexReceiveHashFacet'];
-    let flexConfirmNativeFacet: ContractTypesMap['FlexConfirmNativeFacet'];
-    let flexConfirmNativeDomainFacet: ContractTypesMap['FlexConfirmNativeDomainFacet'];
+    let flexRefundNativeFacet: ContractTypesMap['FlexRefundNativeFacet'];
+    let flexRefundNativeDomainFacet: ContractTypesMap['FlexRefundNativeDomainFacet'];
 
     if (INSIDE_DIAMOND) {
       const diamondCutFacet = await viem.deployContract('DiamondCutFacet');
@@ -45,8 +46,8 @@ describe('FlexConfirmNativeFacet', function () {
       flexReceiveNativeDomainFacet = await viem.deployContract('FlexReceiveNativeDomainFacet', [flexReceiveNativeDomain]);
       flexReceiveStateFacet = await viem.deployContract('FlexReceiveStateFacet');
       flexReceiveHashFacet = await viem.deployContract('FlexReceiveHashFacet');
-      flexConfirmNativeFacet = await viem.deployContract('FlexConfirmNativeFacet', [flexConfirmNativeDomain, flexReceiveNativeDomain]);
-      flexConfirmNativeDomainFacet = await viem.deployContract('FlexConfirmNativeDomainFacet', [flexConfirmNativeDomain]);
+      flexRefundNativeFacet = await viem.deployContract('FlexRefundNativeFacet', [flexRefundNativeDomain, flexReceiveNativeDomain]);
+      flexRefundNativeDomainFacet = await viem.deployContract('FlexRefundNativeDomainFacet', [flexRefundNativeDomain]);
 
       flex = await viem.deployContract('Diamond', [walletClient.account.address, diamondCutFacet.address]);
       await walletClient.writeContract({
@@ -105,24 +106,24 @@ describe('FlexConfirmNativeFacet', function () {
             },
             {
               action: 0, // Add
-              facetAddress: flexConfirmNativeFacet.address,
+              facetAddress: flexRefundNativeFacet.address,
               functionSelectors: [
                 toFunctionSelector(
                   getAbiItem({
-                    abi: flexConfirmNativeFacet.abi,
-                    name: 'flexConfirmNative',
+                    abi: flexRefundNativeFacet.abi,
+                    name: 'flexRefundNative',
                   }),
                 ),
               ],
             },
             {
               action: 0, // Add
-              facetAddress: flexConfirmNativeDomainFacet.address,
+              facetAddress: flexRefundNativeDomainFacet.address,
               functionSelectors: [
                 toFunctionSelector(
                   getAbiItem({
-                    abi: flexConfirmNativeDomainFacet.abi,
-                    name: 'flexConfirmNativeDomain',
+                    abi: flexRefundNativeDomainFacet.abi,
+                    name: 'flexRefundNativeDomain',
                   }),
                 ),
               ],
@@ -146,8 +147,8 @@ describe('FlexConfirmNativeFacet', function () {
       flexReceiveNativeDomainFacet = flex as ContractTypesMap['FlexReceiveNativeDomainFacet'];
       flexReceiveStateFacet = flex as ContractTypesMap['FlexReceiveStateFacet'];
       flexReceiveHashFacet = flex as ContractTypesMap['FlexReceiveHashFacet'];
-      flexConfirmNativeFacet = flex as ContractTypesMap['FlexConfirmNativeFacet'];
-      flexConfirmNativeDomainFacet = flex as ContractTypesMap['FlexConfirmNativeDomainFacet'];
+      flexRefundNativeFacet = flex as ContractTypesMap['FlexRefundNativeFacet'];
+      flexRefundNativeDomainFacet = flex as ContractTypesMap['FlexRefundNativeDomainFacet'];
     }
 
     const resolver = await viem.deployContract('ResolverTest');
@@ -161,8 +162,8 @@ describe('FlexConfirmNativeFacet', function () {
       flexReceiveNativeDomainFacet,
       flexReceiveStateFacet,
       flexReceiveHashFacet,
-      flexConfirmNativeFacet,
-      flexConfirmNativeDomainFacet,
+      flexRefundNativeFacet,
+      flexRefundNativeDomainFacet,
     };
   }
 
@@ -170,46 +171,46 @@ describe('FlexConfirmNativeFacet', function () {
   if (INSIDE_DIAMOND) {
   //
 
-    it('Should show FlexConfirmNativeFacet code', async function () {
-      const { publicClient, flexConfirmNativeFacet } = await loadFixture(deployFixture);
+    it('Should show FlexRefundNativeFacet code', async function () {
+      const { publicClient, flexRefundNativeFacet } = await loadFixture(deployFixture);
 
-      const code = await publicClient.getCode({ address: flexConfirmNativeFacet.address });
-      console.log(`FlexConfirmNativeFacet code: ${code}`);
+      const code = await publicClient.getCode({ address: flexRefundNativeFacet.address });
+      console.log(`FlexRefundNativeFacet code: ${code}`);
     });
 
-    it('Should show FlexConfirmNativeDomainFacet code', async function () {
-      const { publicClient, flexConfirmNativeDomainFacet } = await loadFixture(deployFixture);
+    it('Should show FlexRefundNativeDomainFacet code', async function () {
+      const { publicClient, flexRefundNativeDomainFacet } = await loadFixture(deployFixture);
 
-      const code = await publicClient.getCode({ address: flexConfirmNativeDomainFacet.address });
-      console.log(`FlexConfirmNativeDomainFacet code: ${code}`);
+      const code = await publicClient.getCode({ address: flexRefundNativeDomainFacet.address });
+      console.log(`FlexRefundNativeDomainFacet code: ${code}`);
     });
 
-    it('Should show FlexConfirmNativeFacet function selectors', async function () {
-      const { flexConfirmNativeFacet } = await loadFixture(deployFixture);
+    it('Should show FlexRefundNativeFacet function selectors', async function () {
+      const { flexRefundNativeFacet } = await loadFixture(deployFixture);
 
-      console.log('FlexConfirmNativeFacet selectors:');
-      for (const abi of flexConfirmNativeFacet.abi) {
+      console.log('FlexRefundNativeFacet selectors:');
+      for (const abi of flexRefundNativeFacet.abi) {
         if (abi.type !== 'function') {
           continue;
         }
 
-        const item = getAbiItem({ abi: flexConfirmNativeFacet.abi, name: abi.name });
+        const item = getAbiItem({ abi: flexRefundNativeFacet.abi, name: abi.name });
         const signature = toFunctionSignature(item);
         const selector = toFunctionSelector(item);
         console.log(`- ${selector}: ${signature}`);
       }
     });
   
-    it('Should show FlexConfirmNativeDomainFacet function selectors', async function () {
-      const { flexConfirmNativeDomainFacet } = await loadFixture(deployFixture);
+    it('Should show FlexRefundNativeDomainFacet function selectors', async function () {
+      const { flexRefundNativeDomainFacet } = await loadFixture(deployFixture);
 
-      console.log('FlexConfirmNativeDomainFacet selectors:');
-      for (const abi of flexConfirmNativeDomainFacet.abi) {
+      console.log('FlexRefundNativeDomainFacet selectors:');
+      for (const abi of flexRefundNativeDomainFacet.abi) {
         if (abi.type !== 'function') {
           continue;
         }
   
-        const item = getAbiItem({ abi: flexConfirmNativeDomainFacet.abi, name: abi.name });
+        const item = getAbiItem({ abi: flexRefundNativeDomainFacet.abi, name: abi.name });
         const signature = toFunctionSignature(item);
         const selector = toFunctionSelector(item);
         console.log(`- ${selector}: ${signature}`);
@@ -220,15 +221,15 @@ describe('FlexConfirmNativeFacet', function () {
   }
   //
 
-  it('Should confirm native', async function () {
+  it('Should refund native', async function () {
     const {
       flex,
       flexReceiveNativeFacet,
       flexReceiveNativeDomainFacet,
       flexReceiveStateFacet,
       flexReceiveHashFacet,
-      flexConfirmNativeFacet,
-      flexConfirmNativeDomainFacet,
+      flexRefundNativeFacet,
+      flexRefundNativeDomainFacet,
       walletClient,
       publicClient,
       resolver,
@@ -237,10 +238,11 @@ describe('FlexConfirmNativeFacet', function () {
     const deadline = 4_000_000_000n;
     const nonce = 424_242n;
     const receiver = resolver.address;
+    const refundReceiver = walletClient.account.address;
     const amount = 123_456_789n;
 
-    const confirmKey = '0x5ec8e15ec8e15ec8e15ec8e15ec8e15ec8e15ec8e15ec8e15ec8e15ec8e15ec8' as const;
-    const confirmKeyHash = keccak256(confirmKey);
+    const refundKey = '0x5ec8e15ec8e15ec8e15ec8e15ec8e15ec8e15ec8e15ec8e15ec8e15ec8e15ec8' as const;
+    const refundKeyHash = keccak256(refundKey);
 
     // Imaginary data. Gas doesn't include signature check implementation by resolver (like ECDSA recover)
     const receiverSignature = bytesToHex(crypto.getRandomValues(new Uint8Array(IMAGINARY_RECEIVER_SIGNATURE_BYTES)));
@@ -265,18 +267,22 @@ describe('FlexConfirmNativeFacet', function () {
       data1: receiveData1,
     });
 
-    const confirmDomain = await publicClient.readContract({
-      abi: flexConfirmNativeDomainFacet.abi,
+    const refundDomain = await publicClient.readContract({
+      abi: flexRefundNativeDomainFacet.abi,
       address: flex.address,
-      functionName: 'flexConfirmNativeDomain',
+      functionName: 'flexRefundNativeDomain',
       args: [],
     });
-    const confirmData0 = encodeFlexConfirmNativeData0({
-      keyHash: confirmKeyHash,
+    const refundData0 = encodeFlexRefundNativeData0({
+      keyHash: refundKeyHash,
     });
-    const confirmHash = calcFlexConfirmNativeHash({
-      domain: confirmDomain,
-      data0: confirmData0,
+    const refundData1 = encodeFlexRefundNativeData1({
+      receiver: refundReceiver,
+    });
+    const refundHash = calcFlexRefundNativeHash({
+      domain: refundDomain,
+      data0: refundData0,
+      data1: refundData1,
     });
 
     const imaginaryComponentHashes: Hex[] = [];
@@ -285,7 +291,7 @@ describe('FlexConfirmNativeFacet', function () {
       imaginaryComponentHashes.push(imaginaryComponentHash);
     }
 
-    const componentHashes = [receiveHash, confirmHash, ...imaginaryComponentHashes];
+    const componentHashes = [receiveHash, refundHash, ...imaginaryComponentHashes];
     const orderTree = calcFlexTree({ leaves: componentHashes });
     const orderHash = calcFlexTreeHash({ tree: orderTree });
 
@@ -293,24 +299,25 @@ describe('FlexConfirmNativeFacet', function () {
       tree: orderTree,
       receiveNativeHash: receiveHash,
     });
-    const confirmComponentMultiBranch = calcFlexConfirmNativeMultiBranch({
+    const refundComponentMultiBranch = calcFlexRefundNativeMultiBranch({
       tree: orderTree,
       receiveNativeHash: receiveHash,
-      confirmNativeHash: confirmHash,
+      refundNativeHash: refundHash,
     });
 
     await expect(
       walletClient.writeContract({
-        abi: flexConfirmNativeFacet.abi,
+        abi: flexRefundNativeFacet.abi,
         address: flex.address,
-        functionName: 'flexConfirmNative',
+        functionName: 'flexRefundNative',
         args: [
           receiveData0,
           receiveData1,
-          confirmData0,
-          confirmKey,
-          confirmComponentMultiBranch.branch,
-          confirmComponentMultiBranch.flags,
+          refundData0,
+          refundData1,
+          refundKey,
+          refundComponentMultiBranch.branch,
+          refundComponentMultiBranch.flags,
           zeroAddress, // receiveHashBefore
           [], // receiveOrderHashesAfter
         ],
@@ -359,26 +366,30 @@ describe('FlexConfirmNativeFacet', function () {
     }
 
     const receiverBalanceBefore = await publicClient.getBalance({ address: receiver });
+    const refundReceiverBalanceBefore = await publicClient.getBalance({ address: refundReceiver });
 
     {
       const hash = await walletClient.writeContract({
-        abi: flexConfirmNativeFacet.abi,
+        abi: flexRefundNativeFacet.abi,
         address: flex.address,
-        functionName: 'flexConfirmNative',
+        functionName: 'flexRefundNative',
         args: [
           receiveData0,
           receiveData1,
-          confirmData0,
-          confirmKey,
-          confirmComponentMultiBranch.branch,
-          confirmComponentMultiBranch.flags,
+          refundData0,
+          refundData1,
+          refundKey,
+          refundComponentMultiBranch.branch,
+          refundComponentMultiBranch.flags,
           zeroAddress, // receiveHashBefore
           [], // receiveOrderHashesAfter
         ],
       });
 
       const receipt = await publicClient.getTransactionReceipt({ hash });
-      console.log(`flexConfirmNative gas: ${receipt.gasUsed}`);
+      console.log(`flexRefundNative gas: ${receipt.gasUsed}`);
+
+      const txCost = receipt.gasUsed * receipt.effectiveGasPrice;
 
       {
         const balance = await publicClient.getBalance({ address: flex.address });
@@ -386,7 +397,11 @@ describe('FlexConfirmNativeFacet', function () {
       }
       {
         const balance = await publicClient.getBalance({ address: receiver });
-        expect(balance - receiverBalanceBefore).equal(amount);
+        expect(balance).equal(receiverBalanceBefore);
+      }
+      {
+        const balance = await publicClient.getBalance({ address: refundReceiver });
+        expect(balance + txCost - refundReceiverBalanceBefore).equal(amount);
       }
     }
 
@@ -400,7 +415,7 @@ describe('FlexConfirmNativeFacet', function () {
           nonce,
         ],
       });
-      expect(state).equal(2); // FlexReceiveState.Confirmed
+      expect(state).equal(3); // FlexReceiveState.Refunded
     }
   });
 });

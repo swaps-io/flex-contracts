@@ -42,6 +42,7 @@ describe('FlexReceiveNativeFacet', function () {
 
     const flexReceiveNativeDomain = '0xc0ffeec0ffeec0ffeec0ffeec0ffeec0ffeec0ffeec0ffeec0ffeec0ffeec0ff';
     const flexConfirmNativeDomain = '0xdeadbeefdeadbeefdeadbeefdeadbeefdeadbeefdeadbeefdeadbeefdeadbeef'; // For standalone
+    const flexRefundNativeDomain = '0x4e4e4e4e4e4e4e4e4e4e4e4e4e4e4e4e4e4e4e4e4e4e4e4e4e4e4e4e4e4e4e4e'; // For standalone
 
     let flex: { address: Address };
     let flexReceiveNativeFacet: ContractTypesMap['FlexReceiveNativeFacet'];
@@ -123,6 +124,7 @@ describe('FlexReceiveNativeFacet', function () {
         [
           flexReceiveNativeDomain,
           flexConfirmNativeDomain,
+          flexRefundNativeDomain,
         ],
       );
 
