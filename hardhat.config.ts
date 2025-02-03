@@ -23,14 +23,23 @@ const config: HardhatUserConfig = {
       'contracts/facets/FlexReceiveNativeFacet.sol',
       'contracts/facets/FlexReceiveNativeDomainFacet.sol',
 
+      'contracts/facets/FlexReceiveTokenFacet.sol',
+      'contracts/facets/FlexReceiveTokenDomainFacet.sol',
+
       'contracts/facets/FlexReceiveStateFacet.sol',
       'contracts/facets/FlexReceiveHashFacet.sol',
 
       'contracts/facets/FlexConfirmNativeFacet.sol',
       'contracts/facets/FlexConfirmNativeDomainFacet.sol',
 
+      'contracts/facets/FlexConfirmTokenFacet.sol',
+      'contracts/facets/FlexConfirmTokenDomainFacet.sol',
+
       'contracts/facets/FlexRefundNativeFacet.sol',
       'contracts/facets/FlexRefundNativeDomainFacet.sol',
+
+      'contracts/facets/FlexRefundTokenFacet.sol',
+      'contracts/facets/FlexRefundTokenDomainFacet.sol',
 
       'contracts/facets/FlexSendNativeDomainFacet.sol',
       'contracts/facets/FlexSendNativeFacet.sol',
@@ -41,7 +50,11 @@ const config: HardhatUserConfig = {
       'contracts/facets/FlexSendTimeFacet.sol',
       'contracts/facets/FlexSendHashFacet.sol',
 
+      'contracts/standalone/FlexReceiveNativeStandalone.sol',
+      'contracts/standalone/FlexReceiveTokenStandalone.sol',
       'contracts/standalone/FlexReceiveStandalone.sol',
+      'contracts/standalone/FlexSendNativeStandalone.sol',
+      'contracts/standalone/FlexSendTokenStandalone.sol',
       'contracts/standalone/FlexSendStandalone.sol',
       'contracts/standalone/FlexStandalone.sol',
     ],
