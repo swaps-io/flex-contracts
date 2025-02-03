@@ -7,9 +7,12 @@ import {SignatureChecker} from "@openzeppelin/contracts/utils/cryptography/Signa
 import {SafeERC20, IERC20} from "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
 
 import {IFlexReceiveToken} from "../interfaces/IFlexReceiveToken.sol";
-import {FlexDeadlineError} from "../interfaces/FlexDeadlineError.sol";
-import {FlexSignatureError} from "../interfaces/FlexSignatureError.sol";
-import {FlexStateError} from "../interfaces/FlexStateError.sol";
+
+import {FlexDeadlineError} from "../interfaces/errors/FlexDeadlineError.sol";
+import {FlexSignatureError} from "../interfaces/errors/FlexSignatureError.sol";
+import {FlexStateError} from "../interfaces/errors/FlexStateError.sol";
+
+import {FlexReceive} from "../interfaces/events/FlexReceive.sol";
 
 import {FlexReceiveStateStorage} from "../storages/FlexReceiveStateStorage.sol";
 import {FlexReceiveStateAccess, FlexReceiveState} from "../storages/FlexReceiveStateAccess.sol";
@@ -55,6 +58,6 @@ contract FlexReceiveTokenFacet is IFlexReceiveToken {
         address token = address(uint160(uint256(receiveData2_)));
         SafeERC20.safeTransferFrom(IERC20(token), msg.sender, address(this), uint256(receiveData1_));
 
-        emit FlexReceiveToken(orderHash);
+        emit FlexReceive(orderHash);
     }
 }

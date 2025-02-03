@@ -6,10 +6,13 @@ import {MerkleProof} from "@openzeppelin/contracts/utils/cryptography/MerkleProo
 import {Address} from "@openzeppelin/contracts/utils/Address.sol";
 
 import {IFlexSendNative} from "../interfaces/IFlexSendNative.sol";
-import {FlexCallerError} from "../interfaces/FlexCallerError.sol";
-import {FlexEarlinessError} from "../interfaces/FlexEarlinessError.sol";
-import {FlexDeadlineError} from "../interfaces/FlexDeadlineError.sol";
-import {FlexChronologyError} from "../interfaces/FlexChronologyError.sol";
+
+import {FlexCallerError} from "../interfaces/errors/FlexCallerError.sol";
+import {FlexEarlinessError} from "../interfaces/errors/FlexEarlinessError.sol";
+import {FlexDeadlineError} from "../interfaces/errors/FlexDeadlineError.sol";
+import {FlexChronologyError} from "../interfaces/errors/FlexChronologyError.sol";
+
+import {FlexSend} from "../interfaces/events/FlexSend.sol";
 
 import {FlexSendStateStorage} from "../storages/FlexSendStateStorage.sol";
 import {FlexSendStateAccess} from "../storages/FlexSendStateAccess.sol";
@@ -54,6 +57,6 @@ contract FlexSendNativeFacet is IFlexSendNative {
         address receiver = address(uint160(uint256(sendData1_)));
         Address.sendValue(payable(receiver), msg.value);
 
-        emit FlexSendNative(orderHash);
+        emit FlexSend(orderHash);
     }
 }

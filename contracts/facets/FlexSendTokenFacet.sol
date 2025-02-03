@@ -6,10 +6,13 @@ import {MerkleProof} from "@openzeppelin/contracts/utils/cryptography/MerkleProo
 import {SafeERC20, IERC20} from "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
 
 import {IFlexSendToken} from "../interfaces/IFlexSendToken.sol";
-import {FlexCallerError} from "../interfaces/FlexCallerError.sol";
-import {FlexEarlinessError} from "../interfaces/FlexEarlinessError.sol";
-import {FlexDeadlineError} from "../interfaces/FlexDeadlineError.sol";
-import {FlexChronologyError} from "../interfaces/FlexChronologyError.sol";
+
+import {FlexCallerError} from "../interfaces/errors/FlexCallerError.sol";
+import {FlexEarlinessError} from "../interfaces/errors/FlexEarlinessError.sol";
+import {FlexDeadlineError} from "../interfaces/errors/FlexDeadlineError.sol";
+import {FlexChronologyError} from "../interfaces/errors/FlexChronologyError.sol";
+
+import {FlexSend} from "../interfaces/events/FlexSend.sol";
 
 import {FlexSendStateStorage} from "../storages/FlexSendStateStorage.sol";
 import {FlexSendStateAccess} from "../storages/FlexSendStateAccess.sol";
@@ -57,6 +60,6 @@ contract FlexSendTokenFacet is IFlexSendToken {
         address receiver = address(uint160(uint256(sendData1_)));
         SafeERC20.safeTransferFrom(IERC20(token), sender, receiver, uint256(sendData2_));
 
-        emit FlexSendToken(orderHash);
+        emit FlexSend(orderHash);
     }
 }

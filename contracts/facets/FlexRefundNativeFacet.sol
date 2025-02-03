@@ -6,9 +6,12 @@ import {MerkleProof} from "@openzeppelin/contracts/utils/cryptography/MerkleProo
 import {Address} from "@openzeppelin/contracts/utils/Address.sol";
 
 import {IFlexRefundNative} from "../interfaces/IFlexRefundNative.sol";
-import {FlexStateError} from "../interfaces/FlexStateError.sol";
-import {FlexKeyError} from "../interfaces/FlexKeyError.sol";
-import {FlexAccumulatorError} from "../interfaces/FlexAccumulatorError.sol";
+
+import {FlexStateError} from "../interfaces/errors/FlexStateError.sol";
+import {FlexKeyError} from "../interfaces/errors/FlexKeyError.sol";
+import {FlexAccumulatorError} from "../interfaces/errors/FlexAccumulatorError.sol";
+
+import {FlexRefund} from "../interfaces/events/FlexRefund.sol";
 
 import {FlexReceiveStateStorage} from "../storages/FlexReceiveStateStorage.sol";
 import {FlexReceiveStateAccess, FlexReceiveState} from "../storages/FlexReceiveStateAccess.sol";
@@ -58,6 +61,6 @@ contract FlexRefundNativeFacet is IFlexRefundNative {
         receiver = address(uint160(uint256(refundData1_)));
         Address.sendValue(payable(receiver), uint256(receiveData1_));
 
-        emit FlexRefundNative(orderHash);
+        emit FlexRefund(orderHash);
     }
 }

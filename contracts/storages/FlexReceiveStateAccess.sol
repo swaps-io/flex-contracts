@@ -2,7 +2,7 @@
 
 pragma solidity ^0.8.28;
 
-import {FlexReceiveState} from "../interfaces/FlexReceiveState.sol";
+import {FlexReceiveState} from "../interfaces/enums/FlexReceiveState.sol";
 
 library FlexReceiveStateAccess {
     function calcBucket(address receiver_, uint96 nonce_) internal pure returns (bytes32) {

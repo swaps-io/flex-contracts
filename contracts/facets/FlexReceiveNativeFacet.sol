@@ -6,9 +6,12 @@ import {MerkleProof} from "@openzeppelin/contracts/utils/cryptography/MerkleProo
 import {SignatureChecker} from "@openzeppelin/contracts/utils/cryptography/SignatureChecker.sol";
 
 import {IFlexReceiveNative} from "../interfaces/IFlexReceiveNative.sol";
-import {FlexDeadlineError} from "../interfaces/FlexDeadlineError.sol";
-import {FlexSignatureError} from "../interfaces/FlexSignatureError.sol";
-import {FlexStateError} from "../interfaces/FlexStateError.sol";
+
+import {FlexDeadlineError} from "../interfaces/errors/FlexDeadlineError.sol";
+import {FlexSignatureError} from "../interfaces/errors/FlexSignatureError.sol";
+import {FlexStateError} from "../interfaces/errors/FlexStateError.sol";
+
+import {FlexReceive} from "../interfaces/events/FlexReceive.sol";
 
 import {FlexReceiveStateStorage} from "../storages/FlexReceiveStateStorage.sol";
 import {FlexReceiveStateAccess, FlexReceiveState} from "../storages/FlexReceiveStateAccess.sol";
@@ -49,6 +52,6 @@ contract FlexReceiveNativeFacet is IFlexReceiveNative {
 
         FlexReceiveStateStorage.data()[bucket] = bucketState;
 
-        emit FlexReceiveNative(orderHash);
+        emit FlexReceive(orderHash);
     }
 }
