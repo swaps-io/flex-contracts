@@ -29,6 +29,9 @@ const config: HardhatUserConfig = {
       'contracts/facets/FlexConfirmNativeFacet.sol',
       'contracts/facets/FlexConfirmNativeDomainFacet.sol',
 
+      'contracts/facets/FlexRefundNativeFacet.sol',
+      'contracts/facets/FlexRefundNativeDomainFacet.sol',
+
       'contracts/facets/FlexSendNativeDomainFacet.sol',
       'contracts/facets/FlexSendNativeFacet.sol',
 
