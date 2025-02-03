@@ -134,7 +134,7 @@ describe('FlexConfirmNativeFacet', function () {
       });
     } else {
       flex = await viem.deployContract(
-        'FlexReceiveStandalone',
+        'FlexReceiveNativeStandalone',
         [
           flexReceiveNativeDomain,
           flexConfirmNativeDomain,
