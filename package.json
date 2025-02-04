@@ -29,6 +29,7 @@
     "b": "yarn build",
     "test": "hardhat test",
     "t": "yarn test",
-    "tg": "yarn test --grep"
+    "tg": "yarn test --grep",
+    "cv": "SOLIDITY_COVERAGE=true hardhat coverage"
   }
 }
