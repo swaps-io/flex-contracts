@@ -8,8 +8,8 @@ import {FlexReceiveStateFacet} from "../facets/FlexReceiveStateFacet.sol";
 import {FlexReceiveHashFacet} from "../facets/FlexReceiveHashFacet.sol";
 import {FlexConfirmTokenFacet} from "../facets/FlexConfirmTokenFacet.sol";
 import {FlexConfirmTokenDomainFacet} from "../facets/FlexConfirmTokenDomainFacet.sol";
-// import {FlexRefundTokenFacet} from "../facets/FlexRefundTokenFacet.sol";
-// import {FlexRefundTokenDomainFacet} from "../facets/FlexRefundTokenDomainFacet.sol";
+import {FlexRefundTokenFacet} from "../facets/FlexRefundTokenFacet.sol";
+import {FlexRefundTokenDomainFacet} from "../facets/FlexRefundTokenDomainFacet.sol";
 
 contract FlexReceiveTokenStandalone is
     FlexReceiveTokenFacet,
@@ -17,9 +17,9 @@ contract FlexReceiveTokenStandalone is
     FlexReceiveStateFacet,
     FlexReceiveHashFacet,
     FlexConfirmTokenFacet,
-    FlexConfirmTokenDomainFacet //,
-    // FlexRefundTokenFacet,
-    // FlexRefundTokenDomainFacet
+    FlexConfirmTokenDomainFacet,
+    FlexRefundTokenFacet,
+    FlexRefundTokenDomainFacet
 {
     constructor(
         bytes32 receiveTokenDomain_,
@@ -30,7 +30,7 @@ contract FlexReceiveTokenStandalone is
         FlexReceiveTokenDomainFacet(receiveTokenDomain_)
         FlexConfirmTokenFacet(confirmTokenDomain_, receiveTokenDomain_)
         FlexConfirmTokenDomainFacet(confirmTokenDomain_)
-        // FlexRefundTokenFacet(refundTokenDomain_, receiveTokenDomain_)
-        // FlexRefundTokenDomainFacet(refundTokenDomain_)
+        FlexRefundTokenFacet(refundTokenDomain_, receiveTokenDomain_)
+        FlexRefundTokenDomainFacet(refundTokenDomain_)
     {}
 }
