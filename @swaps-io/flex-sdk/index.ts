@@ -4,6 +4,7 @@ export * from './receiveToken';
 export * from './confirmNative';
 export * from './confirmToken';
 export * from './refundNative';
+export * from './refundToken';
 export * from './sendNative';
 export * from './sendToken';
 export * from './utils';
