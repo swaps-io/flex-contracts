@@ -273,7 +273,7 @@ describe('FlexReceiveTokenFacet', function () {
   }
   //
 
-  it('Should receive native', async function () {
+  it('Should receive token', async function () {
     const {
       flex,
       flexReceiveTokenFacet,
