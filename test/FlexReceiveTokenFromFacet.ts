@@ -6,6 +6,7 @@ import {
   Address,
   bytesToHex,
   concat,
+  encodeFunctionData,
   getAbiItem,
   Hex,
   keccak256,
@@ -402,21 +403,28 @@ describe('FlexReceiveTokenFromFacet', function () {
 
     {
       const hash = await walletClient.writeContract({
-        abi: flexReceiveTokenFromFacet.abi,
-        address: flex.address,
-        functionName: 'flexReceiveTokenFrom',
+        abi: resolver.abi,
+        address: resolver.address,
+        functionName: 'call',
         args: [
-          receiveData0,
-          receiveData1,
-          receiveData2,
-          receiveData3,
-          receiveComponentBranch,
-          senderSignature,
+          flex.address,
+          encodeFunctionData({
+            abi: flexReceiveTokenFromFacet.abi,
+            functionName: 'flexReceiveTokenFrom',
+            args: [
+              receiveData0,
+              receiveData1,
+              receiveData2,
+              receiveData3,
+              receiveComponentBranch,
+              senderSignature,
+            ],
+          }),
         ],
       });
 
       const receipt = await publicClient.getTransactionReceipt({ hash });
-      console.log(`flexReceiveTokenFrom gas (1st): ${receipt.gasUsed}`);
+      console.log(`flexReceiveTokenFrom gas (1st, via contract): ${receipt.gasUsed}`);
 
       const balance = await publicClient.readContract({
         abi: token.abi,
@@ -457,16 +465,23 @@ describe('FlexReceiveTokenFromFacet', function () {
 
     await expect(
       walletClient.writeContract({
-        abi: flexReceiveTokenFromFacet.abi,
-        address: flex.address,
-        functionName: 'flexReceiveTokenFrom',
+        abi: resolver.abi,
+        address: resolver.address,
+        functionName: 'call',
         args: [
-          receiveData0,
-          receiveData1,
-          receiveData2,
-          receiveData3,
-          receiveComponentBranch,
-          senderSignature,
+          flex.address,
+          encodeFunctionData({
+            abi: flexReceiveTokenFromFacet.abi,
+            functionName: 'flexReceiveTokenFrom',
+            args: [
+              receiveData0,
+              receiveData1,
+              receiveData2,
+              receiveData3,
+              receiveComponentBranch,
+              senderSignature,
+            ],
+          }),
         ],
       }),
     ).rejectedWith(
@@ -519,27 +534,34 @@ describe('FlexReceiveTokenFromFacet', function () {
 
       const newSenderSignature = await senderClient.signMessage({ message: { raw: newOrderHash } });
 
-      const receiveComponentBranch = calcFlexReceiveTokenFromBranch({
+      const newReceiveComponentBranch = calcFlexReceiveTokenFromBranch({
         tree: newOrderTree,
         receiveTokenFromHash: newReceiveHash,
       });
 
       const hash = await walletClient.writeContract({
-        abi: flexReceiveTokenFromFacet.abi,
-        address: flex.address,
-        functionName: 'flexReceiveTokenFrom',
+        abi: resolver.abi,
+        address: resolver.address,
+        functionName: 'call',
         args: [
-          newReceiveData0,
-          receiveData1,
-          receiveData2,
-          receiveData3,
-          receiveComponentBranch,
-          newSenderSignature,
+          flex.address,
+          encodeFunctionData({
+            abi: flexReceiveTokenFromFacet.abi,
+            functionName: 'flexReceiveTokenFrom',
+            args: [
+              newReceiveData0,
+              receiveData1,
+              receiveData2,
+              receiveData3,
+              newReceiveComponentBranch,
+              newSenderSignature,
+            ],
+          }),
         ],
       });
 
       const receipt = await publicClient.getTransactionReceipt({ hash });
-      console.log(`flexReceiveTokenFrom gas (2nd): ${receipt.gasUsed}`);
+      console.log(`flexReceiveTokenFrom gas (2nd, via contract): ${receipt.gasUsed}`);
 
       const balance = await publicClient.readContract({
         abi: token.abi,
