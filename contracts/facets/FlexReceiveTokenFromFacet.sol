@@ -36,7 +36,7 @@ contract FlexReceiveTokenFromFacet is IFlexReceiveTokenFrom {
         bytes calldata senderSignature_
     ) external override {
         address receiver = address(uint160(uint256(receiveData0_)));
-        require(msg.sender == receiver, FlexCallerError());
+        // require(msg.sender == receiver, FlexCallerError()); // TODO - check if there is a need, if so - consider adding extra field
 
         uint48 deadline = uint48(uint256(receiveData0_) >> 208);
         require(block.timestamp <= deadline, FlexDeadlineError());
