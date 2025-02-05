@@ -12,6 +12,7 @@ contract FlexStandalone is
     constructor(
         bytes32 receiveNativeDomain_,
         bytes32 receiveTokenDomain_,
+        bytes32 receiveTokenFromDomain_,
         bytes32 confirmNativeDomain_,
         bytes32 confirmTokenDomain_,
         bytes32 refundNativeDomain_,
@@ -22,6 +23,7 @@ contract FlexStandalone is
         FlexReceiveStandalone(
             receiveNativeDomain_,
             receiveTokenDomain_,
+            receiveTokenFromDomain_,
             confirmNativeDomain_,
             confirmTokenDomain_,
             refundNativeDomain_,

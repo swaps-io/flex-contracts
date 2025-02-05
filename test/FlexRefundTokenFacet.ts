@@ -29,6 +29,7 @@ describe('FlexRefundTokenFacet', function () {
     const [walletClient] = await viem.getWalletClients();
 
     const flexReceiveTokenDomain = '0xc0ffeec0ffeec0ffeec0ffeec0ffeec0ffeec0ffeec0ffeec0ffeec0ffeec0ff';
+    const flexReceiveTokenFromDomain = '0xf0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0'; // For standalone
     const flexConfirmTokenDomain = '0xdeadbeefdeadbeefdeadbeefdeadbeefdeadbeefdeadbeefdeadbeefdeadbeef'; // For standalone
     const flexRefundTokenDomain = '0x4e4e4e4e4e4e4e4e4e4e4e4e4e4e4e4e4e4e4e4e4e4e4e4e4e4e4e4e4e4e4e4e';
 
@@ -139,6 +140,7 @@ describe('FlexRefundTokenFacet', function () {
         'FlexReceiveTokenStandalone',
         [
           flexReceiveTokenDomain,
+          flexReceiveTokenFromDomain,
           flexConfirmTokenDomain,
           flexRefundTokenDomain,
         ],
