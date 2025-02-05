@@ -1,6 +1,7 @@
 export * from './flex';
 export * from './receiveNative';
 export * from './receiveToken';
+export * from './receiveTokenFrom';
 export * from './confirmNative';
 export * from './confirmToken';
 export * from './refundNative';
