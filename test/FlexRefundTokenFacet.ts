@@ -17,6 +17,7 @@ import {
   calcFlexTreeHash,
   calcFlexReceiveTokenBranch,
   calcFlexRefundTokenBranch,
+  calcFlexAccumulatorHash,
 } from '../@swaps-io/flex-sdk';
 
 const IMAGINARY_COMPONENTS = 2; // Implied in order, but not used here
@@ -409,7 +410,7 @@ describe('FlexRefundTokenFacet', function () {
       });
       expect(state).equal(1); // FlexReceiveState.Received
 
-      expectedReceiveHash = sliceHex(keccak256(concat([zeroAddress, orderHash])), 0, 20);
+      expectedReceiveHash = calcFlexAccumulatorHash({ accumulatorHash: zeroAddress, hashToAdd: orderHash });
 
       const hash = await publicClient.readContract({
         abi: flexReceiveHashFacet.abi,

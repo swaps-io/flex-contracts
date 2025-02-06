@@ -25,6 +25,7 @@ import {
   encodeFlexReceiveTokenFromData1,
   encodeFlexReceiveTokenFromData2,
   encodeFlexReceiveTokenFromData3,
+  calcFlexAccumulatorHash,
 } from '../@swaps-io/flex-sdk';
 
 const IMAGINARY_COMPONENTS = 3; // Implied in order, but not used here
@@ -449,7 +450,7 @@ describe('FlexReceiveTokenFromFacet', function () {
       });
       expect(state).equal(1); // FlexReceiveState.Received
 
-      expectedReceiveHash = sliceHex(keccak256(concat([expectedReceiveHash, orderHash])), 0, 20);
+      expectedReceiveHash = calcFlexAccumulatorHash({ accumulatorHash: expectedReceiveHash, hashToAdd: orderHash });
 
       const hash = await publicClient.readContract({
         abi: flexReceiveHashFacet.abi,
@@ -585,7 +586,7 @@ describe('FlexReceiveTokenFromFacet', function () {
         });
         expect(state).equal(1); // FlexReceiveState.Received
 
-        expectedReceiveHash = sliceHex(keccak256(concat([expectedReceiveHash, newOrderHash])), 0, 20);
+        expectedReceiveHash = calcFlexAccumulatorHash({ accumulatorHash: expectedReceiveHash, hashToAdd: newOrderHash });
 
         const hash = await publicClient.readContract({
           abi: flexReceiveHashFacet.abi,
