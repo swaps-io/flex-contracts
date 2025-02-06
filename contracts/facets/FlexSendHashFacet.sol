@@ -4,8 +4,9 @@ pragma solidity ^0.8.28;
 
 import {IFlexSendHash} from "../interfaces/IFlexSendHash.sol";
 
-import {FlexSendStateStorage} from "../storages/FlexSendStateStorage.sol";
-import {FlexSendStateAccess} from "../storages/FlexSendStateAccess.sol";
+import {FlexSendStateStorage} from "../libraries/storages/FlexSendStateStorage.sol";
+
+import {FlexSendStateAccess} from "../libraries/accesses/FlexSendStateAccess.sol";
 
 contract FlexSendHashFacet is IFlexSendHash {
     function flexSendHash(address sender_, uint48 group_) external view override returns (bytes20) {

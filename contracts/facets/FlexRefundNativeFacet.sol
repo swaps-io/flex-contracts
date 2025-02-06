@@ -7,15 +7,11 @@ import {Address} from "@openzeppelin/contracts/utils/Address.sol";
 
 import {IFlexRefundNative} from "../interfaces/IFlexRefundNative.sol";
 
-import {FlexStateError} from "../interfaces/errors/FlexStateError.sol";
-import {FlexKeyError} from "../interfaces/errors/FlexKeyError.sol";
-import {FlexAccumulatorError} from "../interfaces/errors/FlexAccumulatorError.sol";
-
 import {FlexRefund} from "../interfaces/events/FlexRefund.sol";
 
-import {FlexReceiveStateStorage} from "../storages/FlexReceiveStateStorage.sol";
-import {FlexReceiveStateAccess, FlexReceiveState} from "../storages/FlexReceiveStateAccess.sol";
-import {FlexHashAccumulator} from "../storages/FlexHashAccumulator.sol";
+import {FlexKeyConstraint} from "../libraries/constraints/FlexKeyConstraint.sol";
+
+import {FlexReceiveStateUpdate} from "../libraries/states/FlexReceiveStateUpdate.sol";
 
 contract FlexRefundNativeFacet is IFlexRefundNative {
     bytes32 private immutable _domain;
@@ -36,7 +32,7 @@ contract FlexRefundNativeFacet is IFlexRefundNative {
         bytes20 receiveHashBefore_,
         bytes32[] calldata receiveOrderHashesAfter_
     ) external override {
-        require(refundData0_ == keccak256(abi.encode(refundKey_)), FlexKeyError());
+        FlexKeyConstraint.validate(refundData0_, refundKey_);
 
         bytes32 componentHash = keccak256(abi.encode(_receiveDomain, receiveData0_, receiveData1_));
         componentHash = keccak256(abi.encode(_domain, refundData0_, refundData1_, componentHash));
@@ -44,17 +40,7 @@ contract FlexRefundNativeFacet is IFlexRefundNative {
 
         address receiver = address(uint160(uint256(receiveData0_)));
         uint96 nonce = uint48(uint256(receiveData0_) >> 160);
-        bytes32 bucket = FlexReceiveStateAccess.calcBucket(receiver, nonce);
-        uint8 offset = FlexReceiveStateAccess.calcOffset(nonce);
-        bytes32 bucketState = FlexReceiveStateStorage.data()[bucket];
-        require(FlexReceiveStateAccess.readState(bucketState, offset) == FlexReceiveState.Received, FlexStateError());
-
-        bytes20 receiveHash = FlexHashAccumulator.accumulate(receiveHashBefore_, orderHash);
-        receiveHash = FlexHashAccumulator.accumulateCalldata(receiveHash, receiveOrderHashesAfter_);
-        require(receiveHash == FlexReceiveStateAccess.readHash(bucketState), FlexAccumulatorError());
-
-        bucketState = FlexReceiveStateAccess.writeState(bucketState, offset, FlexReceiveState.Refunded);
-        FlexReceiveStateStorage.data()[bucket] = bucketState;
+        FlexReceiveStateUpdate.toRefunded(receiver, nonce, orderHash, receiveHashBefore_, receiveOrderHashesAfter_);
 
         receiver = address(uint160(uint256(refundData1_)));
         Address.sendValue(payable(receiver), uint256(receiveData1_));

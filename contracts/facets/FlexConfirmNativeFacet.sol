@@ -7,15 +7,11 @@ import {Address} from "@openzeppelin/contracts/utils/Address.sol";
 
 import {IFlexConfirmNative} from "../interfaces/IFlexConfirmNative.sol";
 
-import {FlexKeyError} from "../interfaces/errors/FlexKeyError.sol";
-import {FlexStateError} from "../interfaces/errors/FlexStateError.sol";
-import {FlexAccumulatorError} from "../interfaces/errors/FlexAccumulatorError.sol";
-
 import {FlexConfirm} from "../interfaces/events/FlexConfirm.sol";
 
-import {FlexReceiveStateStorage} from "../storages/FlexReceiveStateStorage.sol";
-import {FlexReceiveStateAccess, FlexReceiveState} from "../storages/FlexReceiveStateAccess.sol";
-import {FlexHashAccumulator} from "../storages/FlexHashAccumulator.sol";
+import {FlexKeyConstraint} from "../libraries/constraints/FlexKeyConstraint.sol";
+
+import {FlexReceiveStateUpdate} from "../libraries/states/FlexReceiveStateUpdate.sol";
 
 contract FlexConfirmNativeFacet is IFlexConfirmNative {
     bytes32 private immutable _domain;
@@ -35,7 +31,7 @@ contract FlexConfirmNativeFacet is IFlexConfirmNative {
         bytes20 receiveHashBefore_,
         bytes32[] calldata receiveOrderHashesAfter_
     ) external override {
-        require(confirmData0_ == keccak256(abi.encode(confirmKey_)), FlexKeyError());
+        FlexKeyConstraint.validate(confirmData0_, confirmKey_);
 
         bytes32 componentHash = keccak256(abi.encode(_receiveDomain, receiveData0_, receiveData1_));
         componentHash = keccak256(abi.encode(_domain, confirmData0_, componentHash));
@@ -43,17 +39,7 @@ contract FlexConfirmNativeFacet is IFlexConfirmNative {
 
         address receiver = address(uint160(uint256(receiveData0_)));
         uint96 nonce = uint48(uint256(receiveData0_) >> 160);
-        bytes32 bucket = FlexReceiveStateAccess.calcBucket(receiver, nonce);
-        uint8 offset = FlexReceiveStateAccess.calcOffset(nonce);
-        bytes32 bucketState = FlexReceiveStateStorage.data()[bucket];
-        require(FlexReceiveStateAccess.readState(bucketState, offset) == FlexReceiveState.Received, FlexStateError());
-
-        bytes20 receiveHash = FlexHashAccumulator.accumulate(receiveHashBefore_, orderHash);
-        receiveHash = FlexHashAccumulator.accumulateCalldata(receiveHash, receiveOrderHashesAfter_);
-        require(receiveHash == FlexReceiveStateAccess.readHash(bucketState), FlexAccumulatorError());
-
-        bucketState = FlexReceiveStateAccess.writeState(bucketState, offset, FlexReceiveState.Confirmed);
-        FlexReceiveStateStorage.data()[bucket] = bucketState;
+        FlexReceiveStateUpdate.toConfirmed(receiver, nonce, orderHash, receiveHashBefore_, receiveOrderHashesAfter_);
 
         Address.sendValue(payable(receiver), uint256(receiveData1_));
 

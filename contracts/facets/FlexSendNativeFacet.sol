@@ -7,16 +7,13 @@ import {Address} from "@openzeppelin/contracts/utils/Address.sol";
 
 import {IFlexSendNative} from "../interfaces/IFlexSendNative.sol";
 
-import {FlexCallerError} from "../interfaces/errors/FlexCallerError.sol";
-import {FlexEarlinessError} from "../interfaces/errors/FlexEarlinessError.sol";
-import {FlexDeadlineError} from "../interfaces/errors/FlexDeadlineError.sol";
-import {FlexChronologyError} from "../interfaces/errors/FlexChronologyError.sol";
-
 import {FlexSend} from "../interfaces/events/FlexSend.sol";
 
-import {FlexSendStateStorage} from "../storages/FlexSendStateStorage.sol";
-import {FlexSendStateAccess} from "../storages/FlexSendStateAccess.sol";
-import {FlexHashAccumulator} from "../storages/FlexHashAccumulator.sol";
+import {FlexCallerConstraint} from "../libraries/constraints/FlexCallerConstraint.sol";
+import {FlexEarlinessConstraint} from "../libraries/constraints/FlexEarlinessConstraint.sol";
+import {FlexDeadlineConstraint} from "../libraries/constraints/FlexDeadlineConstraint.sol";
+
+import {FlexSendStateUpdate} from "../libraries/states/FlexSendStateUpdate.sol";
 
 contract FlexSendNativeFacet is IFlexSendNative {
     bytes32 private immutable _domain;
@@ -31,28 +28,19 @@ contract FlexSendNativeFacet is IFlexSendNative {
         bytes32[] calldata componentBranch_
     ) external payable override {
         address sender = address(uint160(uint256(sendData0_)));
-        require(msg.sender == sender, FlexCallerError());
+        FlexCallerConstraint.validate(sender);
 
         uint48 start = uint48(uint256(sendData0_) >> 208);
-        require(block.timestamp >= start, FlexEarlinessError());
+        FlexEarlinessConstraint.validate(start);
 
         uint48 deadline = start + uint48(uint256(sendData0_) >> 160);
-        require(block.timestamp <= deadline, FlexDeadlineError());
+        FlexDeadlineConstraint.validate(deadline);
 
         bytes32 componentHash = keccak256(abi.encode(_domain, sendData0_, sendData1_, msg.value));
         bytes32 orderHash = MerkleProof.processProofCalldata(componentBranch_, componentHash);
 
         uint48 group = uint48(uint256(sendData1_) >> 208);
-        bytes32 bucket = FlexSendStateAccess.calcBucket(sender, group);
-        bytes32 bucketState = FlexSendStateStorage.data()[bucket];
-        require(FlexSendStateAccess.readTime(bucketState) <= start, FlexChronologyError());
-        bucketState = FlexSendStateAccess.writeTime(bucketState, start);
-
-        bytes20 sendHash = FlexSendStateAccess.readHash(bucketState);
-        sendHash = FlexHashAccumulator.accumulate(sendHash, orderHash);
-        bucketState = FlexSendStateAccess.writeHash(bucketState, sendHash);
-
-        FlexSendStateStorage.data()[bucket] = bucketState;
+        FlexSendStateUpdate.toSent(sender, group, start, orderHash);
 
         address receiver = address(uint160(uint256(sendData1_)));
         Address.sendValue(payable(receiver), msg.value);

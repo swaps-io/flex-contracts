@@ -9,16 +9,13 @@ import {SafeERC20, IERC20} from "@openzeppelin/contracts/token/ERC20/utils/SafeE
 
 import {IFlexReceiveTokenFrom} from "../interfaces/IFlexReceiveTokenFrom.sol";
 
-import {FlexCallerError} from "../interfaces/errors/FlexCallerError.sol";
-import {FlexDeadlineError} from "../interfaces/errors/FlexDeadlineError.sol";
-import {FlexSignatureError} from "../interfaces/errors/FlexSignatureError.sol";
-import {FlexStateError} from "../interfaces/errors/FlexStateError.sol";
-
 import {FlexReceive} from "../interfaces/events/FlexReceive.sol";
 
-import {FlexReceiveStateStorage} from "../storages/FlexReceiveStateStorage.sol";
-import {FlexReceiveStateAccess, FlexReceiveState} from "../storages/FlexReceiveStateAccess.sol";
-import {FlexHashAccumulator} from "../storages/FlexHashAccumulator.sol";
+import {FlexCallerConstraint} from "../libraries/constraints/FlexCallerConstraint.sol";
+import {FlexDeadlineConstraint} from "../libraries/constraints/FlexDeadlineConstraint.sol";
+import {FlexSignatureConstraint} from "../libraries/constraints/FlexSignatureConstraint.sol";
+
+import {FlexReceiveStateUpdate} from "../libraries/states/FlexReceiveStateUpdate.sol";
 
 contract FlexReceiveTokenFromFacet is IFlexReceiveTokenFrom {
     bytes32 private immutable _domain;
@@ -36,30 +33,19 @@ contract FlexReceiveTokenFromFacet is IFlexReceiveTokenFrom {
         bytes calldata senderSignature_
     ) external override {
         address receiver = address(uint160(uint256(receiveData0_)));
-        require(msg.sender == receiver, FlexCallerError());
+        FlexCallerConstraint.validate(receiver);
 
         uint48 deadline = uint48(uint256(receiveData0_) >> 208);
-        require(block.timestamp <= deadline, FlexDeadlineError());
+        FlexDeadlineConstraint.validate(deadline);
 
         bytes32 componentHash = keccak256(abi.encode(_domain, receiveData0_, receiveData1_, receiveData2_, receiveData3_));
         bytes32 orderHash = MerkleProof.processProofCalldata(componentBranch_, componentHash);
 
         address sender = address(uint160(uint256(receiveData3_)));
-        require(ECDSA.recover(MessageHashUtils.toEthSignedMessageHash(orderHash), senderSignature_) == sender, FlexSignatureError());
+        FlexSignatureConstraint.validate(false, sender, orderHash, senderSignature_);
 
         uint96 nonce = uint48(uint256(receiveData0_) >> 160);
-        bytes32 bucket = FlexReceiveStateAccess.calcBucket(receiver, nonce);
-        bytes32 bucketState = FlexReceiveStateStorage.data()[bucket];
-
-        uint8 offset = FlexReceiveStateAccess.calcOffset(nonce);
-        require(FlexReceiveStateAccess.readState(bucketState, offset) == FlexReceiveState.None, FlexStateError());
-        bucketState = FlexReceiveStateAccess.writeState(bucketState, offset, FlexReceiveState.Received);
-
-        bytes20 receiveHash = FlexReceiveStateAccess.readHash(bucketState);
-        receiveHash = FlexHashAccumulator.accumulate(receiveHash, orderHash);
-        bucketState = FlexReceiveStateAccess.writeHash(bucketState, receiveHash);
-
-        FlexReceiveStateStorage.data()[bucket] = bucketState;
+        FlexReceiveStateUpdate.toReceived(receiver, nonce, orderHash);
 
         address token = address(uint160(uint256(receiveData2_)));
         SafeERC20.safeTransferFrom(IERC20(token), sender, address(this), uint256(receiveData1_));

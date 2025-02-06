@@ -4,8 +4,9 @@ pragma solidity ^0.8.28;
 
 import {IFlexReceiveHash} from "../interfaces/IFlexReceiveHash.sol";
 
-import {FlexReceiveStateStorage} from "../storages/FlexReceiveStateStorage.sol";
-import {FlexReceiveStateAccess} from "../storages/FlexReceiveStateAccess.sol";
+import {FlexReceiveStateStorage} from "../libraries/storages/FlexReceiveStateStorage.sol";
+
+import {FlexReceiveStateAccess} from "../libraries/accesses/FlexReceiveStateAccess.sol";
 
 contract FlexReceiveHashFacet is IFlexReceiveHash {
     function flexReceiveHash(address receiver_, uint96 nonce_) external view override returns (bytes20) {
