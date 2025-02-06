@@ -9,7 +9,7 @@ import {FlexReceiveStateStorage} from "../storages/FlexReceiveStateStorage.sol";
 
 import {FlexReceiveStateAccess, FlexReceiveState} from "../accesses/FlexReceiveStateAccess.sol";
 
-import {FlexHashAccumulator} from "../FlexHashAccumulator.sol";
+import {FlexHashAccumulator} from "../utilities/FlexHashAccumulator.sol";
 
 library FlexReceiveStateUpdate {
     function toReceived(address receiver_, uint96 nonce_, bytes32 orderHash_) internal {

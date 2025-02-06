@@ -8,7 +8,7 @@ import {FlexSendStateStorage} from "../storages/FlexSendStateStorage.sol";
 
 import {FlexSendStateAccess} from "../accesses/FlexSendStateAccess.sol";
 
-import {FlexHashAccumulator} from "../FlexHashAccumulator.sol";
+import {FlexHashAccumulator} from "../utilities/FlexHashAccumulator.sol";
 
 library FlexSendStateUpdate {
     function toSent(
