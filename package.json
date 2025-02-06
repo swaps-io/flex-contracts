@@ -30,6 +30,7 @@
     "test": "hardhat test",
     "t": "yarn test",
     "tg": "yarn test --grep",
+    "tn": "yarn test --no-compile",
     "cv": "SOLIDITY_COVERAGE=true hardhat coverage"
   }
 }
