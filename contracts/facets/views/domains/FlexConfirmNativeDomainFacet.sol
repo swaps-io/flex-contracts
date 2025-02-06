@@ -2,7 +2,7 @@
 
 pragma solidity ^0.8.28;
 
-import {IFlexConfirmNativeDomain} from "../interfaces/IFlexConfirmNativeDomain.sol";
+import {IFlexConfirmNativeDomain} from "../../../interfaces/views/domains/IFlexConfirmNativeDomain.sol";
 
 contract FlexConfirmNativeDomainFacet is IFlexConfirmNativeDomain {
     bytes32 public immutable override flexConfirmNativeDomain;

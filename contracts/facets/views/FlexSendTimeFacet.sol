@@ -2,11 +2,11 @@
 
 pragma solidity ^0.8.28;
 
-import {IFlexSendTime} from "../interfaces/IFlexSendTime.sol";
+import {IFlexSendTime} from "../../interfaces/views/IFlexSendTime.sol";
 
-import {FlexSendStateStorage} from "../libraries/storages/FlexSendStateStorage.sol";
+import {FlexSendStateStorage} from "../../libraries/storages/FlexSendStateStorage.sol";
 
-import {FlexSendStateAccess} from "../libraries/accesses/FlexSendStateAccess.sol";
+import {FlexSendStateAccess} from "../../libraries/accesses/FlexSendStateAccess.sol";
 
 contract FlexSendTimeFacet is IFlexSendTime {
     function flexSendTime(address sender_, uint48 group_) external view override returns (uint48) {

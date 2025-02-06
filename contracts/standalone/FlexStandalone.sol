@@ -2,8 +2,9 @@
 
 pragma solidity ^0.8.28;
 
-import {FlexReceiveStandalone} from "./FlexReceiveStandalone.sol";
-import {FlexSendStandalone} from "./FlexSendStandalone.sol";
+import {FlexReceiveStandalone} from "./receive/FlexReceiveStandalone.sol";
+
+import {FlexSendStandalone} from "./send/FlexSendStandalone.sol";
 
 contract FlexStandalone is
     FlexReceiveStandalone,

@@ -2,10 +2,12 @@
 
 pragma solidity ^0.8.28;
 
-import {FlexSendNativeFacet} from "../facets/FlexSendNativeFacet.sol";
-import {FlexSendNativeDomainFacet} from "../facets/FlexSendNativeDomainFacet.sol";
-import {FlexSendTimeFacet} from "../facets/FlexSendTimeFacet.sol";
-import {FlexSendHashFacet} from "../facets/FlexSendHashFacet.sol";
+import {FlexSendNativeFacet} from "../../facets/FlexSendNativeFacet.sol";
+
+import {FlexSendTimeFacet} from "../../facets/views/FlexSendTimeFacet.sol";
+import {FlexSendHashFacet} from "../../facets/views/FlexSendHashFacet.sol";
+
+import {FlexSendNativeDomainFacet} from "../../facets/views/domains/FlexSendNativeDomainFacet.sol";
 
 contract FlexSendNativeStandalone is
     FlexSendNativeFacet,

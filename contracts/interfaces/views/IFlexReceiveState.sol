@@ -2,7 +2,7 @@
 
 pragma solidity ^0.8.28;
 
-import {FlexReceiveState} from "./enums/FlexReceiveState.sol";
+import {FlexReceiveState} from "../enums/FlexReceiveState.sol";
 
 interface IFlexReceiveState {
     function flexReceiveState(address receiver, uint96 nonce) external view returns (FlexReceiveState);

@@ -22,44 +22,44 @@ const config: HardhatUserConfig = {
     strict: true,
     only: [
       'contracts/facets/FlexReceiveNativeFacet.sol',
-      'contracts/facets/FlexReceiveNativeDomainFacet.sol',
+      'contracts/facets/views/domains/FlexReceiveNativeDomainFacet.sol',
 
       'contracts/facets/FlexReceiveTokenFacet.sol',
-      'contracts/facets/FlexReceiveTokenDomainFacet.sol',
+      'contracts/facets/views/domains/FlexReceiveTokenDomainFacet.sol',
 
       'contracts/facets/FlexReceiveTokenFromFacet.sol',
-      'contracts/facets/FlexReceiveTokenFromDomainFacet.sol',
+      'contracts/facets/views/domains/FlexReceiveTokenFromDomainFacet.sol',
 
-      'contracts/facets/FlexReceiveStateFacet.sol',
-      'contracts/facets/FlexReceiveHashFacet.sol',
+      'contracts/facets/views/FlexReceiveStateFacet.sol',
+      'contracts/facets/views/FlexReceiveHashFacet.sol',
 
       'contracts/facets/FlexConfirmNativeFacet.sol',
-      'contracts/facets/FlexConfirmNativeDomainFacet.sol',
+      'contracts/facets/views/domains/FlexConfirmNativeDomainFacet.sol',
 
       'contracts/facets/FlexConfirmTokenFacet.sol',
-      'contracts/facets/FlexConfirmTokenDomainFacet.sol',
+      'contracts/facets/views/domains/FlexConfirmTokenDomainFacet.sol',
 
       'contracts/facets/FlexRefundNativeFacet.sol',
-      'contracts/facets/FlexRefundNativeDomainFacet.sol',
+      'contracts/facets/views/domains/FlexRefundNativeDomainFacet.sol',
 
       'contracts/facets/FlexRefundTokenFacet.sol',
-      'contracts/facets/FlexRefundTokenDomainFacet.sol',
+      'contracts/facets/views/domains/FlexRefundTokenDomainFacet.sol',
 
-      'contracts/facets/FlexSendNativeDomainFacet.sol',
       'contracts/facets/FlexSendNativeFacet.sol',
+      'contracts/facets/views/domains/FlexSendNativeDomainFacet.sol',
 
-      'contracts/facets/FlexSendTokenDomainFacet.sol',
       'contracts/facets/FlexSendTokenFacet.sol',
+      'contracts/facets/views/domains/FlexSendTokenDomainFacet.sol',
 
-      'contracts/facets/FlexSendTimeFacet.sol',
-      'contracts/facets/FlexSendHashFacet.sol',
+      'contracts/facets/views/FlexSendTimeFacet.sol',
+      'contracts/facets/views/FlexSendHashFacet.sol',
 
-      'contracts/standalone/FlexReceiveNativeStandalone.sol',
-      'contracts/standalone/FlexReceiveTokenStandalone.sol',
-      'contracts/standalone/FlexReceiveStandalone.sol',
-      'contracts/standalone/FlexSendNativeStandalone.sol',
-      'contracts/standalone/FlexSendTokenStandalone.sol',
-      'contracts/standalone/FlexSendStandalone.sol',
+      'contracts/standalone/receive/FlexReceiveNativeStandalone.sol',
+      'contracts/standalone/receive/FlexReceiveTokenStandalone.sol',
+      'contracts/standalone/receive/FlexReceiveStandalone.sol',
+      'contracts/standalone/send/FlexSendNativeStandalone.sol',
+      'contracts/standalone/send/FlexSendTokenStandalone.sol',
+      'contracts/standalone/send/FlexSendStandalone.sol',
       'contracts/standalone/FlexStandalone.sol',
     ],
   },

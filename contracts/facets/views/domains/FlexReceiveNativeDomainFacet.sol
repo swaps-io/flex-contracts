@@ -2,7 +2,7 @@
 
 pragma solidity ^0.8.28;
 
-import {IFlexReceiveNativeDomain} from "../interfaces/IFlexReceiveNativeDomain.sol";
+import {IFlexReceiveNativeDomain} from "../../../interfaces/views/domains/IFlexReceiveNativeDomain.sol";
 
 contract FlexReceiveNativeDomainFacet is IFlexReceiveNativeDomain {
     bytes32 public immutable override flexReceiveNativeDomain;

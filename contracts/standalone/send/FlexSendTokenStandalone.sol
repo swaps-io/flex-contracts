@@ -2,10 +2,12 @@
 
 pragma solidity ^0.8.28;
 
-import {FlexSendTokenFacet} from "../facets/FlexSendTokenFacet.sol";
-import {FlexSendTokenDomainFacet} from "../facets/FlexSendTokenDomainFacet.sol";
-import {FlexSendTimeFacet} from "../facets/FlexSendTimeFacet.sol";
-import {FlexSendHashFacet} from "../facets/FlexSendHashFacet.sol";
+import {FlexSendTokenFacet} from "../../facets/FlexSendTokenFacet.sol";
+
+import {FlexSendTimeFacet} from "../../facets/views/FlexSendTimeFacet.sol";
+import {FlexSendHashFacet} from "../../facets/views/FlexSendHashFacet.sol";
+
+import {FlexSendTokenDomainFacet} from "../../facets/views/domains/FlexSendTokenDomainFacet.sol";
 
 contract FlexSendTokenStandalone is
     FlexSendTokenFacet,

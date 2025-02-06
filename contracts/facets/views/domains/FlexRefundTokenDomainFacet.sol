@@ -2,7 +2,7 @@
 
 pragma solidity ^0.8.28;
 
-import {IFlexRefundTokenDomain} from "../interfaces/IFlexRefundTokenDomain.sol";
+import {IFlexRefundTokenDomain} from "../../../interfaces/views/domains/IFlexRefundTokenDomain.sol";
 
 contract FlexRefundTokenDomainFacet is IFlexRefundTokenDomain {
     bytes32 public immutable override flexRefundTokenDomain;

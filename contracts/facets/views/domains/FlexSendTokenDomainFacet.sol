@@ -2,7 +2,7 @@
 
 pragma solidity ^0.8.28;
 
-import {IFlexSendTokenDomain} from "../interfaces/IFlexSendTokenDomain.sol";
+import {IFlexSendTokenDomain} from "../../../interfaces/views/domains/IFlexSendTokenDomain.sol";
 
 contract FlexSendTokenDomainFacet is IFlexSendTokenDomain {
     bytes32 public immutable override flexSendTokenDomain;
