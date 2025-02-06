@@ -55,6 +55,7 @@ const config: HardhatUserConfig = {
       'contracts/facets/views/FlexSendHashFacet.sol',
 
       'contracts/facets/FlexAllocateReceiveFacet.sol',
+      'contracts/facets/FlexAllocateSendFacet.sol',
 
       'contracts/standalone/receive/FlexReceiveNativeStandalone.sol',
       'contracts/standalone/receive/FlexReceiveTokenStandalone.sol',
