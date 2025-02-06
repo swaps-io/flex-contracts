@@ -13,6 +13,8 @@ import {FlexKeyConstraint} from "../libraries/constraints/FlexKeyConstraint.sol"
 
 import {FlexReceiveStateUpdate} from "../libraries/states/FlexReceiveStateUpdate.sol";
 
+import {FlexEfficientHash} from "../libraries/utilities/FlexEfficientHash.sol";
+
 contract FlexRefundTokenFacet is IFlexRefundToken {
     bytes32 private immutable _domain;
     bytes32 private immutable _receiveDomain;
@@ -35,8 +37,8 @@ contract FlexRefundTokenFacet is IFlexRefundToken {
     ) external override {
         FlexKeyConstraint.validate(refundData0_, refundKey_);
 
-        bytes32 componentHash = keccak256(abi.encode(_receiveDomain, receiveData0_, receiveData1_, receiveData2_));
-        componentHash = keccak256(abi.encode(_domain, refundData0_, refundData1_, componentHash));
+        bytes32 componentHash = FlexEfficientHash.calc(_receiveDomain, receiveData0_, receiveData1_, receiveData2_);
+        componentHash = FlexEfficientHash.calc(_domain, refundData0_, refundData1_, componentHash);
         bytes32 orderHash = MerkleProof.processProofCalldata(componentBranch_, componentHash);
 
         address receiver = address(uint160(uint256(receiveData0_)));

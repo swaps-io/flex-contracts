@@ -17,6 +17,8 @@ import {FlexSignatureConstraint} from "../libraries/constraints/FlexSignatureCon
 
 import {FlexReceiveStateUpdate} from "../libraries/states/FlexReceiveStateUpdate.sol";
 
+import {FlexEfficientHash} from "../libraries/utilities/FlexEfficientHash.sol";
+
 contract FlexReceiveTokenFromFacet is IFlexReceiveTokenFrom {
     bytes32 private immutable _domain;
 
@@ -38,7 +40,7 @@ contract FlexReceiveTokenFromFacet is IFlexReceiveTokenFrom {
         uint48 deadline = uint48(uint256(receiveData0_) >> 208);
         FlexDeadlineConstraint.validate(deadline);
 
-        bytes32 componentHash = keccak256(abi.encode(_domain, receiveData0_, receiveData1_, receiveData2_, receiveData3_));
+        bytes32 componentHash = FlexEfficientHash.calc(_domain, receiveData0_, receiveData1_, receiveData2_, receiveData3_);
         bytes32 orderHash = MerkleProof.processProofCalldata(componentBranch_, componentHash);
 
         address sender = address(uint160(uint256(receiveData3_)));

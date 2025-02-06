@@ -15,6 +15,8 @@ import {FlexDeadlineConstraint} from "../libraries/constraints/FlexDeadlineConst
 
 import {FlexSendStateUpdate} from "../libraries/states/FlexSendStateUpdate.sol";
 
+import {FlexEfficientHash} from "../libraries/utilities/FlexEfficientHash.sol";
+
 contract FlexSendTokenFacet is IFlexSendToken {
     bytes32 private immutable _domain;
 
@@ -38,7 +40,7 @@ contract FlexSendTokenFacet is IFlexSendToken {
         uint48 deadline = start + uint48(uint256(sendData0_) >> 160);
         FlexDeadlineConstraint.validate(deadline);
 
-        bytes32 componentHash = keccak256(abi.encode(_domain, sendData0_, sendData1_, sendData2_, sendData3_));
+        bytes32 componentHash = FlexEfficientHash.calc(_domain, sendData0_, sendData1_, sendData2_, sendData3_);
         bytes32 orderHash = MerkleProof.processProofCalldata(componentBranch_, componentHash);
 
         uint48 group = uint48(uint256(sendData1_) >> 208);

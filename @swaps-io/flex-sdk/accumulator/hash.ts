@@ -12,6 +12,7 @@ export function calcFlexAccumulatorHash(params: CalcFlexAccumulatorHashParams): 
     keccak256(
       concatHex([
         asHex(params.accumulatorHash, 20),
+        asHex(0, 12),
         asHex(params.hashToAdd, 32),
       ]),
     ),

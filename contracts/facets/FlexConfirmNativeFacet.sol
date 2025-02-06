@@ -13,6 +13,8 @@ import {FlexKeyConstraint} from "../libraries/constraints/FlexKeyConstraint.sol"
 
 import {FlexReceiveStateUpdate} from "../libraries/states/FlexReceiveStateUpdate.sol";
 
+import {FlexEfficientHash} from "../libraries/utilities/FlexEfficientHash.sol";
+
 contract FlexConfirmNativeFacet is IFlexConfirmNative {
     bytes32 private immutable _domain;
     bytes32 private immutable _receiveDomain;
@@ -33,8 +35,8 @@ contract FlexConfirmNativeFacet is IFlexConfirmNative {
     ) external override {
         FlexKeyConstraint.validate(confirmData0_, confirmKey_);
 
-        bytes32 componentHash = keccak256(abi.encode(_receiveDomain, receiveData0_, receiveData1_));
-        componentHash = keccak256(abi.encode(_domain, confirmData0_, componentHash));
+        bytes32 componentHash = FlexEfficientHash.calc(_receiveDomain, receiveData0_, receiveData1_);
+        componentHash = FlexEfficientHash.calc(_domain, confirmData0_, componentHash);
         bytes32 orderHash = MerkleProof.processProofCalldata(componentBranch_, componentHash);
 
         address receiver = address(uint160(uint256(receiveData0_)));
