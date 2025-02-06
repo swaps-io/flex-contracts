@@ -8,4 +8,6 @@ export * from './refundNative';
 export * from './refundToken';
 export * from './sendNative';
 export * from './sendToken';
+export * from './allocateReceive';
+export * from './allocateSend';
 export * from './utils';
