@@ -10,4 +10,4 @@ export type { Hex, ByteArray } from 'viem';
 export { isHex, toHex, concatHex, padHex, keccak256 } from 'viem';
 
 export { SimpleMerkleTree } from '@openzeppelin/merkle-tree';
-export { processProof, processMultiProof } from '@openzeppelin/merkle-tree/dist/core';
+export { processProof } from '@openzeppelin/merkle-tree/dist/core';
