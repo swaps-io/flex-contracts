@@ -9,7 +9,6 @@ interface IFlexConfirmNative {
         bytes32 confirmData0, // Content: key hash (256)
         bytes32 confirmKey,
         bytes32[] calldata componentBranch,
-        bool[] calldata componentFlags,
         bytes20 receiveHashBefore,
         bytes32[] calldata receiveOrderHashesAfter
     ) external;

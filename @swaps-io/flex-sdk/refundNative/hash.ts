@@ -6,6 +6,7 @@ export interface CalcFlexRefundNativeHashParams {
   domain: AsHexValue;
   data0: AsHexValue;
   data1: AsHexValue;
+  data2: AsHexValue;
 }
 
 export function calcFlexRefundNativeHash(params: CalcFlexRefundNativeHashParams): Hex {
@@ -14,6 +15,7 @@ export function calcFlexRefundNativeHash(params: CalcFlexRefundNativeHashParams)
       asHex(params.domain, 32),
       asHex(params.data0, 32),
       asHex(params.data1, 32),
+      asHex(params.data2, 32),
     ]),
   );
 }

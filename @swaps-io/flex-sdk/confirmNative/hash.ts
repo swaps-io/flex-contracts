@@ -5,6 +5,7 @@ import { AsHexValue, asHex } from '../utils/asHex';
 export interface CalcFlexConfirmNativeHashParams {
   domain: AsHexValue;
   data0: AsHexValue;
+  data1: AsHexValue;
 }
 
 export function calcFlexConfirmNativeHash(params: CalcFlexConfirmNativeHashParams): Hex {
@@ -12,6 +13,7 @@ export function calcFlexConfirmNativeHash(params: CalcFlexConfirmNativeHashParam
     concatHex([
       asHex(params.domain, 32),
       asHex(params.data0, 32),
+      asHex(params.data1, 32),
     ]),
   );
 }

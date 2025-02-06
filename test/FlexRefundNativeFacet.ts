@@ -9,12 +9,13 @@ import {
   encodeFlexReceiveNativeData1,
   encodeFlexRefundNativeData0,
   encodeFlexRefundNativeData1,
+  encodeFlexRefundNativeData2,
   calcFlexReceiveNativeHash,
   calcFlexRefundNativeHash,
   calcFlexTree,
   calcFlexTreeHash,
-  calcFlexRefundNativeMultiBranch,
   calcFlexReceiveNativeBranch,
+  calcFlexRefundNativeBranch,
 } from '../@swaps-io/flex-sdk';
 
 const IMAGINARY_COMPONENTS = 2; // Implied in order, but not used here
@@ -279,10 +280,14 @@ describe('FlexRefundNativeFacet', function () {
     const refundData1 = encodeFlexRefundNativeData1({
       receiver: refundReceiver,
     });
+    const refundData2 = encodeFlexRefundNativeData2({
+      receiveNativeHash: receiveHash,
+    });
     const refundHash = calcFlexRefundNativeHash({
       domain: refundDomain,
       data0: refundData0,
       data1: refundData1,
+      data2: refundData2,
     });
 
     const imaginaryComponentHashes: Hex[] = [];
@@ -299,9 +304,8 @@ describe('FlexRefundNativeFacet', function () {
       tree: orderTree,
       receiveNativeHash: receiveHash,
     });
-    const refundComponentMultiBranch = calcFlexRefundNativeMultiBranch({
+    const refundComponentBranch = calcFlexRefundNativeBranch({
       tree: orderTree,
-      receiveNativeHash: receiveHash,
       refundNativeHash: refundHash,
     });
 
@@ -316,8 +320,7 @@ describe('FlexRefundNativeFacet', function () {
           refundData0,
           refundData1,
           refundKey,
-          refundComponentMultiBranch.branch,
-          refundComponentMultiBranch.flags,
+          refundComponentBranch,
           zeroAddress, // receiveHashBefore
           [], // receiveOrderHashesAfter
         ],
@@ -379,8 +382,7 @@ describe('FlexRefundNativeFacet', function () {
           refundData0,
           refundData1,
           refundKey,
-          refundComponentMultiBranch.branch,
-          refundComponentMultiBranch.flags,
+          refundComponentBranch,
           zeroAddress, // receiveHashBefore
           [], // receiveOrderHashesAfter
         ],

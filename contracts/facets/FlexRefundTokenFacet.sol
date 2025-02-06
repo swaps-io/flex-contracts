@@ -34,16 +34,14 @@ contract FlexRefundTokenFacet is IFlexRefundToken {
         bytes32 refundData1_, // Content: <unused> (96), refund receiver (160)
         bytes32 refundKey_,
         bytes32[] calldata componentBranch_,
-        bool[] calldata componentFlags_,
         bytes20 receiveHashBefore_,
         bytes32[] calldata receiveOrderHashesAfter_
     ) external override {
         require(refundData0_ == keccak256(abi.encode(refundKey_)), FlexKeyError());
 
-        bytes32[] memory componentHashes = new bytes32[](2);
-        componentHashes[0] = keccak256(abi.encode(_receiveDomain, receiveData0_, receiveData1_, receiveData2_)); // Receive token component
-        componentHashes[1] = keccak256(abi.encode(_domain, refundData0_, refundData1_)); // Refund token component
-        bytes32 orderHash = MerkleProof.processMultiProofCalldata(componentBranch_, componentFlags_, componentHashes);
+        bytes32 componentHash = keccak256(abi.encode(_receiveDomain, receiveData0_, receiveData1_, receiveData2_));
+        componentHash = keccak256(abi.encode(_domain, refundData0_, refundData1_, componentHash));
+        bytes32 orderHash = MerkleProof.processProofCalldata(componentBranch_, componentHash);
 
         address receiver = address(uint160(uint256(receiveData0_)));
         uint96 nonce = uint48(uint256(receiveData0_) >> 160);

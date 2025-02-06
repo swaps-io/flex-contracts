@@ -10,12 +10,13 @@ import {
   encodeFlexReceiveTokenData2,
   encodeFlexRefundTokenData0,
   encodeFlexRefundTokenData1,
+  encodeFlexRefundTokenData2,
   calcFlexReceiveTokenHash,
   calcFlexRefundTokenHash,
   calcFlexTree,
   calcFlexTreeHash,
-  calcFlexRefundTokenMultiBranch,
   calcFlexReceiveTokenBranch,
+  calcFlexRefundTokenBranch,
 } from '../@swaps-io/flex-sdk';
 
 const IMAGINARY_COMPONENTS = 2; // Implied in order, but not used here
@@ -332,10 +333,14 @@ describe('FlexRefundTokenFacet', function () {
     const refundData1 = encodeFlexRefundTokenData1({
       receiver: refundReceiver,
     });
+    const refundData2 = encodeFlexRefundTokenData2({
+      receiveTokenHash: receiveHash,
+    });
     const refundHash = calcFlexRefundTokenHash({
       domain: refundDomain,
       data0: refundData0,
       data1: refundData1,
+      data2: refundData2,
     });
 
     const imaginaryComponentHashes: Hex[] = [];
@@ -352,9 +357,8 @@ describe('FlexRefundTokenFacet', function () {
       tree: orderTree,
       receiveTokenHash: receiveHash,
     });
-    const refundComponentMultiBranch = calcFlexRefundTokenMultiBranch({
+    const refundComponentBranch = calcFlexRefundTokenBranch({
       tree: orderTree,
-      receiveTokenHash: receiveHash,
       refundTokenHash: refundHash,
     });
 
@@ -370,8 +374,7 @@ describe('FlexRefundTokenFacet', function () {
           refundData0,
           refundData1,
           refundKey,
-          refundComponentMultiBranch.branch,
-          refundComponentMultiBranch.flags,
+          refundComponentBranch,
           zeroAddress, // receiveHashBefore
           [], // receiveOrderHashesAfter
         ],
@@ -449,8 +452,7 @@ describe('FlexRefundTokenFacet', function () {
           refundData0,
           refundData1,
           refundKey,
-          refundComponentMultiBranch.branch,
-          refundComponentMultiBranch.flags,
+          refundComponentBranch,
           zeroAddress, // receiveHashBefore
           [], // receiveOrderHashesAfter
         ],

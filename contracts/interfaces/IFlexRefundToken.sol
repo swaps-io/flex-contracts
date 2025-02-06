@@ -11,7 +11,6 @@ interface IFlexRefundToken {
         bytes32 refundData1, // Content: <unused> (96), refund receiver (160)
         bytes32 refundKey,
         bytes32[] calldata componentBranch,
-        bool[] calldata componentFlags,
         bytes20 receiveHashBefore,
         bytes32[] calldata receiveOrderHashesAfter
     ) external;

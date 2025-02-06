@@ -9,12 +9,13 @@ import {
   encodeFlexReceiveTokenData1,
   encodeFlexReceiveTokenData2,
   encodeFlexConfirmTokenData0,
+  encodeFlexConfirmTokenData1,
   calcFlexReceiveTokenHash,
   calcFlexConfirmTokenHash,
   calcFlexTree,
   calcFlexTreeHash,
-  calcFlexConfirmTokenMultiBranch,
   calcFlexReceiveTokenBranch,
+  calcFlexConfirmTokenBranch,
 } from '../@swaps-io/flex-sdk';
 
 const IMAGINARY_COMPONENTS = 2; // Implied in order, but not used here
@@ -327,9 +328,13 @@ describe('FlexConfirmTokenFacet', function () {
     const confirmData0 = encodeFlexConfirmTokenData0({
       keyHash: confirmKeyHash,
     });
+    const confirmData1 = encodeFlexConfirmTokenData1({
+      receiveTokenHash: receiveHash,
+    });
     const confirmHash = calcFlexConfirmTokenHash({
       domain: confirmDomain,
       data0: confirmData0,
+      data1: confirmData1,
     });
 
     const imaginaryComponentHashes: Hex[] = [];
@@ -346,9 +351,8 @@ describe('FlexConfirmTokenFacet', function () {
       tree: orderTree,
       receiveTokenHash: receiveHash,
     });
-    const confirmComponentMultiBranch = calcFlexConfirmTokenMultiBranch({
+    const confirmComponentBranch = calcFlexConfirmTokenBranch({
       tree: orderTree,
-      receiveTokenHash: receiveHash,
       confirmTokenHash: confirmHash,
     });
 
@@ -363,8 +367,7 @@ describe('FlexConfirmTokenFacet', function () {
           receiveData2,
           confirmData0,
           confirmKey,
-          confirmComponentMultiBranch.branch,
-          confirmComponentMultiBranch.flags,
+          confirmComponentBranch,
           zeroAddress, // receiveHashBefore
           [], // receiveOrderHashesAfter
         ],
@@ -433,8 +436,7 @@ describe('FlexConfirmTokenFacet', function () {
           receiveData2,
           confirmData0,
           confirmKey,
-          confirmComponentMultiBranch.branch,
-          confirmComponentMultiBranch.flags,
+          confirmComponentBranch,
           zeroAddress, // receiveHashBefore
           [], // receiveOrderHashesAfter
         ],

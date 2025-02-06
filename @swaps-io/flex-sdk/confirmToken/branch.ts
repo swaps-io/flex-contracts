@@ -3,14 +3,14 @@ import { Hex } from '../external';
 import { FlexTree } from '../flex/tree';
 import { calcFlexBranch, FlexBranch } from '../flex/branch';
 
-export interface CalcFlexConfirmNativeBranchParams {
+export interface CalcFlexConfirmTokenBranchParams {
   tree: FlexTree;
-  confirmNativeHash: Hex;
+  confirmTokenHash: Hex;
 }
 
-export function calcFlexConfirmNativeBranch(params: CalcFlexConfirmNativeBranchParams): FlexBranch {
+export function calcFlexConfirmTokenBranch(params: CalcFlexConfirmTokenBranchParams): FlexBranch {
   return calcFlexBranch({
     tree: params.tree,
-    leaf: params.confirmNativeHash,
+    leaf: params.confirmTokenHash,
   });
 }

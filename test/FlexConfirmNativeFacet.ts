@@ -8,12 +8,13 @@ import {
   encodeFlexReceiveNativeData0,
   encodeFlexReceiveNativeData1,
   encodeFlexConfirmNativeData0,
+  encodeFlexConfirmNativeData1,
   calcFlexReceiveNativeHash,
   calcFlexConfirmNativeHash,
   calcFlexTree,
   calcFlexTreeHash,
-  calcFlexConfirmNativeMultiBranch,
   calcFlexReceiveNativeBranch,
+  calcFlexConfirmNativeBranch,
 } from '../@swaps-io/flex-sdk';
 
 const IMAGINARY_COMPONENTS = 2; // Implied in order, but not used here
@@ -274,9 +275,13 @@ describe('FlexConfirmNativeFacet', function () {
     const confirmData0 = encodeFlexConfirmNativeData0({
       keyHash: confirmKeyHash,
     });
+    const confirmData1 = encodeFlexConfirmNativeData1({
+      receiveNativeHash: receiveHash,
+    });
     const confirmHash = calcFlexConfirmNativeHash({
       domain: confirmDomain,
       data0: confirmData0,
+      data1: confirmData1,
     });
 
     const imaginaryComponentHashes: Hex[] = [];
@@ -293,9 +298,8 @@ describe('FlexConfirmNativeFacet', function () {
       tree: orderTree,
       receiveNativeHash: receiveHash,
     });
-    const confirmComponentMultiBranch = calcFlexConfirmNativeMultiBranch({
+    const confirmComponentBranch = calcFlexConfirmNativeBranch({
       tree: orderTree,
-      receiveNativeHash: receiveHash,
       confirmNativeHash: confirmHash,
     });
 
@@ -309,8 +313,7 @@ describe('FlexConfirmNativeFacet', function () {
           receiveData1,
           confirmData0,
           confirmKey,
-          confirmComponentMultiBranch.branch,
-          confirmComponentMultiBranch.flags,
+          confirmComponentBranch,
           zeroAddress, // receiveHashBefore
           [], // receiveOrderHashesAfter
         ],
@@ -370,8 +373,7 @@ describe('FlexConfirmNativeFacet', function () {
           receiveData1,
           confirmData0,
           confirmKey,
-          confirmComponentMultiBranch.branch,
-          confirmComponentMultiBranch.flags,
+          confirmComponentBranch,
           zeroAddress, // receiveHashBefore
           [], // receiveOrderHashesAfter
         ],
