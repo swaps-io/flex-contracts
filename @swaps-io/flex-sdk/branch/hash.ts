@@ -1,6 +1,6 @@
 import { Hex, processProof } from '../external';
 
-import { FlexBranch } from './branch';
+import { FlexBranch } from './data';
 
 export interface CalcFlexBranchHashParams {
   leaf: Hex;

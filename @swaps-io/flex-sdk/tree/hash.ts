@@ -1,6 +1,6 @@
 import { Hex } from '../external';
 
-import { FlexTree } from './tree';
+import { FlexTree } from './data';
 
 export interface CalcFlexTreeHashParams {
   tree: FlexTree;

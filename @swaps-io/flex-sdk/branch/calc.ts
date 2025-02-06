@@ -1,8 +1,8 @@
 import { Hex } from '../external';
 
-import { FlexTree } from './tree';
+import { FlexTree } from '../tree';
 
-export type FlexBranch = Hex[];
+import { FlexBranch } from './data';
 
 export interface CalcFlexBranchParams {
   tree: FlexTree;

@@ -1,7 +1,7 @@
 import { Hex } from '../external';
 
-import { FlexTree } from '../flex/tree';
-import { calcFlexBranch, FlexBranch } from '../flex/branch';
+import { FlexTree } from '../tree';
+import { calcFlexBranch, FlexBranch } from '../branch';
 
 export interface CalcFlexConfirmNativeBranchParams {
   tree: FlexTree;
