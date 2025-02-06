@@ -6,6 +6,7 @@ import {FlexReceiveTokenFacet} from "../../facets/FlexReceiveTokenFacet.sol";
 import {FlexReceiveTokenFromFacet} from "../../facets/FlexReceiveTokenFromFacet.sol";
 import {FlexConfirmTokenFacet} from "../../facets/FlexConfirmTokenFacet.sol";
 import {FlexRefundTokenFacet} from "../../facets/FlexRefundTokenFacet.sol";
+import {FlexAllocateReceiveFacet} from "../../facets/FlexAllocateReceiveFacet.sol";
 
 import {FlexReceiveStateFacet} from "../../facets/views/FlexReceiveStateFacet.sol";
 import {FlexReceiveHashFacet} from "../../facets/views/FlexReceiveHashFacet.sol";
@@ -25,7 +26,8 @@ contract FlexReceiveTokenStandalone is
     FlexConfirmTokenFacet,
     FlexConfirmTokenDomainFacet,
     FlexRefundTokenFacet,
-    FlexRefundTokenDomainFacet
+    FlexRefundTokenDomainFacet,
+    FlexAllocateReceiveFacet
 {
     constructor(
         bytes32 receiveTokenDomain_,

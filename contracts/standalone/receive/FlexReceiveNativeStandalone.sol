@@ -5,6 +5,7 @@ pragma solidity ^0.8.28;
 import {FlexReceiveNativeFacet} from "../../facets/FlexReceiveNativeFacet.sol";
 import {FlexConfirmNativeFacet} from "../../facets/FlexConfirmNativeFacet.sol";
 import {FlexRefundNativeFacet} from "../../facets/FlexRefundNativeFacet.sol";
+import {FlexAllocateReceiveFacet} from "../../facets/FlexAllocateReceiveFacet.sol";
 
 import {FlexReceiveStateFacet} from "../../facets/views/FlexReceiveStateFacet.sol";
 import {FlexReceiveHashFacet} from "../../facets/views/FlexReceiveHashFacet.sol";
@@ -21,7 +22,8 @@ contract FlexReceiveNativeStandalone is
     FlexConfirmNativeFacet,
     FlexConfirmNativeDomainFacet,
     FlexRefundNativeFacet,
-    FlexRefundNativeDomainFacet
+    FlexRefundNativeDomainFacet,
+    FlexAllocateReceiveFacet
 {
     constructor(
         bytes32 receiveNativeDomain_,
