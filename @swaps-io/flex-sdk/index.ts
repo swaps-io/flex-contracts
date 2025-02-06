@@ -10,4 +10,5 @@ export * from './sendNative';
 export * from './sendToken';
 export * from './allocateReceive';
 export * from './allocateSend';
+export * from './constants';
 export * from './utils';

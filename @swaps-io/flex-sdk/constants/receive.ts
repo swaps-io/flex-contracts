@@ -1,0 +1,1 @@
+export const FLEX_RECEIVE_NONCES_PER_BUCKET = 48n;
