@@ -14,14 +14,20 @@ contract FlexReceiveStandalone is
         bytes32 receiveTokenDomain_,
         bytes32 receiveTokenFromDomain_,
         bytes32 confirmNativeDomain_,
+        bytes32 confirmNativeProofDomain_,
         bytes32 confirmTokenDomain_,
         bytes32 refundNativeDomain_,
-        bytes32 refundTokenDomain_
+        bytes32 refundNativeProofDomain_,
+        bytes32 refundTokenDomain_,
+        address proofVerifier_
     )
         FlexReceiveNativeStandalone(
             receiveNativeDomain_,
             confirmNativeDomain_,
-            refundNativeDomain_
+            confirmNativeProofDomain_,
+            refundNativeDomain_,
+            refundNativeProofDomain_,
+            proofVerifier_
         )
         FlexReceiveTokenStandalone(
             receiveTokenDomain_,

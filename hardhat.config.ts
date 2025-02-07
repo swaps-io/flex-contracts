@@ -36,6 +36,9 @@ const config: HardhatUserConfig = {
       'contracts/facets/FlexConfirmNativeFacet.sol',
       'contracts/facets/views/domains/FlexConfirmNativeDomainFacet.sol',
 
+      'contracts/facets/FlexConfirmNativeProofFacet.sol',
+      'contracts/facets/views/domains/FlexConfirmNativeProofDomainFacet.sol',
+
       'contracts/facets/FlexConfirmTokenFacet.sol',
       'contracts/facets/views/domains/FlexConfirmTokenDomainFacet.sol',
 
@@ -56,6 +59,8 @@ const config: HardhatUserConfig = {
 
       'contracts/facets/FlexAllocateReceiveFacet.sol',
       'contracts/facets/FlexAllocateSendFacet.sol',
+
+      'contracts/facets/views/FlexProofVerifierFacet.sol',
 
       'contracts/standalone/receive/FlexReceiveNativeStandalone.sol',
       'contracts/standalone/receive/FlexReceiveTokenStandalone.sol',
