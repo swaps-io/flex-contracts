@@ -6,6 +6,7 @@ import {
   Hex,
   toFunctionSelector,
   toFunctionSignature,
+  zeroAddress,
 } from 'viem';
 
 import {
@@ -25,7 +26,10 @@ describe('FlexAllocateReceive', function () {
 
     const receiveNativeDomain = '0xc0ffeec0ffeec0ffeec0ffeec0ffeec0ffeec0ffeec0ffeec0ffeec0ffeec0ff'; // For standalone
     const confirmNativeDomain = '0xdeadbeefdeadbeefdeadbeefdeadbeefdeadbeefdeadbeefdeadbeefdeadbeef'; // For standalone
+    const confirmNativeProofDomain = '0xb0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0'; // For standalone
     const refundNativeDomain = '0x4e4e4e4e4e4e4e4e4e4e4e4e4e4e4e4e4e4e4e4e4e4e4e4e4e4e4e4e4e4e4e4e'; // For standalone
+    const refundNativeProofDomain = '0x3a3a3a3a3a3a3a3a3a3a3a3a3a3a3a3a3a3a3a3a3a3a3a3a3a3a3a3a3a3a3a3a'; // For standalone
+    const proofVerifier = zeroAddress; // For standalone
 
     // Includes `FlexAllocateReceiveFacet`
     const flexReceiveStandalone = await viem.deployContract(
@@ -33,7 +37,10 @@ describe('FlexAllocateReceive', function () {
       [
         receiveNativeDomain,
         confirmNativeDomain,
+        confirmNativeProofDomain,
         refundNativeDomain,
+        refundNativeProofDomain,
+        proofVerifier,
       ],
     );
 

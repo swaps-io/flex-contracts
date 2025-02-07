@@ -29,9 +29,12 @@ describe('FlexRefundNativeFacet', function () {
 
     const [walletClient] = await viem.getWalletClients();
 
-    const flexReceiveNativeDomain = '0xc0ffeec0ffeec0ffeec0ffeec0ffeec0ffeec0ffeec0ffeec0ffeec0ffeec0ff';
-    const flexConfirmNativeDomain = '0xdeadbeefdeadbeefdeadbeefdeadbeefdeadbeefdeadbeefdeadbeefdeadbeef'; // For standalone
-    const flexRefundNativeDomain = '0x4e4e4e4e4e4e4e4e4e4e4e4e4e4e4e4e4e4e4e4e4e4e4e4e4e4e4e4e4e4e4e4e';
+    const receiveNativeDomain = '0xc0ffeec0ffeec0ffeec0ffeec0ffeec0ffeec0ffeec0ffeec0ffeec0ffeec0ff';
+    const confirmNativeDomain = '0xdeadbeefdeadbeefdeadbeefdeadbeefdeadbeefdeadbeefdeadbeefdeadbeef'; // For standalone
+    const confirmNativeProofDomain = '0xb0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0'; // For standalone
+    const refundNativeDomain = '0x4e4e4e4e4e4e4e4e4e4e4e4e4e4e4e4e4e4e4e4e4e4e4e4e4e4e4e4e4e4e4e4e';
+    const refundNativeProofDomain = '0x3a3a3a3a3a3a3a3a3a3a3a3a3a3a3a3a3a3a3a3a3a3a3a3a3a3a3a3a3a3a3a3a'; // For standalone
+    const proofVerifier = zeroAddress; // For standalone
 
     let flex: { address: Address };
     let flexReceiveNativeFacet: ContractTypesMap['FlexReceiveNativeFacet'];
@@ -44,12 +47,12 @@ describe('FlexRefundNativeFacet', function () {
     if (INSIDE_DIAMOND) {
       const diamondCutFacet = await viem.deployContract('DiamondCutFacet');
 
-      flexReceiveNativeFacet = await viem.deployContract('FlexReceiveNativeFacet', [flexReceiveNativeDomain]);
-      flexReceiveNativeDomainFacet = await viem.deployContract('FlexReceiveNativeDomainFacet', [flexReceiveNativeDomain]);
+      flexReceiveNativeFacet = await viem.deployContract('FlexReceiveNativeFacet', [receiveNativeDomain]);
+      flexReceiveNativeDomainFacet = await viem.deployContract('FlexReceiveNativeDomainFacet', [receiveNativeDomain]);
       flexReceiveStateFacet = await viem.deployContract('FlexReceiveStateFacet');
       flexReceiveHashFacet = await viem.deployContract('FlexReceiveHashFacet');
-      flexRefundNativeFacet = await viem.deployContract('FlexRefundNativeFacet', [flexRefundNativeDomain, flexReceiveNativeDomain]);
-      flexRefundNativeDomainFacet = await viem.deployContract('FlexRefundNativeDomainFacet', [flexRefundNativeDomain]);
+      flexRefundNativeFacet = await viem.deployContract('FlexRefundNativeFacet', [refundNativeDomain, receiveNativeDomain]);
+      flexRefundNativeDomainFacet = await viem.deployContract('FlexRefundNativeDomainFacet', [refundNativeDomain]);
 
       flex = await viem.deployContract('Diamond', [walletClient.account.address, diamondCutFacet.address]);
       await walletClient.writeContract({
@@ -139,9 +142,12 @@ describe('FlexRefundNativeFacet', function () {
       flex = await viem.deployContract(
         'FlexReceiveNativeStandalone',
         [
-          flexReceiveNativeDomain,
-          flexConfirmNativeDomain,
-          flexRefundNativeDomain,
+          receiveNativeDomain,
+          confirmNativeDomain,
+          confirmNativeProofDomain,
+          refundNativeDomain,
+          refundNativeProofDomain,
+          proofVerifier,
         ],
       );
 
