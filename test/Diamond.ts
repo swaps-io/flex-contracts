@@ -1,6 +1,10 @@
 import { viem } from 'hardhat';
 import { loadFixture } from '@nomicfoundation/hardhat-toolbox-viem/network-helpers';
-import { getAbiItem, toFunctionSelector, zeroAddress } from 'viem';
+import {
+  getAbiItem,
+  toFunctionSelector,
+  zeroAddress,
+} from 'viem';
 
 describe('Diamond', function () {
   async function deployFixture() {

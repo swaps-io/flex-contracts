@@ -5,11 +5,8 @@ import { expect } from 'chai';
 import {
   Address,
   bytesToHex,
-  concat,
   getAbiItem,
   Hex,
-  keccak256,
-  sliceHex,
   toFunctionSelector,
   toFunctionSignature,
   zeroAddress,
@@ -35,8 +32,8 @@ describe('FlexSendNativeFacet', function () {
 
     const [walletClient, resolverClient] = await viem.getWalletClients();
 
-    const flexSendNativeDomain = '0xabababababababababababababababababababababababababababababababab';
-    const flexSendTokenDomain = '0xcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcd'; // For standalone
+    const sendNativeDomain = '0xabababababababababababababababababababababababababababababababab';
+    const sendTokenDomain = '0xcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcd'; // For standalone
 
     let flex: { address: Address };
     let flexSendNativeFacet: ContractTypesMap['FlexSendNativeFacet'];
@@ -47,8 +44,8 @@ describe('FlexSendNativeFacet', function () {
     if (INSIDE_DIAMOND) {
       const diamondCutFacet = await viem.deployContract('DiamondCutFacet');
 
-      flexSendNativeFacet = await viem.deployContract('FlexSendNativeFacet', [flexSendNativeDomain]);
-      flexSendNativeDomainFacet = await viem.deployContract('FlexSendNativeDomainFacet', [flexSendNativeDomain]);
+      flexSendNativeFacet = await viem.deployContract('FlexSendNativeFacet', [sendNativeDomain]);
+      flexSendNativeDomainFacet = await viem.deployContract('FlexSendNativeDomainFacet', [sendNativeDomain]);
       flexSendTimeFacet = await viem.deployContract('FlexSendTimeFacet');
       flexSendHashFacet = await viem.deployContract('FlexSendHashFacet');
 
@@ -116,8 +113,8 @@ describe('FlexSendNativeFacet', function () {
       flex = await viem.deployContract(
         'FlexSendStandalone',
         [
-          flexSendNativeDomain,
-          flexSendTokenDomain,
+          sendNativeDomain,
+          sendTokenDomain,
         ],
       );
 

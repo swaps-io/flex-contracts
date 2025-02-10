@@ -1,7 +1,12 @@
 import { expect } from 'chai';
 import { Hex } from 'viem';
 
-import { flexCalcBranch, flexCalcBranchHash, flexCalcTree, flexCalcTreeHash } from '../../@swaps-io/flex-sdk';
+import {
+  flexCalcBranch,
+  flexCalcBranchHash,
+  flexCalcTree,
+  flexCalcTreeHash,
+} from '../../@swaps-io/flex-sdk';
 
 describe('flex-sdk/flexCalcBranch', function () {
   it('Should not calc branch of tree with 1 mismatching leaf', function () {

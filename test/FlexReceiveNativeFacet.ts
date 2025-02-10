@@ -12,7 +12,6 @@ import {
   keccak256,
   pad,
   slice,
-  sliceHex,
   stringToHex,
   toFunctionSelector,
   toFunctionSignature,

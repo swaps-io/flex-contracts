@@ -1,8 +1,17 @@
 import { viem } from 'hardhat';
 import { loadFixture } from '@nomicfoundation/hardhat-toolbox-viem/network-helpers';
 import { ContractTypesMap } from 'hardhat/types/artifacts';
-import { Address, bytesToHex, concat, getAbiItem, Hex, keccak256, sliceHex, toFunctionSelector, toFunctionSignature, zeroAddress } from 'viem';
 import { expect } from 'chai';
+import {
+  Address,
+  bytesToHex,
+  getAbiItem,
+  Hex,
+  keccak256,
+  toFunctionSelector,
+  toFunctionSignature,
+  zeroAddress,
+} from 'viem';
 
 import {
   flexEncodeReceiveNativeData0,
