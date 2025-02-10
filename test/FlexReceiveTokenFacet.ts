@@ -295,6 +295,7 @@ describe('FlexReceiveTokenFacet', function () {
     const deadline = 4_000_000_000n;
     const nonce = 424_242n;
     const receiver = resolver.address;
+    const receiverContract = true;
     const amount = 123_456_789n;
 
     const remainingSenderAmount = 111_222n;
@@ -339,6 +340,7 @@ describe('FlexReceiveTokenFacet', function () {
       deadline,
       nonce,
       receiver,
+      receiverContract,
     });
     const receiveData1 = flexEncodeReceiveTokenData1({
       amount,
@@ -500,6 +502,7 @@ describe('FlexReceiveTokenFacet', function () {
         deadline,
         nonce: newNonce,
         receiver,
+        receiverContract,
       });
       const newReceiveHash = flexCalcReceiveTokenHash({
         domain: receiveDomain,

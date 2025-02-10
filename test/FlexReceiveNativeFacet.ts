@@ -296,6 +296,7 @@ describe('FlexReceiveNativeFacet', function () {
     const deadline = 4_000_000_000n;
     const nonce = 424_242n;
     const receiver = resolver.address;
+    const receiverContract = true;
     const amount = 123_456_789n;
 
     const receiveDomain = await publicClient.readContract({
@@ -308,6 +309,7 @@ describe('FlexReceiveNativeFacet', function () {
       deadline,
       nonce,
       receiver,
+      receiverContract,
     });
     const receiveData1 = flexEncodeReceiveNativeData1({
       amount,
@@ -495,6 +497,7 @@ describe('FlexReceiveNativeFacet', function () {
         deadline,
         nonce: newNonce,
         receiver,
+        receiverContract,
       });
       const newReceiveHash = flexCalcReceiveNativeHash({
         domain: receiveDomain,

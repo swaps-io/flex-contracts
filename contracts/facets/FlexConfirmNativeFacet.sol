@@ -25,7 +25,7 @@ contract FlexConfirmNativeFacet is IFlexConfirmNative {
     }
 
     function flexConfirmNative(
-        bytes32 receiveData0_, // Content: deadline (48), nonce (48), receiver (160)
+        bytes32 receiveData0_, // Content: deadline (48), nonce (40), receiver flags (8), receiver (160)
         bytes32 receiveData1_, // Content: amount (256)
         bytes32 confirmData0_, // Content: key hash (256)
         bytes32 confirmKey_,
@@ -40,7 +40,7 @@ contract FlexConfirmNativeFacet is IFlexConfirmNative {
         bytes32 orderHash = MerkleProof.processProofCalldata(componentBranch_, componentHash);
 
         address receiver = address(uint160(uint256(receiveData0_)));
-        uint96 nonce = uint48(uint256(receiveData0_) >> 160);
+        uint96 nonce = uint40(uint256(receiveData0_) >> 168);
         FlexReceiveStateUpdate.toConfirmed(receiver, nonce, orderHash, receiveHashBefore_, receiveOrderHashesAfter_);
 
         Address.sendValue(payable(receiver), uint256(receiveData1_));

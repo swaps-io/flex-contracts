@@ -27,7 +27,7 @@ contract FlexRefundNativeProofFacet is IFlexRefundNativeProof {
     }
 
     function flexRefundNativeProof(
-        bytes32 receiveData0_, // Content: deadline (48), nonce (48), receiver (160)
+        bytes32 receiveData0_, // Content: deadline (48), nonce (40), receiver flags (8), receiver (160)
         bytes32 receiveData1_, // Content: amount (256)
         bytes32 refundData0_, // Content: event signature (256)
         bytes32 refundData1_, // Content: event chain (256)
@@ -44,7 +44,7 @@ contract FlexRefundNativeProofFacet is IFlexRefundNativeProof {
         FlexProofConstraint.verify(_proofVerifier, refundData0_, orderHash, uint256(refundData1_), refundProof_);
 
         address receiver = address(uint160(uint256(receiveData0_)));
-        uint96 nonce = uint48(uint256(receiveData0_) >> 160);
+        uint96 nonce = uint40(uint256(receiveData0_) >> 168);
         FlexReceiveStateUpdate.toRefunded(receiver, nonce, orderHash, receiveHashBefore_, receiveOrderHashesAfter_);
 
         receiver = address(uint160(uint256(refundData2_)));

@@ -262,6 +262,7 @@ describe('FlexRefundTokenFacet', function () {
     const deadline = 4_000_000_000n;
     const nonce = 424_242n;
     const receiver = resolver.address;
+    const receiverContract = true;
     const refundReceiver = walletClient.account.address;
     const amount = 123_456_789n;
 
@@ -323,6 +324,7 @@ describe('FlexRefundTokenFacet', function () {
       deadline,
       nonce,
       receiver,
+      receiverContract,
     });
     const receiveData1 = flexEncodeReceiveTokenData1({
       amount,

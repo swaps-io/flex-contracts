@@ -27,10 +27,10 @@ contract FlexReceiveTokenFromFacet is IFlexReceiveTokenFrom {
     }
 
     function flexReceiveTokenFrom(
-        bytes32 receiveData0_, // Content: deadline (48), nonce (48), receiver (160)
+        bytes32 receiveData0_, // Content: deadline (48), nonce (40), receiver flags (8), receiver (160)
         bytes32 receiveData1_, // Content: token amount (256)
         bytes32 receiveData2_, // Content: <unused> (96), token (160)
-        bytes32 receiveData3_, // Content: <unused> (96), sender (160)
+        bytes32 receiveData3_, // Content: <unused> (88), sender flags (8), sender (160)
         bytes32[] calldata componentBranch_,
         bytes calldata senderSignature_
     ) external override {
@@ -44,9 +44,9 @@ contract FlexReceiveTokenFromFacet is IFlexReceiveTokenFrom {
         bytes32 orderHash = MerkleProof.processProofCalldata(componentBranch_, componentHash);
 
         address sender = address(uint160(uint256(receiveData3_)));
-        FlexSignatureConstraint.validate(false, sender, orderHash, senderSignature_);
+        FlexSignatureConstraint.validate(uint256(receiveData3_ >> 160), sender, orderHash, senderSignature_);
 
-        uint96 nonce = uint48(uint256(receiveData0_) >> 160);
+        uint96 nonce = uint40(uint256(receiveData0_) >> 168);
         FlexReceiveStateUpdate.toReceived(receiver, nonce, orderHash);
 
         address token = address(uint160(uint256(receiveData2_)));

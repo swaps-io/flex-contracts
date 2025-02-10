@@ -17,4 +17,5 @@ export * from './allocateReceive';
 export * from './allocateSend';
 export * from './constants';
 export * from './utils';
+export * from './flags';
 export * from './accumulator';

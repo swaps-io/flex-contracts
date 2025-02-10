@@ -8,12 +8,12 @@ import {MessageHashUtils} from "@openzeppelin/contracts/utils/cryptography/Messa
 import {FlexSignatureError} from "../../interfaces/errors/FlexSignatureError.sol";
 
 library FlexSignatureConstraint {
-    function validate(bool contract_, address signer_, bytes32 hash_, bytes calldata signature_) internal view {
-        if (contract_) {
-            require(SignatureChecker.isValidERC1271SignatureNow(signer_, hash_, signature_), FlexSignatureError());
-        } else {
+    function validate(uint256 flags_, address signer_, bytes32 hash_, bytes calldata signature_) internal view {
+        if (flags_ & 1 == 0) { // Flag #0 - validate as contract signature
             (address recovered, ECDSA.RecoverError err,) = ECDSA.tryRecover(MessageHashUtils.toEthSignedMessageHash(hash_), signature_);
-            require(err == ECDSA.RecoverError.NoError && recovered == signer_, FlexSignatureError());
+            if (err == ECDSA.RecoverError.NoError && recovered == signer_) return; // Valid EOA signature
+            require(flags_ & 2 == 0, FlexSignatureError()); // Flag #1 - no validation retry as contract signature
         }
+        require(SignatureChecker.isValidERC1271SignatureNow(signer_, hash_, signature_), FlexSignatureError());
     }
 }

@@ -254,6 +254,7 @@ describe('FlexConfirmNativeFacet', function () {
     const deadline = 4_000_000_000n;
     const nonce = 424_242n;
     const receiver = resolver.address;
+    const receiverContract = true;
     const amount = 123_456_789n;
 
     const confirmKey = '0x5ec8e15ec8e15ec8e15ec8e15ec8e15ec8e15ec8e15ec8e15ec8e15ec8e15ec8' as const;
@@ -272,6 +273,7 @@ describe('FlexConfirmNativeFacet', function () {
       deadline,
       nonce,
       receiver,
+      receiverContract,
     });
     const receiveData1 = flexEncodeReceiveNativeData1({
       amount,
