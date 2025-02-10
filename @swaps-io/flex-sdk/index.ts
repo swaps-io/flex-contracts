@@ -2,7 +2,6 @@ export * from './tree';
 export * from './branch';
 export * from './receiveNative';
 export * from './receiveToken';
-export * from './receiveTokenFrom';
 export * from './confirmNative';
 export * from './confirmNativeProof';
 export * from './confirmToken';
