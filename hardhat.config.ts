@@ -42,11 +42,20 @@ const config: HardhatUserConfig = {
       'contracts/facets/FlexConfirmTokenFacet.sol',
       'contracts/facets/views/domains/FlexConfirmTokenDomainFacet.sol',
 
+      'contracts/facets/FlexConfirmTokenProofFacet.sol',
+      'contracts/facets/views/domains/FlexConfirmTokenProofDomainFacet.sol',
+
       'contracts/facets/FlexRefundNativeFacet.sol',
       'contracts/facets/views/domains/FlexRefundNativeDomainFacet.sol',
 
+      'contracts/facets/FlexRefundNativeProofFacet.sol',
+      'contracts/facets/views/domains/FlexRefundNativeProofDomainFacet.sol',
+
       'contracts/facets/FlexRefundTokenFacet.sol',
       'contracts/facets/views/domains/FlexRefundTokenDomainFacet.sol',
+
+      'contracts/facets/FlexRefundTokenProofFacet.sol',
+      'contracts/facets/views/domains/FlexRefundTokenProofDomainFacet.sol',
 
       'contracts/facets/FlexSendNativeFacet.sol',
       'contracts/facets/views/domains/FlexSendNativeDomainFacet.sol',
