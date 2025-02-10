@@ -5,11 +5,8 @@ import { expect } from 'chai';
 import {
   Address,
   bytesToHex,
-  concat,
   getAbiItem,
   Hex,
-  keccak256,
-  sliceHex,
   toFunctionSelector,
   toFunctionSignature,
   zeroAddress,
@@ -36,10 +33,13 @@ describe('FlexReceiveTokenFacet', function () {
 
     const [walletClient] = await viem.getWalletClients();
 
-    const flexReceiveTokenDomain = '0xc0ffeec0ffeec0ffeec0ffeec0ffeec0ffeec0ffeec0ffeec0ffeec0ffeec0ff';
-    const flexReceiveTokenFromDomain = '0xf0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0'; // For standalone
-    const flexConfirmTokenDomain = '0xdeadbeefdeadbeefdeadbeefdeadbeefdeadbeefdeadbeefdeadbeefdeadbeef'; // For standalone
-    const flexRefundTokenDomain = '0x4e4e4e4e4e4e4e4e4e4e4e4e4e4e4e4e4e4e4e4e4e4e4e4e4e4e4e4e4e4e4e4e'; // For standalone
+    const receiveTokenDomain = '0xc0ffeec0ffeec0ffeec0ffeec0ffeec0ffeec0ffeec0ffeec0ffeec0ffeec0ff';
+    const receiveTokenFromDomain = '0xbebebebebebebebebebebebebebebebebebebebebebebebebebebebebebebebe'; // For standalone
+    const confirmTokenDomain = '0xdeadbeefdeadbeefdeadbeefdeadbeefdeadbeefdeadbeefdeadbeefdeadbeef'; // For standalone
+    const confirmTokenProofDomain = '0xb0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0'; // For standalone
+    const refundTokenDomain = '0x4e4e4e4e4e4e4e4e4e4e4e4e4e4e4e4e4e4e4e4e4e4e4e4e4e4e4e4e4e4e4e4e'; // For standalone
+    const refundTokenProofDomain = '0x3a3a3a3a3a3a3a3a3a3a3a3a3a3a3a3a3a3a3a3a3a3a3a3a3a3a3a3a3a3a3a3a'; // For standalone
+    const proofVerifier = zeroAddress; // For standalone
 
     let flex: { address: Address };
     let flexReceiveTokenFacet: ContractTypesMap['FlexReceiveTokenFacet'];
@@ -50,8 +50,8 @@ describe('FlexReceiveTokenFacet', function () {
     if (INSIDE_DIAMOND) {
       const diamondCutFacet = await viem.deployContract('DiamondCutFacet');
 
-      flexReceiveTokenFacet = await viem.deployContract('FlexReceiveTokenFacet', [flexReceiveTokenDomain]);
-      flexReceiveTokenDomainFacet = await viem.deployContract('FlexReceiveTokenDomainFacet', [flexReceiveTokenDomain]);
+      flexReceiveTokenFacet = await viem.deployContract('FlexReceiveTokenFacet', [receiveTokenDomain]);
+      flexReceiveTokenDomainFacet = await viem.deployContract('FlexReceiveTokenDomainFacet', [receiveTokenDomain]);
       flexReceiveStateFacet = await viem.deployContract('FlexReceiveStateFacet');
       flexReceiveHashFacet = await viem.deployContract('FlexReceiveHashFacet');
 
@@ -119,10 +119,13 @@ describe('FlexReceiveTokenFacet', function () {
       flex = await viem.deployContract(
         'FlexReceiveTokenStandalone',
         [
-          flexReceiveTokenDomain,
-          flexReceiveTokenFromDomain,
-          flexConfirmTokenDomain,
-          flexRefundTokenDomain,
+          receiveTokenDomain,
+          receiveTokenFromDomain,
+          confirmTokenDomain,
+          confirmTokenProofDomain,
+          refundTokenDomain,
+          refundTokenProofDomain,
+          proofVerifier,
         ],
       );
 

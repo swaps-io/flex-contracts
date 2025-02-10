@@ -1,8 +1,17 @@
 import { viem } from 'hardhat';
 import { loadFixture } from '@nomicfoundation/hardhat-toolbox-viem/network-helpers';
 import { ContractTypesMap } from 'hardhat/types/artifacts';
-import { Address, bytesToHex, concat, getAbiItem, Hex, keccak256, sliceHex, toFunctionSelector, toFunctionSignature, zeroAddress } from 'viem';
 import { expect } from 'chai';
+import {
+  Address,
+  bytesToHex,
+  getAbiItem,
+  Hex,
+  keccak256,
+  toFunctionSelector,
+  toFunctionSignature,
+  zeroAddress,
+} from 'viem';
 
 import {
   encodeFlexReceiveTokenData0,
@@ -30,10 +39,13 @@ describe('FlexRefundTokenFacet', function () {
 
     const [walletClient] = await viem.getWalletClients();
 
-    const flexReceiveTokenDomain = '0xc0ffeec0ffeec0ffeec0ffeec0ffeec0ffeec0ffeec0ffeec0ffeec0ffeec0ff';
-    const flexReceiveTokenFromDomain = '0xf0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0'; // For standalone
-    const flexConfirmTokenDomain = '0xdeadbeefdeadbeefdeadbeefdeadbeefdeadbeefdeadbeefdeadbeefdeadbeef'; // For standalone
-    const flexRefundTokenDomain = '0x4e4e4e4e4e4e4e4e4e4e4e4e4e4e4e4e4e4e4e4e4e4e4e4e4e4e4e4e4e4e4e4e';
+    const receiveTokenDomain = '0xc0ffeec0ffeec0ffeec0ffeec0ffeec0ffeec0ffeec0ffeec0ffeec0ffeec0ff';
+    const receiveTokenFromDomain = '0xbebebebebebebebebebebebebebebebebebebebebebebebebebebebebebebebe'; // For standalone
+    const confirmTokenDomain = '0xdeadbeefdeadbeefdeadbeefdeadbeefdeadbeefdeadbeefdeadbeefdeadbeef'; // For standalone
+    const confirmTokenProofDomain = '0xb0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0'; // For standalone
+    const refundTokenDomain = '0x4e4e4e4e4e4e4e4e4e4e4e4e4e4e4e4e4e4e4e4e4e4e4e4e4e4e4e4e4e4e4e4e';
+    const refundTokenProofDomain = '0x3a3a3a3a3a3a3a3a3a3a3a3a3a3a3a3a3a3a3a3a3a3a3a3a3a3a3a3a3a3a3a3a'; // For standalone
+    const proofVerifier = zeroAddress; // For standalone
 
     let flex: { address: Address };
     let flexReceiveTokenFacet: ContractTypesMap['FlexReceiveTokenFacet'];
@@ -46,12 +58,12 @@ describe('FlexRefundTokenFacet', function () {
     if (INSIDE_DIAMOND) {
       const diamondCutFacet = await viem.deployContract('DiamondCutFacet');
 
-      flexReceiveTokenFacet = await viem.deployContract('FlexReceiveTokenFacet', [flexReceiveTokenDomain]);
-      flexReceiveTokenDomainFacet = await viem.deployContract('FlexReceiveTokenDomainFacet', [flexReceiveTokenDomain]);
+      flexReceiveTokenFacet = await viem.deployContract('FlexReceiveTokenFacet', [receiveTokenDomain]);
+      flexReceiveTokenDomainFacet = await viem.deployContract('FlexReceiveTokenDomainFacet', [receiveTokenDomain]);
       flexReceiveStateFacet = await viem.deployContract('FlexReceiveStateFacet');
       flexReceiveHashFacet = await viem.deployContract('FlexReceiveHashFacet');
-      flexRefundTokenFacet = await viem.deployContract('FlexRefundTokenFacet', [flexRefundTokenDomain, flexReceiveTokenDomain]);
-      flexRefundTokenDomainFacet = await viem.deployContract('FlexRefundTokenDomainFacet', [flexRefundTokenDomain]);
+      flexRefundTokenFacet = await viem.deployContract('FlexRefundTokenFacet', [refundTokenDomain, receiveTokenDomain]);
+      flexRefundTokenDomainFacet = await viem.deployContract('FlexRefundTokenDomainFacet', [refundTokenDomain]);
 
       flex = await viem.deployContract('Diamond', [walletClient.account.address, diamondCutFacet.address]);
       await walletClient.writeContract({
@@ -141,10 +153,13 @@ describe('FlexRefundTokenFacet', function () {
       flex = await viem.deployContract(
         'FlexReceiveTokenStandalone',
         [
-          flexReceiveTokenDomain,
-          flexReceiveTokenFromDomain,
-          flexConfirmTokenDomain,
-          flexRefundTokenDomain,
+          receiveTokenDomain,
+          receiveTokenFromDomain,
+          confirmTokenDomain,
+          confirmTokenProofDomain,
+          refundTokenDomain,
+          refundTokenProofDomain,
+          proofVerifier,
         ],
       );
 
