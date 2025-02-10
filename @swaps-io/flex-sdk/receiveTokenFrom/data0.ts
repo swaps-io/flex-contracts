@@ -1,23 +1,16 @@
 import { Hex, concatHex, AsHexValue, asHex } from '../external';
 
-import { flexPackFlags } from '../flags';
-
 export interface FlexEncodeReceiveTokenFromData0Params {
-  sender: AsHexValue;
-  senderContract: boolean;
-  senderNoRetryAsContract?: boolean;
+  deadline: AsHexValue;
+  nonce: AsHexValue;
+  receiver: AsHexValue;
 }
 
 export function flexEncodeReceiveTokenFromData0(params: FlexEncodeReceiveTokenFromData0Params): Hex {
   return concatHex([
-    asHex(0, 11),
-    asHex(
-      flexPackFlags([
-        params.senderContract,
-        params.senderNoRetryAsContract,
-      ]),
-      1,
-    ),
-    asHex(params.sender, 20),
+    asHex(params.deadline, 6),
+    asHex(params.nonce, 5),
+    asHex(0, 1),
+    asHex(params.receiver, 20),
   ]);
 }

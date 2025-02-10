@@ -1,9 +1,9 @@
 import { Hex, AsHexValue, asHex } from '../external';
 
 export interface FlexEncodeReceiveTokenFromData1Params {
-  receiveTokenHash: AsHexValue;
+  amount: AsHexValue;
 }
 
 export function flexEncodeReceiveTokenFromData1(params: FlexEncodeReceiveTokenFromData1Params): Hex {
-  return asHex(params.receiveTokenHash, 32);
+  return asHex(params.amount, 32);
 }
