@@ -4,6 +4,7 @@ export interface FlexCalcReceiveNativeHashParams {
   domain: AsHexValue;
   data0: AsHexValue;
   data1: AsHexValue;
+  data2: AsHexValue;
 }
 
 export function flexCalcReceiveNativeHash(params: FlexCalcReceiveNativeHashParams): Hex {
@@ -12,6 +13,7 @@ export function flexCalcReceiveNativeHash(params: FlexCalcReceiveNativeHashParam
       asHex(params.domain, 32),
       asHex(params.data0, 32),
       asHex(params.data1, 32),
+      asHex(params.data2, 32),
     ]),
   );
 }

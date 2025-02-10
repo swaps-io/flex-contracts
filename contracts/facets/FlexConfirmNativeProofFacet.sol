@@ -29,6 +29,7 @@ contract FlexConfirmNativeProofFacet is IFlexConfirmNativeProof {
     function flexConfirmNativeProof(
         bytes32 receiveData0_, // Content: deadline (48), nonce (40), receiver flags (8), receiver (160)
         bytes32 receiveData1_, // Content: amount (256)
+        bytes32 receiveData2_, // Content: <unused> (96), sender (160)
         bytes32 confirmData0_, // Content: event signature (256)
         bytes32 confirmData1_, // Content: event chain (256)
         bytes calldata confirmProof_,
@@ -36,7 +37,7 @@ contract FlexConfirmNativeProofFacet is IFlexConfirmNativeProof {
         bytes20 receiveHashBefore_,
         bytes32[] calldata receiveOrderHashesAfter_
     ) external override {
-        bytes32 componentHash = FlexEfficientHash.calc(_receiveDomain, receiveData0_, receiveData1_);
+        bytes32 componentHash = FlexEfficientHash.calc(_receiveDomain, receiveData0_, receiveData1_, receiveData2_);
         componentHash = FlexEfficientHash.calc(_domain, confirmData0_, confirmData1_, componentHash);
         bytes32 orderHash = MerkleProof.processProofCalldata(componentBranch_, componentHash);
 

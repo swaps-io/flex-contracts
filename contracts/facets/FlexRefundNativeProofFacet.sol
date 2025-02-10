@@ -29,6 +29,7 @@ contract FlexRefundNativeProofFacet is IFlexRefundNativeProof {
     function flexRefundNativeProof(
         bytes32 receiveData0_, // Content: deadline (48), nonce (40), receiver flags (8), receiver (160)
         bytes32 receiveData1_, // Content: amount (256)
+        bytes32 receiveData2_, // Content: <unused> (96), sender (160)
         bytes32 refundData0_, // Content: event signature (256)
         bytes32 refundData1_, // Content: event chain (256)
         bytes32 refundData2_, // Content: <unused> (96), refund receiver (160)
@@ -37,7 +38,7 @@ contract FlexRefundNativeProofFacet is IFlexRefundNativeProof {
         bytes20 receiveHashBefore_,
         bytes32[] calldata receiveOrderHashesAfter_
     ) external override {
-        bytes32 componentHash = FlexEfficientHash.calc(_receiveDomain, receiveData0_, receiveData1_);
+        bytes32 componentHash = FlexEfficientHash.calc(_receiveDomain, receiveData0_, receiveData1_, receiveData2_);
         componentHash = FlexEfficientHash.calc(_domain, refundData0_, refundData1_, refundData2_, componentHash);
         bytes32 orderHash = MerkleProof.processProofCalldata(componentBranch_, componentHash);
 

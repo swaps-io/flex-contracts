@@ -27,6 +27,7 @@ contract FlexConfirmNativeFacet is IFlexConfirmNative {
     function flexConfirmNative(
         bytes32 receiveData0_, // Content: deadline (48), nonce (40), receiver flags (8), receiver (160)
         bytes32 receiveData1_, // Content: amount (256)
+        bytes32 receiveData2_, // Content: <unused> (96), sender (160)
         bytes32 confirmData0_, // Content: key hash (256)
         bytes32 confirmKey_,
         bytes32[] calldata componentBranch_,
@@ -35,7 +36,7 @@ contract FlexConfirmNativeFacet is IFlexConfirmNative {
     ) external override {
         FlexKeyConstraint.validate(confirmData0_, confirmKey_);
 
-        bytes32 componentHash = FlexEfficientHash.calc(_receiveDomain, receiveData0_, receiveData1_);
+        bytes32 componentHash = FlexEfficientHash.calc(_receiveDomain, receiveData0_, receiveData1_, receiveData2_);
         componentHash = FlexEfficientHash.calc(_domain, confirmData0_, componentHash);
         bytes32 orderHash = MerkleProof.processProofCalldata(componentBranch_, componentHash);
 

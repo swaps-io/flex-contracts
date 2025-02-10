@@ -6,6 +6,7 @@ interface IFlexRefundNative {
     function flexRefundNative(
         bytes32 receiveData0, // Content: deadline (48), nonce (40), receiver flags (8), receiver (160)
         bytes32 receiveData1, // Content: amount (256)
+        bytes32 receiveData2, // Content: <unused> (96), sender (160)
         bytes32 refundData0, // Content: key hash (256)
         bytes32 refundData1, // Content: <unused> (96), refund receiver (160)
         bytes32 refundKey,

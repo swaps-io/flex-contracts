@@ -31,7 +31,7 @@ contract FlexReceiveNativeFacet is IFlexReceiveNative {
         uint48 deadline = uint48(uint256(receiveData0_) >> 208);
         FlexDeadlineConstraint.validate(deadline);
 
-        bytes32 componentHash = FlexEfficientHash.calc(_domain, receiveData0_, bytes32(msg.value));
+        bytes32 componentHash = FlexEfficientHash.calc(_domain, receiveData0_, bytes32(msg.value), bytes32(uint256(uint160(msg.sender))));
         bytes32 orderHash = MerkleProof.processProofCalldata(componentBranch_, componentHash);
 
         address receiver = address(uint160(uint256(receiveData0_)));
