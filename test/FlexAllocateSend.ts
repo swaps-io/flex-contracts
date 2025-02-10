@@ -9,7 +9,7 @@ import {
 } from 'viem';
 
 import {
-  encodeFlexAllocateSendData0,
+  flexEncodeAllocateSendData0,
   FLEX_UNALLOCATED_HASH,
   FLEX_ALLOCATED_HASH,
 } from '../@swaps-io/flex-sdk';
@@ -74,7 +74,7 @@ describe('FlexAllocateSend', function () {
 
     const endGroup = startGroup + totalBuckets; // Excluded
 
-    const allocateData0 = encodeFlexAllocateSendData0({
+    const allocateData0 = flexEncodeAllocateSendData0({
       sender,
       startGroup,
       totalBuckets,

@@ -2,13 +2,13 @@ import { Hex, concatHex } from '../external';
 
 import { AsHexValue, asHex } from '../utils/asHex';
 
-export interface EncodeFlexSendTokenData0Params {
+export interface FlexEncodeSendTokenData0Params {
   start: AsHexValue;
   duration: AsHexValue;
   sender: AsHexValue;
 }
 
-export function encodeFlexSendTokenData0(params: EncodeFlexSendTokenData0Params): Hex {
+export function flexEncodeSendTokenData0(params: FlexEncodeSendTokenData0Params): Hex {
   return concatHex([
     asHex(params.start, 6),
     asHex(params.duration, 6),

@@ -16,15 +16,15 @@ import {
 } from 'viem';
 
 import {
-  calcFlexSendTokenBranch,
-  calcFlexSendTokenHash,
-  calcFlexTree,
-  calcFlexTreeHash,
-  encodeFlexSendTokenData0,
-  encodeFlexSendTokenData1,
-  encodeFlexSendTokenData2,
-  encodeFlexSendTokenData3,
-  calcFlexAccumulatorHash,
+  flexCalcSendTokenBranch,
+  flexCalcSendTokenHash,
+  flexCalcTree,
+  flexCalcTreeHash,
+  flexEncodeSendTokenData0,
+  flexEncodeSendTokenData1,
+  flexEncodeSendTokenData2,
+  flexEncodeSendTokenData3,
+  flexCalcAccumulatorHash,
 } from '../@swaps-io/flex-sdk';
 
 const IMAGINARY_COMPONENTS = 3; // Implied in order, but not used here
@@ -329,23 +329,23 @@ describe('FlexSendTokenFacet', function () {
       functionName: 'flexSendTokenDomain',
       args: [],
     });
-    const sendData0 = encodeFlexSendTokenData0({
+    const sendData0 = flexEncodeSendTokenData0({
       start,
       duration,
       sender,
     });
-    const sendData1 = encodeFlexSendTokenData1({
+    const sendData1 = flexEncodeSendTokenData1({
       group,
       nonce,
       receiver,
     });
-    const sendData2 = encodeFlexSendTokenData2({
+    const sendData2 = flexEncodeSendTokenData2({
       amount,
     });
-    const sendData3 = encodeFlexSendTokenData3({
+    const sendData3 = flexEncodeSendTokenData3({
       token: token.address,
     });
-    const sendHash = calcFlexSendTokenHash({
+    const sendHash = flexCalcSendTokenHash({
       domain: sendDomain,
       data0: sendData0,
       data1: sendData1,
@@ -360,10 +360,10 @@ describe('FlexSendTokenFacet', function () {
     }
 
     const componentHashes = [sendHash, ...imaginaryComponentHashes];
-    const orderTree = calcFlexTree({ leaves: componentHashes });
-    const orderHash = calcFlexTreeHash({ tree: orderTree });
+    const orderTree = flexCalcTree({ leaves: componentHashes });
+    const orderHash = flexCalcTreeHash({ tree: orderTree });
 
-    const sendComponentBranch = calcFlexSendTokenBranch({
+    const sendComponentBranch = flexCalcSendTokenBranch({
       tree: orderTree,
       sendTokenHash: sendHash,
     });
@@ -444,7 +444,7 @@ describe('FlexSendTokenFacet', function () {
       });
       expect(time).equal(start);
 
-      expectedSendHash = calcFlexAccumulatorHash({ accumulatorHash: expectedSendHash, hashToAdd: orderHash });
+      expectedSendHash = flexCalcAccumulatorHash({ accumulatorHash: expectedSendHash, hashToAdd: orderHash });
 
       const hash = await publicClient.readContract({
         abi: flexSendHashFacet.abi,
@@ -459,12 +459,12 @@ describe('FlexSendTokenFacet', function () {
     }
 
     {
-      const sendData0 = encodeFlexSendTokenData0({
+      const sendData0 = flexEncodeSendTokenData0({
         start: start - 1, // Note - bad start
         duration,
         sender,
       });
-      const sendHash = calcFlexSendTokenHash({
+      const sendHash = flexCalcSendTokenHash({
         domain: sendDomain,
         data0: sendData0,
         data1: sendData1,
@@ -473,9 +473,9 @@ describe('FlexSendTokenFacet', function () {
       });
   
       const componentHashes = [sendHash, ...imaginaryComponentHashes];
-      const orderTree = calcFlexTree({ leaves: componentHashes });
+      const orderTree = flexCalcTree({ leaves: componentHashes });
 
-      const sendComponentBranch = calcFlexSendTokenBranch({
+      const sendComponentBranch = flexCalcSendTokenBranch({
         tree: orderTree,
         sendTokenHash: sendHash,
       });
@@ -509,12 +509,12 @@ describe('FlexSendTokenFacet', function () {
         ],
       });
 
-      const sendData0 = encodeFlexSendTokenData0({
+      const sendData0 = flexEncodeSendTokenData0({
         start: start + 1, // Note - new start
         duration,
         sender,
       });
-      const sendHash = calcFlexSendTokenHash({
+      const sendHash = flexCalcSendTokenHash({
         domain: sendDomain,
         data0: sendData0,
         data1: sendData1,
@@ -523,10 +523,10 @@ describe('FlexSendTokenFacet', function () {
       });
   
       const componentHashes = [sendHash, ...imaginaryComponentHashes];
-      const orderTree = calcFlexTree({ leaves: componentHashes });
-      newOrderHash = calcFlexTreeHash({ tree: orderTree });
+      const orderTree = flexCalcTree({ leaves: componentHashes });
+      newOrderHash = flexCalcTreeHash({ tree: orderTree });
 
-      const sendComponentBranch = calcFlexSendTokenBranch({
+      const sendComponentBranch = flexCalcSendTokenBranch({
         tree: orderTree,
         sendTokenHash: sendHash,
       });
@@ -570,7 +570,7 @@ describe('FlexSendTokenFacet', function () {
       });
       expect(time).equal(start + 1);
 
-      expectedSendHash = calcFlexAccumulatorHash({ accumulatorHash: expectedSendHash, hashToAdd: newOrderHash });
+      expectedSendHash = flexCalcAccumulatorHash({ accumulatorHash: expectedSendHash, hashToAdd: newOrderHash });
 
       const hash = await publicClient.readContract({
         abi: flexSendHashFacet.abi,

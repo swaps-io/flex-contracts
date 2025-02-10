@@ -20,13 +20,13 @@ import {
 } from 'viem';
 
 import {
-  calcFlexReceiveNativeBranch,
-  calcFlexReceiveNativeHash,
-  calcFlexTree,
-  calcFlexTreeHash,
-  encodeFlexReceiveNativeData0,
-  encodeFlexReceiveNativeData1,
-  calcFlexAccumulatorHash,
+  flexCalcReceiveNativeBranch,
+  flexCalcReceiveNativeHash,
+  flexCalcTree,
+  flexCalcTreeHash,
+  flexEncodeReceiveNativeData0,
+  flexEncodeReceiveNativeData1,
+  flexCalcAccumulatorHash,
 } from '../@swaps-io/flex-sdk';
 
 const IMAGINARY_COMPONENTS = 3; // Implied in order, but not used here
@@ -305,15 +305,15 @@ describe('FlexReceiveNativeFacet', function () {
       functionName: 'flexReceiveNativeDomain',
       args: [],
     });
-    const receiveData0 = encodeFlexReceiveNativeData0({
+    const receiveData0 = flexEncodeReceiveNativeData0({
       deadline,
       nonce,
       receiver,
     });
-    const receiveData1 = encodeFlexReceiveNativeData1({
+    const receiveData1 = flexEncodeReceiveNativeData1({
       amount,
     });
-    const receiveHash = calcFlexReceiveNativeHash({
+    const receiveHash = flexCalcReceiveNativeHash({
       domain: receiveDomain,
       data0: receiveData0,
       data1: receiveData1,
@@ -329,10 +329,10 @@ describe('FlexReceiveNativeFacet', function () {
     }
 
     const componentHashes = [receiveHash, ...imaginaryComponentHashes];
-    const orderTree = calcFlexTree({ leaves: componentHashes });
-    const orderHash = calcFlexTreeHash({ tree: orderTree });
+    const orderTree = flexCalcTree({ leaves: componentHashes });
+    const orderHash = flexCalcTreeHash({ tree: orderTree });
 
-    const receiveComponentBranch = calcFlexReceiveNativeBranch({
+    const receiveComponentBranch = flexCalcReceiveNativeBranch({
       tree: orderTree,
       receiveNativeHash: receiveHash,
     });
@@ -434,7 +434,7 @@ describe('FlexReceiveNativeFacet', function () {
       });
       expect(state).equal(1); // FlexReceiveState.Received
 
-      expectedReceiveHash = calcFlexAccumulatorHash({ accumulatorHash: expectedReceiveHash, hashToAdd: orderHash });
+      expectedReceiveHash = flexCalcAccumulatorHash({ accumulatorHash: expectedReceiveHash, hashToAdd: orderHash });
 
       const hash = await publicClient.readContract({
         abi: flexReceiveHashFacet.abi,
@@ -492,22 +492,22 @@ describe('FlexReceiveNativeFacet', function () {
         expect(hash).equal(expectedReceiveHash);
       }
 
-      const newReceiveData0 = encodeFlexReceiveNativeData0({
+      const newReceiveData0 = flexEncodeReceiveNativeData0({
         deadline,
         nonce: newNonce,
         receiver,
       });
-      const newReceiveHash = calcFlexReceiveNativeHash({
+      const newReceiveHash = flexCalcReceiveNativeHash({
         domain: receiveDomain,
         data0: newReceiveData0,
         data1: receiveData1,
       });
 
       const newComponentHashes = [newReceiveHash, ...imaginaryComponentHashes];
-      const newOrderTree = calcFlexTree({ leaves: newComponentHashes });
-      const newOrderHash = calcFlexTreeHash({ tree: newOrderTree });
+      const newOrderTree = flexCalcTree({ leaves: newComponentHashes });
+      const newOrderHash = flexCalcTreeHash({ tree: newOrderTree });
 
-      const receiveComponentBranch = calcFlexReceiveNativeBranch({
+      const receiveComponentBranch = flexCalcReceiveNativeBranch({
         tree: newOrderTree,
         receiveNativeHash: newReceiveHash,
       });
@@ -543,7 +543,7 @@ describe('FlexReceiveNativeFacet', function () {
         });
         expect(state).equal(1); // FlexReceiveState.Received
 
-        expectedReceiveHash = calcFlexAccumulatorHash({ accumulatorHash: expectedReceiveHash, hashToAdd: newOrderHash });
+        expectedReceiveHash = flexCalcAccumulatorHash({ accumulatorHash: expectedReceiveHash, hashToAdd: newOrderHash });
 
         const hash = await publicClient.readContract({
           abi: flexReceiveHashFacet.abi,

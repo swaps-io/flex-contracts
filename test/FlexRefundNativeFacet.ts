@@ -5,18 +5,18 @@ import { Address, bytesToHex, concat, getAbiItem, Hex, keccak256, sliceHex, toFu
 import { expect } from 'chai';
 
 import {
-  encodeFlexReceiveNativeData0,
-  encodeFlexReceiveNativeData1,
-  encodeFlexRefundNativeData0,
-  encodeFlexRefundNativeData1,
-  encodeFlexRefundNativeData2,
-  calcFlexReceiveNativeHash,
-  calcFlexRefundNativeHash,
-  calcFlexTree,
-  calcFlexTreeHash,
-  calcFlexReceiveNativeBranch,
-  calcFlexRefundNativeBranch,
-  calcFlexAccumulatorHash,
+  flexEncodeReceiveNativeData0,
+  flexEncodeReceiveNativeData1,
+  flexEncodeRefundNativeData0,
+  flexEncodeRefundNativeData1,
+  flexEncodeRefundNativeData2,
+  flexCalcReceiveNativeHash,
+  flexCalcRefundNativeHash,
+  flexCalcTree,
+  flexCalcTreeHash,
+  flexCalcReceiveNativeBranch,
+  flexCalcRefundNativeBranch,
+  flexCalcAccumulatorHash,
 } from '../@swaps-io/flex-sdk';
 
 const IMAGINARY_COMPONENTS = 2; // Implied in order, but not used here
@@ -261,15 +261,15 @@ describe('FlexRefundNativeFacet', function () {
       functionName: 'flexReceiveNativeDomain',
       args: [],
     });
-    const receiveData0 = encodeFlexReceiveNativeData0({
+    const receiveData0 = flexEncodeReceiveNativeData0({
       deadline,
       nonce,
       receiver,
     });
-    const receiveData1 = encodeFlexReceiveNativeData1({
+    const receiveData1 = flexEncodeReceiveNativeData1({
       amount,
     });
-    const receiveHash = calcFlexReceiveNativeHash({
+    const receiveHash = flexCalcReceiveNativeHash({
       domain: receiveDomain,
       data0: receiveData0,
       data1: receiveData1,
@@ -281,16 +281,16 @@ describe('FlexRefundNativeFacet', function () {
       functionName: 'flexRefundNativeDomain',
       args: [],
     });
-    const refundData0 = encodeFlexRefundNativeData0({
+    const refundData0 = flexEncodeRefundNativeData0({
       keyHash: refundKeyHash,
     });
-    const refundData1 = encodeFlexRefundNativeData1({
+    const refundData1 = flexEncodeRefundNativeData1({
       receiver: refundReceiver,
     });
-    const refundData2 = encodeFlexRefundNativeData2({
+    const refundData2 = flexEncodeRefundNativeData2({
       receiveNativeHash: receiveHash,
     });
-    const refundHash = calcFlexRefundNativeHash({
+    const refundHash = flexCalcRefundNativeHash({
       domain: refundDomain,
       data0: refundData0,
       data1: refundData1,
@@ -304,14 +304,14 @@ describe('FlexRefundNativeFacet', function () {
     }
 
     const componentHashes = [receiveHash, refundHash, ...imaginaryComponentHashes];
-    const orderTree = calcFlexTree({ leaves: componentHashes });
-    const orderHash = calcFlexTreeHash({ tree: orderTree });
+    const orderTree = flexCalcTree({ leaves: componentHashes });
+    const orderHash = flexCalcTreeHash({ tree: orderTree });
 
-    const receiveComponentBranch = calcFlexReceiveNativeBranch({
+    const receiveComponentBranch = flexCalcReceiveNativeBranch({
       tree: orderTree,
       receiveNativeHash: receiveHash,
     });
-    const refundComponentBranch = calcFlexRefundNativeBranch({
+    const refundComponentBranch = flexCalcRefundNativeBranch({
       tree: orderTree,
       refundNativeHash: refundHash,
     });
@@ -361,7 +361,7 @@ describe('FlexRefundNativeFacet', function () {
       });
       expect(state).equal(1); // FlexReceiveState.Received
 
-      expectedReceiveHash = calcFlexAccumulatorHash({ accumulatorHash: zeroAddress, hashToAdd: orderHash });
+      expectedReceiveHash = flexCalcAccumulatorHash({ accumulatorHash: zeroAddress, hashToAdd: orderHash });
 
       const hash = await publicClient.readContract({
         abi: flexReceiveHashFacet.abi,

@@ -1,11 +1,11 @@
 import { expect } from 'chai';
 
-import { calcFlexTree, calcFlexTreeHash } from '../../@swaps-io/flex-sdk';
+import { flexCalcTree, flexCalcTreeHash } from '../../@swaps-io/flex-sdk';
 
-describe('flex-sdk/calcFlexTreeHash', function () {
+describe('flex-sdk/flexCalcTreeHash', function () {
   it('Should calc hash of tree with 1 leaf', function () {
-    const hash = calcFlexTreeHash({
-      tree: calcFlexTree({
+    const hash = flexCalcTreeHash({
+      tree: flexCalcTree({
         leaves: [
           '0x1111111111111111111111111111111111111111111111111111111111111111',
         ],
@@ -15,8 +15,8 @@ describe('flex-sdk/calcFlexTreeHash', function () {
   });
 
   it('Should calc hash of tree with 2 leaves', function () {
-    const hash = calcFlexTreeHash({
-      tree: calcFlexTree({
+    const hash = flexCalcTreeHash({
+      tree: flexCalcTree({
         leaves: [
           '0x1111111111111111111111111111111111111111111111111111111111111111',
           '0x2222222222222222222222222222222222222222222222222222222222222222',
@@ -27,8 +27,8 @@ describe('flex-sdk/calcFlexTreeHash', function () {
   });
 
   it('Should calc hash of tree with 2 leaves in different order', function () {
-    const hash = calcFlexTreeHash({
-      tree: calcFlexTree({
+    const hash = flexCalcTreeHash({
+      tree: flexCalcTree({
         leaves: [
           '0x2222222222222222222222222222222222222222222222222222222222222222',
           '0x1111111111111111111111111111111111111111111111111111111111111111',
@@ -39,8 +39,8 @@ describe('flex-sdk/calcFlexTreeHash', function () {
   });
 
   it('Should calc hash of tree with 3 leaves', function () {
-    const hash = calcFlexTreeHash({
-      tree: calcFlexTree({
+    const hash = flexCalcTreeHash({
+      tree: flexCalcTree({
         leaves: [
           '0x1111111111111111111111111111111111111111111111111111111111111111',
           '0x2222222222222222222222222222222222222222222222222222222222222222',
@@ -52,8 +52,8 @@ describe('flex-sdk/calcFlexTreeHash', function () {
   });
 
   it('Should calc hash of tree with 3 leaves in different order', function () {
-    const hash = calcFlexTreeHash({
-      tree: calcFlexTree({
+    const hash = flexCalcTreeHash({
+      tree: flexCalcTree({
         leaves: [
           '0x3333333333333333333333333333333333333333333333333333333333333333',
           '0x2222222222222222222222222222222222222222222222222222222222222222',
@@ -65,8 +65,8 @@ describe('flex-sdk/calcFlexTreeHash', function () {
   });
 
   it('Should calc hash of tree with 7 leaves', function () {
-    const hash = calcFlexTreeHash({
-      tree: calcFlexTree({
+    const hash = flexCalcTreeHash({
+      tree: flexCalcTree({
         leaves: [
           '0x1111111111111111111111111111111111111111111111111111111111111111',
           '0x2222222222222222222222222222222222222222222222222222222222222222',
@@ -82,8 +82,8 @@ describe('flex-sdk/calcFlexTreeHash', function () {
   });
 
   it('Should calc hash of tree with 7 leaves in different order', function () {
-    const hash = calcFlexTreeHash({
-      tree: calcFlexTree({
+    const hash = flexCalcTreeHash({
+      tree: flexCalcTree({
         leaves: [
           '0x5555555555555555555555555555555555555555555555555555555555555555',
           '0x4444444444444444444444444444444444444444444444444444444444444444',

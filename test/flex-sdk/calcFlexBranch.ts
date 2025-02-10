@@ -1,13 +1,13 @@
 import { expect } from 'chai';
 import { Hex } from 'viem';
 
-import { calcFlexBranch, calcFlexBranchHash, calcFlexTree, calcFlexTreeHash } from '../../@swaps-io/flex-sdk';
+import { flexCalcBranch, flexCalcBranchHash, flexCalcTree, flexCalcTreeHash } from '../../@swaps-io/flex-sdk';
 
-describe('flex-sdk/calcFlexBranch', function () {
+describe('flex-sdk/flexCalcBranch', function () {
   it('Should not calc branch of tree with 1 mismatching leaf', function () {
     expect(() => {
-      calcFlexBranch({
-        tree: calcFlexTree({
+      flexCalcBranch({
+        tree: flexCalcTree({
           leaves: [
             '0x1111111111111111111111111111111111111111111111111111111111111111',
           ],
@@ -18,8 +18,8 @@ describe('flex-sdk/calcFlexBranch', function () {
   });
 
   it('Should calc branch of tree with 1 leaf', function () {
-    const branch = calcFlexBranch({
-      tree: calcFlexTree({
+    const branch = flexCalcBranch({
+      tree: flexCalcTree({
         leaves: [
           '0x1111111111111111111111111111111111111111111111111111111111111111',
         ],
@@ -31,8 +31,8 @@ describe('flex-sdk/calcFlexBranch', function () {
 
   it('Should not calc branch of tree with 2 mismatching leaves', function () {
     expect(() => {
-      calcFlexBranch({
-        tree: calcFlexTree({
+      flexCalcBranch({
+        tree: flexCalcTree({
           leaves: [
             '0x1111111111111111111111111111111111111111111111111111111111111111',
             '0x2222222222222222222222222222222222222222222222222222222222222222',
@@ -44,8 +44,8 @@ describe('flex-sdk/calcFlexBranch', function () {
   });
 
   it('Should calc branch of tree with 2 leaves', function () {
-    const branch = calcFlexBranch({
-      tree: calcFlexTree({
+    const branch = flexCalcBranch({
+      tree: flexCalcTree({
         leaves: [
           '0x1111111111111111111111111111111111111111111111111111111111111111',
           '0x2222222222222222222222222222222222222222222222222222222222222222',
@@ -59,8 +59,8 @@ describe('flex-sdk/calcFlexBranch', function () {
   });
 
   it('Should calc 2nd branch of tree with 2 leaves', function () {
-    const branch = calcFlexBranch({
-      tree: calcFlexTree({
+    const branch = flexCalcBranch({
+      tree: flexCalcTree({
         leaves: [
           '0x1111111111111111111111111111111111111111111111111111111111111111',
           '0x2222222222222222222222222222222222222222222222222222222222222222',
@@ -75,8 +75,8 @@ describe('flex-sdk/calcFlexBranch', function () {
 
   it('Should not calc branch of tree with 3 mismatching leaves', function () {
     expect(() => {
-      calcFlexBranch({
-        tree: calcFlexTree({
+      flexCalcBranch({
+        tree: flexCalcTree({
           leaves: [
             '0x1111111111111111111111111111111111111111111111111111111111111111',
             '0x2222222222222222222222222222222222222222222222222222222222222222',
@@ -89,8 +89,8 @@ describe('flex-sdk/calcFlexBranch', function () {
   });
 
   it('Should calc branch of tree with 3 leaves', function () {
-    const branch = calcFlexBranch({
-      tree: calcFlexTree({
+    const branch = flexCalcBranch({
+      tree: flexCalcTree({
         leaves: [
           '0x1111111111111111111111111111111111111111111111111111111111111111',
           '0x2222222222222222222222222222222222222222222222222222222222222222',
@@ -106,8 +106,8 @@ describe('flex-sdk/calcFlexBranch', function () {
   });
 
   it('Should calc 2nd branch of tree with 3 leaves', function () {
-    const branch = calcFlexBranch({
-      tree: calcFlexTree({
+    const branch = flexCalcBranch({
+      tree: flexCalcTree({
         leaves: [
           '0x1111111111111111111111111111111111111111111111111111111111111111',
           '0x2222222222222222222222222222222222222222222222222222222222222222',
@@ -123,8 +123,8 @@ describe('flex-sdk/calcFlexBranch', function () {
   });
 
   it('Should calc 3rd branch of tree with 3 leaves', function () {
-    const branch = calcFlexBranch({
-      tree: calcFlexTree({
+    const branch = flexCalcBranch({
+      tree: flexCalcTree({
         leaves: [
           '0x1111111111111111111111111111111111111111111111111111111111111111',
           '0x2222222222222222222222222222222222222222222222222222222222222222',
@@ -139,8 +139,8 @@ describe('flex-sdk/calcFlexBranch', function () {
   });
 
   it('Should calc branch of tree with 7 leaves', function () {
-    const branch = calcFlexBranch({
-      tree: calcFlexTree({
+    const branch = flexCalcBranch({
+      tree: flexCalcTree({
         leaves: [
           '0x1111111111111111111111111111111111111111111111111111111111111111',
           '0x2222222222222222222222222222222222222222222222222222222222222222',
@@ -175,13 +175,13 @@ describe('flex-sdk/calcFlexBranch', function () {
       '0xBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB',
     ];
 
-    const tree = calcFlexTree({ leaves });
+    const tree = flexCalcTree({ leaves });
 
-    const treeHash = calcFlexTreeHash({ tree });
+    const treeHash = flexCalcTreeHash({ tree });
 
     for (const leaf of leaves) {
-      const branch = calcFlexBranch({ tree, leaf });
-      const branchHash = calcFlexBranchHash({ leaf, branch });
+      const branch = flexCalcBranch({ tree, leaf });
+      const branchHash = flexCalcBranchHash({ leaf, branch });
       expect(branchHash).equal(treeHash);
     }
   });

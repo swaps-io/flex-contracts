@@ -2,14 +2,14 @@ import { Hex, keccak256, concatHex } from '../external';
 
 import { AsHexValue, asHex } from '../utils/asHex';
 
-export interface CalcFlexConfirmNativeProofHashParams {
+export interface FlexCalcConfirmNativeProofHashParams {
   domain: AsHexValue;
   data0: AsHexValue;
   data1: AsHexValue;
   data2: AsHexValue;
 }
 
-export function calcFlexConfirmNativeProofHash(params: CalcFlexConfirmNativeProofHashParams): Hex {
+export function flexCalcConfirmNativeProofHash(params: FlexCalcConfirmNativeProofHashParams): Hex {
   return keccak256(
     concatHex([
       asHex(params.domain, 32),

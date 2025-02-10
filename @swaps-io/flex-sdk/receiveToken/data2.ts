@@ -2,11 +2,11 @@ import { Hex, concatHex } from '../external';
 
 import { AsHexValue, asHex } from '../utils/asHex';
 
-export interface EncodeFlexReceiveTokenData2Params {
+export interface FlexEncodeReceiveTokenData2Params {
   token: AsHexValue;
 }
 
-export function encodeFlexReceiveTokenData2(params: EncodeFlexReceiveTokenData2Params): Hex {
+export function flexEncodeReceiveTokenData2(params: FlexEncodeReceiveTokenData2Params): Hex {
   return concatHex([
     asHex(0, 12),
     asHex(params.token, 20),

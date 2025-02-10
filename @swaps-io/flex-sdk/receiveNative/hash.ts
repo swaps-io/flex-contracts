@@ -2,13 +2,13 @@ import { Hex, keccak256, concatHex } from '../external';
 
 import { AsHexValue, asHex } from '../utils/asHex';
 
-export interface CalcFlexReceiveNativeHashParams {
+export interface FlexCalcReceiveNativeHashParams {
   domain: AsHexValue;
   data0: AsHexValue;
   data1: AsHexValue;
 }
 
-export function calcFlexReceiveNativeHash(params: CalcFlexReceiveNativeHashParams): Hex {
+export function flexCalcReceiveNativeHash(params: FlexCalcReceiveNativeHashParams): Hex {
   return keccak256(
     concatHex([
       asHex(params.domain, 32),

@@ -2,12 +2,12 @@ import { Hex, keccak256, concatHex, sliceHex } from '../external';
 
 import { AsHexValue, asHex } from '../utils/asHex';
 
-export interface CalcFlexAccumulatorHashParams {
+export interface FlexCalcAccumulatorHashParams {
   accumulatorHash: AsHexValue,
   hashToAdd: AsHexValue,
 }
 
-export function calcFlexAccumulatorHash(params: CalcFlexAccumulatorHashParams): Hex {
+export function flexCalcAccumulatorHash(params: FlexCalcAccumulatorHashParams): Hex {
   return sliceHex(
     keccak256(
       concatHex([

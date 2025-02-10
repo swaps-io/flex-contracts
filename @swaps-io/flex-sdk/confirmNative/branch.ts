@@ -1,15 +1,15 @@
 import { Hex } from '../external';
 
 import { FlexTree } from '../tree';
-import { calcFlexBranch, FlexBranch } from '../branch';
+import { flexCalcBranch, FlexBranch } from '../branch';
 
-export interface CalcFlexConfirmNativeBranchParams {
+export interface FlexCalcConfirmNativeBranchParams {
   tree: FlexTree;
   confirmNativeHash: Hex;
 }
 
-export function calcFlexConfirmNativeBranch(params: CalcFlexConfirmNativeBranchParams): FlexBranch {
-  return calcFlexBranch({
+export function flexCalcConfirmNativeBranch(params: FlexCalcConfirmNativeBranchParams): FlexBranch {
+  return flexCalcBranch({
     tree: params.tree,
     leaf: params.confirmNativeHash,
   });

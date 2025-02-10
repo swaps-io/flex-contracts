@@ -13,14 +13,14 @@ import {
 } from 'viem';
 
 import {
-  calcFlexReceiveTokenBranch,
-  calcFlexReceiveTokenHash,
-  calcFlexTree,
-  calcFlexTreeHash,
-  encodeFlexReceiveTokenData0,
-  encodeFlexReceiveTokenData1,
-  encodeFlexReceiveTokenData2,
-  calcFlexAccumulatorHash,
+  flexCalcReceiveTokenBranch,
+  flexCalcReceiveTokenHash,
+  flexCalcTree,
+  flexCalcTreeHash,
+  flexEncodeReceiveTokenData0,
+  flexEncodeReceiveTokenData1,
+  flexEncodeReceiveTokenData2,
+  flexCalcAccumulatorHash,
 } from '../@swaps-io/flex-sdk';
 
 const IMAGINARY_COMPONENTS = 3; // Implied in order, but not used here
@@ -335,18 +335,18 @@ describe('FlexReceiveTokenFacet', function () {
       functionName: 'flexReceiveTokenDomain',
       args: [],
     });
-    const receiveData0 = encodeFlexReceiveTokenData0({
+    const receiveData0 = flexEncodeReceiveTokenData0({
       deadline,
       nonce,
       receiver,
     });
-    const receiveData1 = encodeFlexReceiveTokenData1({
+    const receiveData1 = flexEncodeReceiveTokenData1({
       amount,
     });
-    const receiveData2 = encodeFlexReceiveTokenData2({
+    const receiveData2 = flexEncodeReceiveTokenData2({
       token: token.address,
     });
-    const receiveHash = calcFlexReceiveTokenHash({
+    const receiveHash = flexCalcReceiveTokenHash({
       domain: receiveDomain,
       data0: receiveData0,
       data1: receiveData1,
@@ -363,10 +363,10 @@ describe('FlexReceiveTokenFacet', function () {
     }
 
     const componentHashes = [receiveHash, ...imaginaryComponentHashes];
-    const orderTree = calcFlexTree({ leaves: componentHashes });
-    const orderHash = calcFlexTreeHash({ tree: orderTree });
+    const orderTree = flexCalcTree({ leaves: componentHashes });
+    const orderHash = flexCalcTreeHash({ tree: orderTree });
 
-    const receiveComponentBranch = calcFlexReceiveTokenBranch({
+    const receiveComponentBranch = flexCalcReceiveTokenBranch({
       tree: orderTree,
       receiveTokenHash: receiveHash,
     });
@@ -438,7 +438,7 @@ describe('FlexReceiveTokenFacet', function () {
       });
       expect(state).equal(1); // FlexReceiveState.Received
 
-      expectedReceiveHash = calcFlexAccumulatorHash({ accumulatorHash: expectedReceiveHash, hashToAdd: orderHash });
+      expectedReceiveHash = flexCalcAccumulatorHash({ accumulatorHash: expectedReceiveHash, hashToAdd: orderHash });
 
       const hash = await publicClient.readContract({
         abi: flexReceiveHashFacet.abi,
@@ -496,12 +496,12 @@ describe('FlexReceiveTokenFacet', function () {
         expect(hash).equal(expectedReceiveHash);
       }
 
-      const newReceiveData0 = encodeFlexReceiveTokenData0({
+      const newReceiveData0 = flexEncodeReceiveTokenData0({
         deadline,
         nonce: newNonce,
         receiver,
       });
-      const newReceiveHash = calcFlexReceiveTokenHash({
+      const newReceiveHash = flexCalcReceiveTokenHash({
         domain: receiveDomain,
         data0: newReceiveData0,
         data1: receiveData1,
@@ -509,10 +509,10 @@ describe('FlexReceiveTokenFacet', function () {
       });
 
       const newComponentHashes = [newReceiveHash, ...imaginaryComponentHashes];
-      const newOrderTree = calcFlexTree({ leaves: newComponentHashes });
-      const newOrderHash = calcFlexTreeHash({ tree: newOrderTree });
+      const newOrderTree = flexCalcTree({ leaves: newComponentHashes });
+      const newOrderHash = flexCalcTreeHash({ tree: newOrderTree });
 
-      const receiveComponentBranch = calcFlexReceiveTokenBranch({
+      const receiveComponentBranch = flexCalcReceiveTokenBranch({
         tree: newOrderTree,
         receiveTokenHash: newReceiveHash,
       });
@@ -555,7 +555,7 @@ describe('FlexReceiveTokenFacet', function () {
         });
         expect(state).equal(1); // FlexReceiveState.Received
 
-        expectedReceiveHash = calcFlexAccumulatorHash({ accumulatorHash: expectedReceiveHash, hashToAdd: newOrderHash });
+        expectedReceiveHash = flexCalcAccumulatorHash({ accumulatorHash: expectedReceiveHash, hashToAdd: newOrderHash });
 
         const hash = await publicClient.readContract({
           abi: flexReceiveHashFacet.abi,

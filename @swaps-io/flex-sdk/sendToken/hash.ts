@@ -2,7 +2,7 @@ import { Hex, keccak256, concatHex } from '../external';
 
 import { AsHexValue, asHex } from '../utils/asHex';
 
-export interface CalcFlexSendTokenHashParams {
+export interface FlexCalcSendTokenHashParams {
   domain: AsHexValue;
   data0: AsHexValue;
   data1: AsHexValue;
@@ -10,7 +10,7 @@ export interface CalcFlexSendTokenHashParams {
   data3: AsHexValue;
 }
 
-export function calcFlexSendTokenHash(params: CalcFlexSendTokenHashParams): Hex {
+export function flexCalcSendTokenHash(params: FlexCalcSendTokenHashParams): Hex {
   return keccak256(
     concatHex([
       asHex(params.domain, 32),

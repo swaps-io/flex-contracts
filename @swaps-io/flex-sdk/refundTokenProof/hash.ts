@@ -2,7 +2,7 @@ import { Hex, keccak256, concatHex } from '../external';
 
 import { AsHexValue, asHex } from '../utils/asHex';
 
-export interface CalcFlexRefundTokenProofHashParams {
+export interface FlexCalcRefundTokenProofHashParams {
   domain: AsHexValue;
   data0: AsHexValue;
   data1: AsHexValue;
@@ -10,7 +10,7 @@ export interface CalcFlexRefundTokenProofHashParams {
   data3: AsHexValue;
 }
 
-export function calcFlexRefundTokenProofHash(params: CalcFlexRefundTokenProofHashParams): Hex {
+export function flexCalcRefundTokenProofHash(params: FlexCalcRefundTokenProofHashParams): Hex {
   return keccak256(
     concatHex([
       asHex(params.domain, 32),

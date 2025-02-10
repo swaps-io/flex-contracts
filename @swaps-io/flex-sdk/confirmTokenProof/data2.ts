@@ -2,10 +2,10 @@ import { Hex } from '../external';
 
 import { AsHexValue, asHex } from '../utils/asHex';
 
-export interface EncodeFlexConfirmTokenProofData2Params {
+export interface FlexEncodeConfirmTokenProofData2Params {
   receiveTokenHash: AsHexValue;
 }
 
-export function encodeFlexConfirmTokenProofData2(params: EncodeFlexConfirmTokenProofData2Params): Hex {
+export function flexEncodeConfirmTokenProofData2(params: FlexEncodeConfirmTokenProofData2Params): Hex {
   return asHex(params.receiveTokenHash, 32);
 }

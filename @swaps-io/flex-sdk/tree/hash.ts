@@ -2,10 +2,10 @@ import { Hex } from '../external';
 
 import { FlexTree } from './data';
 
-export interface CalcFlexTreeHashParams {
+export interface FlexCalcTreeHashParams {
   tree: FlexTree;
 }
 
-export function calcFlexTreeHash({ tree }: CalcFlexTreeHashParams): Hex {
+export function flexCalcTreeHash({ tree }: FlexCalcTreeHashParams): Hex {
   return tree.inner.root as Hex;
 }

@@ -1,15 +1,15 @@
 import { Hex } from '../external';
 
 import { FlexTree } from '../tree';
-import { calcFlexBranch, FlexBranch } from '../branch';
+import { flexCalcBranch, FlexBranch } from '../branch';
 
-export interface CalcFlexReceiveTokenBranchParams {
+export interface FlexCalcReceiveTokenBranchParams {
   tree: FlexTree;
   receiveTokenHash: Hex;
 }
 
-export function calcFlexReceiveTokenBranch(params: CalcFlexReceiveTokenBranchParams): FlexBranch {
-  return calcFlexBranch({
+export function flexCalcReceiveTokenBranch(params: FlexCalcReceiveTokenBranchParams): FlexBranch {
+  return flexCalcBranch({
     tree: params.tree,
     leaf: params.receiveTokenHash,
   });

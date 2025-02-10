@@ -2,14 +2,14 @@ import { Hex, keccak256, concatHex } from '../external';
 
 import { AsHexValue, asHex } from '../utils/asHex';
 
-export interface CalcFlexRefundTokenHashParams {
+export interface FlexCalcRefundTokenHashParams {
   domain: AsHexValue;
   data0: AsHexValue;
   data1: AsHexValue;
   data2: AsHexValue;
 }
 
-export function calcFlexRefundTokenHash(params: CalcFlexRefundTokenHashParams): Hex {
+export function flexCalcRefundTokenHash(params: FlexCalcRefundTokenHashParams): Hex {
   return keccak256(
     concatHex([
       asHex(params.domain, 32),

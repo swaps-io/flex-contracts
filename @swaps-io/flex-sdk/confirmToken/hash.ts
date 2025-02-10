@@ -2,13 +2,13 @@ import { Hex, keccak256, concatHex } from '../external';
 
 import { AsHexValue, asHex } from '../utils/asHex';
 
-export interface CalcFlexConfirmTokenHashParams {
+export interface FlexCalcConfirmTokenHashParams {
   domain: AsHexValue;
   data0: AsHexValue;
   data1: AsHexValue;
 }
 
-export function calcFlexConfirmTokenHash(params: CalcFlexConfirmTokenHashParams): Hex {
+export function flexCalcConfirmTokenHash(params: FlexCalcConfirmTokenHashParams): Hex {
   return keccak256(
     concatHex([
       asHex(params.domain, 32),

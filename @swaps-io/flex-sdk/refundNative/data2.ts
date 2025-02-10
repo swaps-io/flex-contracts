@@ -2,10 +2,10 @@ import { Hex } from '../external';
 
 import { AsHexValue, asHex } from '../utils/asHex';
 
-export interface EncodeFlexRefundNativeData2Params {
+export interface FlexEncodeRefundNativeData2Params {
   receiveNativeHash: AsHexValue;
 }
 
-export function encodeFlexRefundNativeData2(params: EncodeFlexRefundNativeData2Params): Hex {
+export function flexEncodeRefundNativeData2(params: FlexEncodeRefundNativeData2Params): Hex {
   return asHex(params.receiveNativeHash, 32);
 }

@@ -4,12 +4,12 @@ import { FlexTree } from '../tree';
 
 import { FlexBranch } from './data';
 
-export interface CalcFlexBranchParams {
+export interface FlexCalcBranchParams {
   tree: FlexTree;
   leaf: Hex;
 }
 
-export function calcFlexBranch({ tree, leaf }: CalcFlexBranchParams): FlexBranch {
+export function flexCalcBranch({ tree, leaf }: FlexCalcBranchParams): FlexBranch {
   const proof = tree.inner.getProof(leaf);
   return proof as FlexBranch;
 }

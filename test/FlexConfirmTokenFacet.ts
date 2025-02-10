@@ -14,18 +14,18 @@ import {
 } from 'viem';
 
 import {
-  encodeFlexReceiveTokenData0,
-  encodeFlexReceiveTokenData1,
-  encodeFlexReceiveTokenData2,
-  encodeFlexConfirmTokenData0,
-  encodeFlexConfirmTokenData1,
-  calcFlexReceiveTokenHash,
-  calcFlexConfirmTokenHash,
-  calcFlexTree,
-  calcFlexTreeHash,
-  calcFlexReceiveTokenBranch,
-  calcFlexConfirmTokenBranch,
-  calcFlexAccumulatorHash,
+  flexEncodeReceiveTokenData0,
+  flexEncodeReceiveTokenData1,
+  flexEncodeReceiveTokenData2,
+  flexEncodeConfirmTokenData0,
+  flexEncodeConfirmTokenData1,
+  flexCalcReceiveTokenHash,
+  flexCalcConfirmTokenHash,
+  flexCalcTree,
+  flexCalcTreeHash,
+  flexCalcReceiveTokenBranch,
+  flexCalcConfirmTokenBranch,
+  flexCalcAccumulatorHash,
 } from '../@swaps-io/flex-sdk';
 
 const IMAGINARY_COMPONENTS = 2; // Implied in order, but not used here
@@ -317,18 +317,18 @@ describe('FlexConfirmTokenFacet', function () {
       functionName: 'flexReceiveTokenDomain',
       args: [],
     });
-    const receiveData0 = encodeFlexReceiveTokenData0({
+    const receiveData0 = flexEncodeReceiveTokenData0({
       deadline,
       nonce,
       receiver,
     });
-    const receiveData1 = encodeFlexReceiveTokenData1({
+    const receiveData1 = flexEncodeReceiveTokenData1({
       amount,
     });
-    const receiveData2 = encodeFlexReceiveTokenData2({
+    const receiveData2 = flexEncodeReceiveTokenData2({
       token: token.address,
     });
-    const receiveHash = calcFlexReceiveTokenHash({
+    const receiveHash = flexCalcReceiveTokenHash({
       domain: receiveDomain,
       data0: receiveData0,
       data1: receiveData1,
@@ -341,13 +341,13 @@ describe('FlexConfirmTokenFacet', function () {
       functionName: 'flexConfirmTokenDomain',
       args: [],
     });
-    const confirmData0 = encodeFlexConfirmTokenData0({
+    const confirmData0 = flexEncodeConfirmTokenData0({
       keyHash: confirmKeyHash,
     });
-    const confirmData1 = encodeFlexConfirmTokenData1({
+    const confirmData1 = flexEncodeConfirmTokenData1({
       receiveTokenHash: receiveHash,
     });
-    const confirmHash = calcFlexConfirmTokenHash({
+    const confirmHash = flexCalcConfirmTokenHash({
       domain: confirmDomain,
       data0: confirmData0,
       data1: confirmData1,
@@ -360,14 +360,14 @@ describe('FlexConfirmTokenFacet', function () {
     }
 
     const componentHashes = [receiveHash, confirmHash, ...imaginaryComponentHashes];
-    const orderTree = calcFlexTree({ leaves: componentHashes });
-    const orderHash = calcFlexTreeHash({ tree: orderTree });
+    const orderTree = flexCalcTree({ leaves: componentHashes });
+    const orderHash = flexCalcTreeHash({ tree: orderTree });
 
-    const receiveComponentBranch = calcFlexReceiveTokenBranch({
+    const receiveComponentBranch = flexCalcReceiveTokenBranch({
       tree: orderTree,
       receiveTokenHash: receiveHash,
     });
-    const confirmComponentBranch = calcFlexConfirmTokenBranch({
+    const confirmComponentBranch = flexCalcConfirmTokenBranch({
       tree: orderTree,
       confirmTokenHash: confirmHash,
     });
@@ -418,7 +418,7 @@ describe('FlexConfirmTokenFacet', function () {
       });
       expect(state).equal(1); // FlexReceiveState.Received
 
-      expectedReceiveHash = calcFlexAccumulatorHash({ accumulatorHash: zeroAddress, hashToAdd: orderHash });
+      expectedReceiveHash = flexCalcAccumulatorHash({ accumulatorHash: zeroAddress, hashToAdd: orderHash });
 
       const hash = await publicClient.readContract({
         abi: flexReceiveHashFacet.abi,

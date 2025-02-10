@@ -10,7 +10,7 @@ import {
 } from 'viem';
 
 import {
-  encodeFlexAllocateReceiveData0,
+  flexEncodeAllocateReceiveData0,
   FLEX_RECEIVE_NONCES_PER_BUCKET,
   FLEX_UNALLOCATED_HASH,
   FLEX_ALLOCATED_HASH,
@@ -87,7 +87,7 @@ describe('FlexAllocateReceive', function () {
     const startBucket = startNonce / FLEX_RECEIVE_NONCES_PER_BUCKET; // Included
     const endBucket = startBucket + totalBuckets; // Excluded
 
-    const allocateData0 = encodeFlexAllocateReceiveData0({
+    const allocateData0 = flexEncodeAllocateReceiveData0({
       receiver,
       startNonce,
       totalBuckets,

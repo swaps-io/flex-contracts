@@ -1,10 +1,10 @@
 import { expect } from 'chai';
 
-import { calcFlexBranchHash } from '../../@swaps-io/flex-sdk';
+import { flexCalcBranchHash } from '../../@swaps-io/flex-sdk';
 
-describe('flex-sdk/calcFlexBranchHash', function () {
+describe('flex-sdk/flexCalcBranchHash', function () {
   it('Should calc hash of 0-length branch', function () {
-    const hash = calcFlexBranchHash({
+    const hash = flexCalcBranchHash({
       leaf: '0x1111111111111111111111111111111111111111111111111111111111111111',
       branch: [],
     });
@@ -12,7 +12,7 @@ describe('flex-sdk/calcFlexBranchHash', function () {
   });
 
   it('Should calc hash of 1-length branch', function () {
-    const hash = calcFlexBranchHash({
+    const hash = flexCalcBranchHash({
       leaf: '0x1111111111111111111111111111111111111111111111111111111111111111',
       branch: [
         '0x2222222222222222222222222222222222222222222222222222222222222222', // 0x3e92e0db88d6afea9edc4eedf62fffa4d92bcdfc310dccbe943747fe8302e871
@@ -22,7 +22,7 @@ describe('flex-sdk/calcFlexBranchHash', function () {
   });
 
   it('Should calc 2nd hash of 1-length branch', function () {
-    const hash = calcFlexBranchHash({
+    const hash = flexCalcBranchHash({
       leaf: '0x2222222222222222222222222222222222222222222222222222222222222222',
       branch: [
         '0x1111111111111111111111111111111111111111111111111111111111111111', // 0x3e92e0db88d6afea9edc4eedf62fffa4d92bcdfc310dccbe943747fe8302e871
@@ -32,7 +32,7 @@ describe('flex-sdk/calcFlexBranchHash', function () {
   });
 
   it('Should calc hash of 2-length branch', function () {
-    const hash = calcFlexBranchHash({
+    const hash = flexCalcBranchHash({
       leaf: '0x1111111111111111111111111111111111111111111111111111111111111111',
       branch: [
         '0x2222222222222222222222222222222222222222222222222222222222222222', // 0x3e92e0db88d6afea9edc4eedf62fffa4d92bcdfc310dccbe943747fe8302e871
@@ -43,7 +43,7 @@ describe('flex-sdk/calcFlexBranchHash', function () {
   });
 
   it('Should calc hash of 8-length branch', function () {
-    const hash = calcFlexBranchHash({
+    const hash = flexCalcBranchHash({
       leaf: '0x1111111111111111111111111111111111111111111111111111111111111111',
       branch: [
         '0x2222222222222222222222222222222222222222222222222222222222222222', // 0x3e92e0db88d6afea9edc4eedf62fffa4d92bcdfc310dccbe943747fe8302e871
