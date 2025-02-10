@@ -17,9 +17,11 @@ contract FlexStandalone is
         bytes32 confirmNativeDomain_,
         bytes32 confirmNativeProofDomain_,
         bytes32 confirmTokenDomain_,
+        bytes32 confirmTokenProofDomain_,
         bytes32 refundNativeDomain_,
         bytes32 refundNativeProofDomain_,
         bytes32 refundTokenDomain_,
+        bytes32 refundTokenProofDomain_,
         bytes32 sendNativeDomain_,
         bytes32 sendTokenDomain_,
         address proofVerifier_
@@ -31,9 +33,11 @@ contract FlexStandalone is
             confirmNativeDomain_,
             confirmNativeProofDomain_,
             confirmTokenDomain_,
+            confirmTokenProofDomain_,
             refundNativeDomain_,
             refundNativeProofDomain_,
             refundTokenDomain_,
+            refundTokenProofDomain_,
             proofVerifier_
         )
         FlexSendStandalone(
