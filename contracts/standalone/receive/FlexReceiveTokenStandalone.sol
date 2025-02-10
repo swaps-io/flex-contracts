@@ -48,7 +48,7 @@ contract FlexReceiveTokenStandalone is
     )
         FlexReceiveTokenFacet(receiveTokenDomain_)
         FlexReceiveTokenDomainFacet(receiveTokenDomain_)
-        FlexReceiveTokenFromFacet(receiveTokenFromDomain_, receiveTokenDomain_)
+        FlexReceiveTokenFromFacet(receiveTokenFromDomain_)
         FlexReceiveTokenFromDomainFacet(receiveTokenFromDomain_)
         FlexConfirmTokenFacet(confirmTokenDomain_, receiveTokenDomain_)
         FlexConfirmTokenDomainFacet(confirmTokenDomain_)
