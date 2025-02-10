@@ -27,7 +27,7 @@ contract FlexReceiveTokenFromFacet is IFlexReceiveTokenFrom {
     }
 
     function flexReceiveTokenFrom(
-        bytes32 receiveData0_, // Content: deadline (48), nonce (40), receiver flags (8), receiver (160)
+        bytes32 receiveData0_, // Content: deadline (48), nonce (40), <unused> (8), receiver (160)
         bytes32 receiveData1_, // Content: token amount (256)
         bytes32 receiveData2_, // Content: <unused> (96), token (160)
         bytes32 receiveData3_, // Content: <unused> (88), sender flags (8), sender (160)
