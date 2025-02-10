@@ -1,6 +1,4 @@
-import { Hex, keccak256, concatHex, sliceHex } from '../external';
-
-import { AsHexValue, asHex } from '../utils/asHex';
+import { Hex, keccak256, concatHex, sliceHex, AsHexValue, asHex } from '../external';
 
 export interface FlexCalcAccumulatorHashParams {
   accumulatorHash: AsHexValue,

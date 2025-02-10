@@ -1,6 +1,4 @@
-import { Hex, concatHex } from '../external';
-
-import { AsHexValue, asHex } from '../utils/asHex';
+import { Hex, concatHex, AsHexValue, asHex } from '../external';
 
 export interface FlexEncodeSendTokenData1Params {
   group: AsHexValue;

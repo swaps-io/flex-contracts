@@ -1,6 +1,4 @@
-import { Hex, keccak256, concatHex } from '../external';
-
-import { AsHexValue, asHex } from '../utils/asHex';
+import { Hex, keccak256, concatHex, AsHexValue, asHex } from '../external';
 
 export interface FlexCalcConfirmNativeProofHashParams {
   domain: AsHexValue;

@@ -1,6 +1,4 @@
-import { Hex } from '../external';
-
-import { AsHexValue, asHex } from '../utils/asHex';
+import { Hex, AsHexValue, asHex } from '../external';
 
 export interface FlexEncodeConfirmNativeData1Params {
   receiveNativeHash: AsHexValue;
