@@ -2,13 +2,12 @@
 
 pragma solidity ^0.8.28;
 
-import {FlexReceiveStandalone} from "./receive/FlexReceiveStandalone.sol";
+import {FlexReceiveNativeStandalone} from "./FlexReceiveNativeStandalone.sol";
+import {FlexReceiveTokenStandalone} from "./FlexReceiveTokenStandalone.sol";
 
-import {FlexSendStandalone} from "./send/FlexSendStandalone.sol";
-
-contract FlexStandalone is
-    FlexReceiveStandalone,
-    FlexSendStandalone
+contract FlexReceiveStandalone is
+    FlexReceiveNativeStandalone,
+    FlexReceiveTokenStandalone
 {
     constructor(
         bytes32 receiveNativeDomain_,
@@ -21,26 +20,23 @@ contract FlexStandalone is
         bytes32 refundNativeProofDomain_,
         bytes32 refundTokenDomain_,
         bytes32 refundTokenProofDomain_,
-        bytes32 sendNativeDomain_,
-        bytes32 sendTokenDomain_,
         address proofVerifier_
     )
-        FlexReceiveStandalone(
+        FlexReceiveNativeStandalone(
             receiveNativeDomain_,
-            receiveTokenDomain_,
             confirmNativeDomain_,
             confirmNativeProofDomain_,
-            confirmTokenDomain_,
-            confirmTokenProofDomain_,
             refundNativeDomain_,
             refundNativeProofDomain_,
+            proofVerifier_
+        )
+        FlexReceiveTokenStandalone(
+            receiveTokenDomain_,
+            confirmTokenDomain_,
+            confirmTokenProofDomain_,
             refundTokenDomain_,
             refundTokenProofDomain_,
             proofVerifier_
-        )
-        FlexSendStandalone(
-            sendNativeDomain_,
-            sendTokenDomain_
         )
     {}
 }
