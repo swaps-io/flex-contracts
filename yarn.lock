@@ -2440,7 +2440,7 @@ __metadata:
     solidity-coverage: "npm:^0.8.14"
     ts-node: "npm:^10.9.2"
     typescript: "npm:~5.7.3"
-    viem: "npm:^2.23.0"
+    viem: "npm:^2.23.1"
   languageName: unknown
   linkType: soft
 
@@ -3719,8 +3719,8 @@ __metadata:
   linkType: hard
 
 "node-gyp@npm:latest":
-  version: 11.0.0
-  resolution: "node-gyp@npm:11.0.0"
+  version: 11.1.0
+  resolution: "node-gyp@npm:11.1.0"
   dependencies:
     env-paths: "npm:^2.2.0"
     exponential-backoff: "npm:^3.1.1"
@@ -3734,7 +3734,7 @@ __metadata:
     which: "npm:^5.0.0"
   bin:
     node-gyp: bin/node-gyp.js
-  checksum: 10c0/a3b885bbee2d271f1def32ba2e30ffcf4562a3db33af06b8b365e053153e2dd2051b9945783c3c8e852d26a0f20f65b251c7e83361623383a99635c0280ee573
+  checksum: 10c0/c38977ce502f1ea41ba2b8721bd5b49bc3d5b3f813eabfac8414082faf0620ccb5211e15c4daecc23ed9f5e3e9cc4da00e575a0bcfc2a95a069294f2afa1e0cd
   languageName: node
   linkType: hard
 
@@ -4994,9 +4994,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"viem@npm:^2.23.0":
-  version: 2.23.0
-  resolution: "viem@npm:2.23.0"
+"viem@npm:^2.23.1":
+  version: 2.23.1
+  resolution: "viem@npm:2.23.1"
   dependencies:
     "@noble/curves": "npm:1.8.1"
     "@noble/hashes": "npm:1.7.1"
@@ -5011,7 +5011,7 @@ __metadata:
   peerDependenciesMeta:
     typescript:
       optional: true
-  checksum: 10c0/4386b2ab6450a67498c7aed24a67354b724b8b7605f8820330c7c8ee22cf1ba250affae1e99a08faa7abf2ca3080a6a3583f15688adeb1600b78f39c5560c77a
+  checksum: 10c0/549a5e071c346f9b7ae5d0251c8a3ec05b34c6930976eedce927a69b71a96394a8d8dfa32436f99f725340eb25173ceeadb317baeea59047f98616f7db4c6207
   languageName: node
   linkType: hard
 
