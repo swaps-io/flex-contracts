@@ -3,8 +3,8 @@
 pragma solidity ^0.8.28;
 
 library FlexSendStateAccess {
-    function calcBucket(address sender_, uint48 group_) internal pure returns (bytes32) {
-        return bytes32(bytes20(sender_)) | bytes32(uint256(group_));
+    function calcBucket(address sender_, uint96 group_) internal pure returns (bytes32) {
+        return bytes20(sender_) | bytes32(uint256(group_));
     }
 
     function readTime(bytes32 bucketState_) internal pure returns (uint48) {
@@ -12,7 +12,7 @@ library FlexSendStateAccess {
     }
 
     function writeTime(bytes32 bucketState_, uint48 time_) internal pure returns (bytes32) {
-        return (bucketState_ & 0xffffffffffffffffffffffffffffffffffffffffffffffffffff000000000000) | bytes32(uint256(time_));
+        return bytes26(bucketState_) | bytes32(uint256(time_));
     }
 
     function readHash(bytes32 bucketState_) internal pure returns (bytes20) {
@@ -20,6 +20,6 @@ library FlexSendStateAccess {
     }
 
     function writeHash(bytes32 bucketState_, bytes20 hash_) internal pure returns (bytes32) {
-        return (bucketState_ & 0x0000000000000000000000000000000000000000ffffffffffffffffffffffff) | bytes32(hash_);
+        return bytes32(uint256(uint96(uint256(bucketState_)))) | hash_;
     }
 }

@@ -19,7 +19,7 @@ import {FlexDomain} from "../libraries/utilities/FlexDomain.sol";
 import {FlexEfficientHash} from "../libraries/utilities/FlexEfficientHash.sol";
 
 contract FlexSendTokenFacet is IFlexSendToken {
-    bytes8 private immutable _domain = FlexDomain.calc(IFlexSendToken.flexSendToken.selector);
+    bytes32 private immutable _domain = FlexDomain.calc(IFlexSendToken.flexSendToken.selector);
 
     function flexSendToken(
         bytes32 sendData0_, // Content: send start (48), time to send (48), sender (160)
@@ -34,8 +34,7 @@ contract FlexSendTokenFacet is IFlexSendToken {
         uint48 start = uint48(uint256(sendData0_) >> 208);
         FlexEarlinessConstraint.validate(start);
 
-        uint48 deadline = start + uint48(uint256(sendData0_) >> 160);
-        FlexDeadlineConstraint.validate(deadline);
+        FlexDeadlineConstraint.validate(start + uint48(uint256(sendData0_) >> 160));
 
         bytes32 componentHash = FlexEfficientHash.calc(_domain, sendData0_, sendData1_, sendData2_, sendData3_);
         bytes32 orderHash = MerkleProof.processProofCalldata(componentBranch_, componentHash);

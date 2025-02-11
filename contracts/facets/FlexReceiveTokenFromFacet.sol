@@ -21,7 +21,7 @@ import {FlexDomain} from "../libraries/utilities/FlexDomain.sol";
 import {FlexEfficientHash} from "../libraries/utilities/FlexEfficientHash.sol";
 
 contract FlexReceiveTokenFromFacet is IFlexReceiveTokenFrom {
-    bytes8 private immutable _domain = FlexDomain.calc(IFlexReceiveTokenFrom.flexReceiveTokenFrom.selector);
+    bytes32 private immutable _domain = FlexDomain.calc(IFlexReceiveTokenFrom.flexReceiveTokenFrom.selector);
 
     function flexReceiveTokenFrom(
         bytes32 receiveData0_, // Content: deadline (48), nonce (40), <unused> (8), receiver (160)
@@ -34,8 +34,7 @@ contract FlexReceiveTokenFromFacet is IFlexReceiveTokenFrom {
         address receiver = address(uint160(uint256(receiveData0_)));
         FlexCallerConstraint.validate(receiver);
 
-        uint48 deadline = uint48(uint256(receiveData0_) >> 208);
-        FlexDeadlineConstraint.validate(deadline);
+        FlexDeadlineConstraint.validate(uint256(receiveData0_) >> 208);
 
         bytes32 componentHash = FlexEfficientHash.calc(_domain, receiveData0_, receiveData1_, receiveData2_, receiveData3_);
         bytes32 orderHash = MerkleProof.processProofCalldata(componentBranch_, componentHash);

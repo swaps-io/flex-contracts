@@ -6,11 +6,11 @@ import {FlexReceiveState} from "../../interfaces/enums/FlexReceiveState.sol";
 
 library FlexReceiveStateAccess {
     function calcBucket(address receiver_, uint96 nonce_) internal pure returns (bytes32) {
-        return bytes32(bytes20(receiver_)) | bytes32(uint256(nonce_) / 48); // 96 bit / 2 bit
+        return bytes20(receiver_) | bytes32(uint256(nonce_) / 48); // 96 bit / 2 bit
     }
 
     function calcOffset(uint96 nonce_) internal pure returns (uint8) {
-        return uint8((nonce_ % 48) * 2); // 96 bit / 2 bit
+        return uint8((nonce_ % 48) << 1); // 96 bit / 2 bit
     }
 
     function readState(bytes32 bucketState_, uint8 offset_) internal pure returns (FlexReceiveState) {
@@ -26,6 +26,6 @@ library FlexReceiveStateAccess {
     }
 
     function writeHash(bytes32 bucketState_, bytes20 hash_) internal pure returns (bytes32) {
-        return (bucketState_ & 0x0000000000000000000000000000000000000000ffffffffffffffffffffffff) | bytes32(hash_);
+        return bytes32(uint256(uint96(uint256(bucketState_)))) | hash_;
     }
 }

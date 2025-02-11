@@ -17,7 +17,7 @@ import {FlexDomain} from "../libraries/utilities/FlexDomain.sol";
 import {FlexEfficientHash} from "../libraries/utilities/FlexEfficientHash.sol";
 
 contract FlexConfirmNativeProofFacet is IFlexConfirmNativeProof {
-    bytes8 private immutable _domain = FlexDomain.calc(IFlexConfirmNativeProof.flexConfirmNativeProof.selector);
+    bytes32 private immutable _domain = FlexDomain.calc(IFlexConfirmNativeProof.flexConfirmNativeProof.selector);
     address private immutable _proofVerifier;
 
     constructor(address proofVerifier_) {

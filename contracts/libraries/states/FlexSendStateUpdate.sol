@@ -13,7 +13,7 @@ import {FlexHashAccumulator} from "../utilities/FlexHashAccumulator.sol";
 library FlexSendStateUpdate {
     function toSent(
         address sender_,
-        uint48 group_,
+        uint96 group_,
         uint48 start_,
         bytes32 orderHash_
     ) internal {

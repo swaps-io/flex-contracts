@@ -17,7 +17,7 @@ import {FlexDomain} from "../libraries/utilities/FlexDomain.sol";
 import {FlexEfficientHash} from "../libraries/utilities/FlexEfficientHash.sol";
 
 contract FlexRefundNativeFacet is IFlexRefundNative {
-    bytes8 private immutable _domain = FlexDomain.calc(IFlexRefundNative.flexRefundNative.selector);
+    bytes32 private immutable _domain = FlexDomain.calc(IFlexRefundNative.flexRefundNative.selector);
 
     function flexRefundNative(
         bytes32 receiveData0_, // Content: deadline (48), nonce (40), receiver flags (8), receiver (160)

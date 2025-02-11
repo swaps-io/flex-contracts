@@ -19,7 +19,7 @@ import {FlexDomain} from "../libraries/utilities/FlexDomain.sol";
 import {FlexEfficientHash} from "../libraries/utilities/FlexEfficientHash.sol";
 
 contract FlexSendNativeFacet is IFlexSendNative {
-    bytes8 private immutable _domain = FlexDomain.calc(IFlexSendNative.flexSendNative.selector);
+    bytes32 private immutable _domain = FlexDomain.calc(IFlexSendNative.flexSendNative.selector);
 
     function flexSendNative(
         bytes32 sendData0_, // Content: send start (48), time to send (48), sender (160)
@@ -32,8 +32,7 @@ contract FlexSendNativeFacet is IFlexSendNative {
         uint48 start = uint48(uint256(sendData0_) >> 208);
         FlexEarlinessConstraint.validate(start);
 
-        uint48 deadline = start + uint48(uint256(sendData0_) >> 160);
-        FlexDeadlineConstraint.validate(deadline);
+        FlexDeadlineConstraint.validate(start + uint48(uint256(sendData0_) >> 160));
 
         bytes32 componentHash = FlexEfficientHash.calc(_domain, sendData0_, sendData1_, bytes32(msg.value));
         bytes32 orderHash = MerkleProof.processProofCalldata(componentBranch_, componentHash);

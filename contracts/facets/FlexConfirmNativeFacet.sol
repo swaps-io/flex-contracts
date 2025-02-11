@@ -17,7 +17,7 @@ import {FlexDomain} from "../libraries/utilities/FlexDomain.sol";
 import {FlexEfficientHash} from "../libraries/utilities/FlexEfficientHash.sol";
 
 contract FlexConfirmNativeFacet is IFlexConfirmNative {
-    bytes8 private immutable _domain = FlexDomain.calc(IFlexConfirmNative.flexConfirmNative.selector);
+    bytes32 private immutable _domain = FlexDomain.calc(IFlexConfirmNative.flexConfirmNative.selector);
 
     function flexConfirmNative(
         bytes32 receiveData0_, // Content: deadline (48), nonce (40), receiver flags (8), receiver (160)
