@@ -17,14 +17,11 @@ import {FlexSignatureConstraint} from "../libraries/constraints/FlexSignatureCon
 
 import {FlexReceiveStateUpdate} from "../libraries/states/FlexReceiveStateUpdate.sol";
 
+import {FlexDomain} from "../libraries/utilities/FlexDomain.sol";
 import {FlexEfficientHash} from "../libraries/utilities/FlexEfficientHash.sol";
 
 contract FlexReceiveTokenFromFacet is IFlexReceiveTokenFrom {
-    bytes32 private immutable _domain;
-
-    constructor(bytes32 domain_) {
-        _domain = domain_;
-    }
+    bytes8 private immutable _domain = FlexDomain.calc(IFlexReceiveTokenFrom.flexReceiveTokenFrom.selector);
 
     function flexReceiveTokenFrom(
         bytes32 receiveData0_, // Content: deadline (48), nonce (40), <unused> (8), receiver (160)

@@ -13,16 +13,11 @@ import {FlexKeyConstraint} from "../libraries/constraints/FlexKeyConstraint.sol"
 
 import {FlexReceiveStateUpdate} from "../libraries/states/FlexReceiveStateUpdate.sol";
 
+import {FlexDomain} from "../libraries/utilities/FlexDomain.sol";
 import {FlexEfficientHash} from "../libraries/utilities/FlexEfficientHash.sol";
 
 contract FlexConfirmNativeFacet is IFlexConfirmNative {
-    bytes32 private immutable _domain;
-    bytes32 private immutable _receiveDomain;
-
-    constructor(bytes32 domain_, bytes32 receiveDomain_) {
-        _domain = domain_;
-        _receiveDomain = receiveDomain_;
-    }
+    bytes8 private immutable _domain = FlexDomain.calc(IFlexConfirmNative.flexConfirmNative.selector);
 
     function flexConfirmNative(
         bytes32 receiveData0_, // Content: deadline (48), nonce (40), receiver flags (8), receiver (160)
@@ -36,7 +31,7 @@ contract FlexConfirmNativeFacet is IFlexConfirmNative {
     ) external override {
         FlexKeyConstraint.validate(confirmData0_, confirmKey_);
 
-        bytes32 componentHash = FlexEfficientHash.calc(_receiveDomain, receiveData0_, receiveData1_, receiveData2_);
+        bytes32 componentHash = FlexEfficientHash.calc(receiveData0_, receiveData1_, receiveData2_);
         componentHash = FlexEfficientHash.calc(_domain, confirmData0_, componentHash);
         bytes32 orderHash = MerkleProof.processProofCalldata(componentBranch_, componentHash);
 

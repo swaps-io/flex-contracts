@@ -3,5 +3,5 @@
 pragma solidity ^0.8.28;
 
 interface IFlexConfirmTokenDomain {
-    function flexConfirmTokenDomain() external view returns (bytes32);
+    function flexConfirmTokenDomain() external view returns (bytes8);
 }

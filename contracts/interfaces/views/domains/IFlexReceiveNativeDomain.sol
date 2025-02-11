@@ -3,5 +3,5 @@
 pragma solidity ^0.8.28;
 
 interface IFlexReceiveNativeDomain {
-    function flexReceiveNativeDomain() external view returns (bytes32);
+    function flexReceiveNativeDomain() external view returns (bytes8);
 }

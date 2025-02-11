@@ -15,14 +15,11 @@ import {FlexDeadlineConstraint} from "../libraries/constraints/FlexDeadlineConst
 
 import {FlexSendStateUpdate} from "../libraries/states/FlexSendStateUpdate.sol";
 
+import {FlexDomain} from "../libraries/utilities/FlexDomain.sol";
 import {FlexEfficientHash} from "../libraries/utilities/FlexEfficientHash.sol";
 
 contract FlexSendTokenFacet is IFlexSendToken {
-    bytes32 private immutable _domain;
-
-    constructor(bytes32 domain_) {
-        _domain = domain_;
-    }
+    bytes8 private immutable _domain = FlexDomain.calc(IFlexSendToken.flexSendToken.selector);
 
     function flexSendToken(
         bytes32 sendData0_, // Content: send start (48), time to send (48), sender (160)

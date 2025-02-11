@@ -3,5 +3,5 @@
 pragma solidity ^0.8.28;
 
 interface IFlexRefundTokenDomain {
-    function flexRefundTokenDomain() external view returns (bytes32);
+    function flexRefundTokenDomain() external view returns (bytes8);
 }

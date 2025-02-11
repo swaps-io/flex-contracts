@@ -4,10 +4,14 @@ pragma solidity ^0.8.28;
 
 import {IFlexRefundTokenProofDomain} from "../../../interfaces/views/domains/IFlexRefundTokenProofDomain.sol";
 
-contract FlexRefundTokenProofDomainFacet is IFlexRefundTokenProofDomain {
-    bytes32 public immutable override flexRefundTokenProofDomain;
+import {IFlexRefundTokenProof} from "../../../interfaces/IFlexRefundTokenProof.sol";
 
-    constructor(bytes32 domain_) {
-        flexRefundTokenProofDomain = domain_;
+import {FlexDomain} from "../../../libraries/utilities/FlexDomain.sol";
+
+contract FlexRefundTokenProofDomainFacet is IFlexRefundTokenProofDomain {
+    bytes8 public immutable override flexRefundTokenProofDomain;
+
+    constructor(address target_) {
+        flexRefundTokenProofDomain = FlexDomain.calc(target_, IFlexRefundTokenProof.flexRefundTokenProof.selector);
     }
 }

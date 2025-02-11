@@ -4,10 +4,14 @@ pragma solidity ^0.8.28;
 
 import {IFlexReceiveTokenDomain} from "../../../interfaces/views/domains/IFlexReceiveTokenDomain.sol";
 
-contract FlexReceiveTokenDomainFacet is IFlexReceiveTokenDomain {
-    bytes32 public immutable override flexReceiveTokenDomain;
+import {IFlexReceiveToken} from "../../../interfaces/IFlexReceiveToken.sol";
 
-    constructor(bytes32 domain_) {
-        flexReceiveTokenDomain = domain_;
+import {FlexDomain} from "../../../libraries/utilities/FlexDomain.sol";
+
+contract FlexReceiveTokenDomainFacet is IFlexReceiveTokenDomain {
+    bytes8 public immutable override flexReceiveTokenDomain;
+
+    constructor(address target_) {
+        flexReceiveTokenDomain = FlexDomain.calc(target_, IFlexReceiveToken.flexReceiveToken.selector);
     }
 }

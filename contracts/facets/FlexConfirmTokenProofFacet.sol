@@ -13,16 +13,14 @@ import {FlexProofConstraint} from "../libraries/constraints/FlexProofConstraint.
 
 import {FlexReceiveStateUpdate} from "../libraries/states/FlexReceiveStateUpdate.sol";
 
+import {FlexDomain} from "../libraries/utilities/FlexDomain.sol";
 import {FlexEfficientHash} from "../libraries/utilities/FlexEfficientHash.sol";
 
 contract FlexConfirmTokenProofFacet is IFlexConfirmTokenProof {
-    bytes32 private immutable _domain;
-    bytes32 private immutable _receiveDomain;
+    bytes8 private immutable _domain = FlexDomain.calc(IFlexConfirmTokenProof.flexConfirmTokenProof.selector);
     address private immutable _proofVerifier;
 
-    constructor(bytes32 domain_, bytes32 receiveDomain_, address proofVerifier_) {
-        _domain = domain_;
-        _receiveDomain = receiveDomain_;
+    constructor(address proofVerifier_) {
         _proofVerifier = proofVerifier_;
     }
 
@@ -37,7 +35,7 @@ contract FlexConfirmTokenProofFacet is IFlexConfirmTokenProof {
         bytes20 receiveHashBefore_,
         bytes32[] calldata receiveOrderHashesAfter_
     ) external override {
-        bytes32 componentHash = FlexEfficientHash.calc(_receiveDomain, receiveData0_, receiveData1_, receiveData2_);
+        bytes32 componentHash = FlexEfficientHash.calc(receiveData0_, receiveData1_, receiveData2_);
         componentHash = FlexEfficientHash.calc(_domain, confirmData0_, confirmData1_, componentHash);
         bytes32 orderHash = MerkleProof.processProofCalldata(componentBranch_, componentHash);
 

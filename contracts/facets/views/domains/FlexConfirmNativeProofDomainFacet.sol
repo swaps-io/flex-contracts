@@ -4,10 +4,14 @@ pragma solidity ^0.8.28;
 
 import {IFlexConfirmNativeProofDomain} from "../../../interfaces/views/domains/IFlexConfirmNativeProofDomain.sol";
 
-contract FlexConfirmNativeProofDomainFacet is IFlexConfirmNativeProofDomain {
-    bytes32 public immutable override flexConfirmNativeProofDomain;
+import {IFlexConfirmNativeProof} from "../../../interfaces/IFlexConfirmNativeProof.sol";
 
-    constructor(bytes32 domain_) {
-        flexConfirmNativeProofDomain = domain_;
+import {FlexDomain} from "../../../libraries/utilities/FlexDomain.sol";
+
+contract FlexConfirmNativeProofDomainFacet is IFlexConfirmNativeProofDomain {
+    bytes8 public immutable override flexConfirmNativeProofDomain;
+
+    constructor(address target_) {
+        flexConfirmNativeProofDomain = FlexDomain.calc(target_, IFlexConfirmNativeProof.flexConfirmNativeProof.selector);
     }
 }

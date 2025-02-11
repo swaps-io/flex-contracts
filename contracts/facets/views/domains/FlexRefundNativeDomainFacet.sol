@@ -4,10 +4,14 @@ pragma solidity ^0.8.28;
 
 import {IFlexRefundNativeDomain} from "../../../interfaces/views/domains/IFlexRefundNativeDomain.sol";
 
-contract FlexRefundNativeDomainFacet is IFlexRefundNativeDomain {
-    bytes32 public immutable override flexRefundNativeDomain;
+import {IFlexRefundNative} from "../../../interfaces/IFlexRefundNative.sol";
 
-    constructor(bytes32 domain_) {
-        flexRefundNativeDomain = domain_;
+import {FlexDomain} from "../../../libraries/utilities/FlexDomain.sol";
+
+contract FlexRefundNativeDomainFacet is IFlexRefundNativeDomain {
+    bytes8 public immutable override flexRefundNativeDomain;
+
+    constructor(address target_) {
+        flexRefundNativeDomain = FlexDomain.calc(target_, IFlexRefundNative.flexRefundNative.selector);
     }
 }
