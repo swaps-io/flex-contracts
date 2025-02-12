@@ -25,25 +25,25 @@ contract FlexConfirmNativeProofFacet is IFlexConfirmNativeProof {
     }
 
     function flexConfirmNativeProof(
-        bytes32 receiveData0_, // Content: deadline (48), nonce (40), receiver flags (8), receiver (160)
+        bytes32 receiveData0_, // Content: signer flags (2), deadline (46), nonce (48), receiver (160)
         bytes32 receiveData1_, // Content: amount (256)
-        bytes32 receiveData2_, // Content: <unused> (96), sender (160)
-        bytes32 confirmData0_, // Content: event signature (256)
-        bytes32 confirmData1_, // Content: event chain (256)
+        bytes32 confirmData0_, // Content: <unused> (64), event chain (192)
+        bytes32 confirmData1_, // Content: event signature (256)
         bytes calldata confirmProof_,
         bytes32[] calldata componentBranch_,
         bytes20 receiveHashBefore_,
         bytes32[] calldata receiveOrderHashesAfter_
     ) external override {
-        bytes32 componentHash = FlexEfficientHash.calc(receiveData0_, receiveData1_, receiveData2_);
-        componentHash = FlexEfficientHash.calc(_domain, confirmData0_, confirmData1_, componentHash);
-        bytes32 orderHash = MerkleProof.processProofCalldata(componentBranch_, componentHash);
+        uint192 eventChain = uint192(uint256(confirmData0_));
 
-        FlexProofConstraint.verify(_proofVerifier, confirmData0_, orderHash, uint256(confirmData1_), confirmProof_);
+        bytes32 orderHash = FlexEfficientHash.calc(receiveData0_, receiveData1_);
+        orderHash = FlexEfficientHash.calc(_domain | bytes32(uint256(eventChain)), confirmData1_, orderHash);
+        orderHash = MerkleProof.processProofCalldata(componentBranch_, orderHash);
+
+        FlexProofConstraint.verify(_proofVerifier, confirmData1_, orderHash, eventChain, confirmProof_);
 
         address receiver = address(uint160(uint256(receiveData0_)));
-        uint96 nonce = uint40(uint256(receiveData0_) >> 168);
-        FlexReceiveStateUpdate.toConfirmed(receiver, nonce, orderHash, receiveHashBefore_, receiveOrderHashesAfter_);
+        FlexReceiveStateUpdate.toConfirmed(receiver, uint48(uint256(receiveData0_) >> 160), orderHash, receiveHashBefore_, receiveOrderHashesAfter_);
 
         Address.sendValue(payable(receiver), uint256(receiveData1_));
 
