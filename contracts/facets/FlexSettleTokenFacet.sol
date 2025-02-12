@@ -11,8 +11,7 @@ import {FlexKeyConstraint} from "../libraries/constraints/FlexKeyConstraint.sol"
 
 import {FlexReceiveStateUpdate} from "../libraries/states/FlexReceiveStateUpdate.sol";
 
-import {FlexDomain} from "../libraries/utilities/FlexDomain.sol";
-import {FlexEfficientHash} from "../libraries/utilities/FlexEfficientHash.sol";
+import {FlexDomain, FlexEfficientHash} from "../libraries/utilities/FlexDomain.sol";
 
 contract FlexSettleTokenFacet is IFlexSettleToken {
     bytes32 private immutable _domain = FlexDomain.calc(IFlexSettleToken.flexSettleToken.selector);

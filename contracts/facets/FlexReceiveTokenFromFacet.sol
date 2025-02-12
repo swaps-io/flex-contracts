@@ -14,8 +14,7 @@ import {FlexSignatureConstraint} from "../libraries/constraints/FlexSignatureCon
 
 import {FlexReceiveStateUpdate} from "../libraries/states/FlexReceiveStateUpdate.sol";
 
-import {FlexDomain} from "../libraries/utilities/FlexDomain.sol";
-import {FlexEfficientHash} from "../libraries/utilities/FlexEfficientHash.sol";
+import {FlexDomain, FlexEfficientHash} from "../libraries/utilities/FlexDomain.sol";
 
 contract FlexReceiveTokenFromFacet is IFlexReceiveTokenFrom {
     bytes32 private immutable _domain = FlexDomain.calc(IFlexReceiveTokenFrom.flexReceiveTokenFrom.selector);

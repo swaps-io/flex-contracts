@@ -12,8 +12,7 @@ import {FlexDeadlineConstraint} from "../libraries/constraints/FlexDeadlineConst
 
 import {FlexSendStateUpdate} from "../libraries/states/FlexSendStateUpdate.sol";
 
-import {FlexDomain} from "../libraries/utilities/FlexDomain.sol";
-import {FlexEfficientHash} from "../libraries/utilities/FlexEfficientHash.sol";
+import {FlexDomain, FlexEfficientHash} from "../libraries/utilities/FlexDomain.sol";
 
 contract FlexSendNativeFacet is IFlexSendNative {
     bytes32 private immutable _domain = FlexDomain.calc(IFlexSendNative.flexSendNative.selector);
