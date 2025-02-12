@@ -19,14 +19,14 @@ contract FlexSendNativeFacet is IFlexSendNative {
 
     function flexSendNative(
         bytes32 sendData1_, // Content: send start (48), time to send (32), sender group (16), receiver (160)
-        bytes32[] calldata componentBranch_
+        bytes32[] calldata orderBranch_
     ) external payable override {
         uint48 start = uint48(uint256(sendData1_) >> 208);
         FlexEarlinessConstraint.validate(start);
         FlexDeadlineConstraint.validate(start + uint32(uint256(sendData1_) >> 176));
 
         bytes32 orderHash = FlexEfficientHash.calc(_domain | bytes32(uint256(uint160(msg.sender))), sendData1_, bytes32(msg.value));
-        orderHash = MerkleProof.processProofCalldata(componentBranch_, orderHash);
+        orderHash = MerkleProof.processProofCalldata(orderBranch_, orderHash);
 
         FlexSendStateUpdate.toSent(msg.sender, uint16(uint256(sendData1_ >> 160)), start, orderHash);
 

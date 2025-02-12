@@ -10,7 +10,7 @@ interface IFlexSettleTokenProof {
         bytes32 settleData0, // Content: <unused> (64), event chain (31), settle flags (1), settle receiver (160)
         bytes32 settleData1, // Content: event signature (256)
         bytes calldata settleProof,
-        bytes32[] calldata componentBranch,
+        bytes32[] calldata orderBranch,
         bytes20 receiveHashBefore,
         bytes32[] calldata receiveOrderHashesAfter
     ) external;

@@ -22,14 +22,14 @@ contract FlexReceiveTokenFacet is IFlexReceiveToken {
         bytes32 receiveData0_, // Content: signer flags (2), deadline (46), nonce (48), receiver (160)
         bytes32 receiveData1_, // Content: token amount (256)
         bytes32 receiveData2_, // Content: <unused> (96), token (160)
-        bytes32[] calldata componentBranch_,
+        bytes32[] calldata orderBranch_,
         bytes calldata receiverSignature_
     ) external override {
         FlexDeadlineConstraint.validate(uint256(receiveData0_ << 2) >> 210);
 
         bytes32 orderHash = FlexEfficientHash.calc(receiveData0_, receiveData1_, receiveData2_);
         orderHash = FlexEfficientHash.calc(_domain | bytes32(uint256(uint160(msg.sender))), orderHash);
-        orderHash = MerkleProof.processProofCalldata(componentBranch_, orderHash);
+        orderHash = MerkleProof.processProofCalldata(orderBranch_, orderHash);
 
         address receiver = address(uint160(uint256(receiveData0_)));
         FlexSignatureConstraint.validate(uint256(receiveData0_ >> 254), receiver, orderHash, receiverSignature_);

@@ -19,14 +19,14 @@ contract FlexReceiveNativeFacet is IFlexReceiveNative {
 
     function flexReceiveNative(
         bytes32 receiveData0_, // Content: signer flags (2), deadline (46), nonce (48), receiver (160)
-        bytes32[] calldata componentBranch_,
+        bytes32[] calldata orderBranch_,
         bytes calldata receiverSignature_
     ) external payable override {
         FlexDeadlineConstraint.validate(uint256(receiveData0_ << 2) >> 210);
 
         bytes32 orderHash = FlexEfficientHash.calc(receiveData0_, bytes32(msg.value));
         orderHash = FlexEfficientHash.calc(_domain | bytes32(uint256(uint160(msg.sender))), orderHash);
-        orderHash = MerkleProof.processProofCalldata(componentBranch_, orderHash);
+        orderHash = MerkleProof.processProofCalldata(orderBranch_, orderHash);
 
         FlexSignatureConstraint.validate(uint256(receiveData0_ >> 254), address(uint160(uint256(receiveData0_))), orderHash, receiverSignature_);
 

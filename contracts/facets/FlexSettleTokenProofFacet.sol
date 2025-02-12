@@ -28,13 +28,13 @@ contract FlexSettleTokenProofFacet is IFlexSettleTokenProof {
         bytes32 settleData0_, // Content: <unused> (64), event chain (31), settle flags (1), settle receiver (160)
         bytes32 settleData1_, // Content: event signature (256)
         bytes calldata settleProof_,
-        bytes32[] calldata componentBranch_,
+        bytes32[] calldata orderBranch_,
         bytes20 receiveHashBefore_,
         bytes32[] calldata receiveOrderHashesAfter_
     ) external override {
         bytes32 orderHash = FlexEfficientHash.calc(receiveData0_, receiveData1_, receiveData2_);
         orderHash = FlexEfficientHash.calc(_domain | bytes32(uint256(uint192(uint256(settleData0_)))), settleData1_, orderHash);
-        orderHash = MerkleProof.processProofCalldata(componentBranch_, orderHash);
+        orderHash = MerkleProof.processProofCalldata(orderBranch_, orderHash);
 
         FlexProofConstraint.verify(_proofVerifier, settleData1_, orderHash, uint256(settleData0_ << 64) >> 225, settleProof_);
 

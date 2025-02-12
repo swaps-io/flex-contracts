@@ -22,7 +22,7 @@ contract FlexSettleNativeFacet is IFlexSettleNative {
         bytes32 settleData0_, // Content: <unused> (95), settle flags (1), settle receiver (160)
         bytes32 settleData1_, // Content: key hash (256)
         bytes32 settleKey_,
-        bytes32[] calldata componentBranch_,
+        bytes32[] calldata orderBranch_,
         bytes20 receiveHashBefore_,
         bytes32[] calldata receiveOrderHashesAfter_
     ) external override {
@@ -30,7 +30,7 @@ contract FlexSettleNativeFacet is IFlexSettleNative {
 
         bytes32 orderHash = FlexEfficientHash.calc(receiveData0_, receiveData1_);
         orderHash = FlexEfficientHash.calc(_domain | bytes32(uint256(uint192(uint256(settleData0_)))), settleData1_, orderHash);
-        orderHash = MerkleProof.processProofCalldata(componentBranch_, orderHash);
+        orderHash = MerkleProof.processProofCalldata(orderBranch_, orderHash);
 
         FlexReceiveStateUpdate.toSettled(receiveData0_, settleData0_, orderHash, receiveHashBefore_, receiveOrderHashesAfter_);
 
