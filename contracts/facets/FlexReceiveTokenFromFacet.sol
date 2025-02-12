@@ -9,8 +9,6 @@ import {SafeERC20, IERC20} from "@openzeppelin/contracts/token/ERC20/utils/SafeE
 
 import {IFlexReceiveTokenFrom} from "../interfaces/IFlexReceiveTokenFrom.sol";
 
-import {FlexReceive} from "../interfaces/events/FlexReceive.sol";
-
 import {FlexDeadlineConstraint} from "../libraries/constraints/FlexDeadlineConstraint.sol";
 import {FlexSignatureConstraint} from "../libraries/constraints/FlexSignatureConstraint.sol";
 
@@ -31,17 +29,16 @@ contract FlexReceiveTokenFromFacet is IFlexReceiveTokenFrom {
     ) external override {
         FlexDeadlineConstraint.validate(uint256(receiveFromData0_ << 2) >> 210);
 
-        bytes32 orderHash = FlexEfficientHash.calc(bytes12(receiveFromData0_) | bytes32(uint256(uint160(msg.sender))), receiveData1_, receiveData2_);
+        bytes32 receiveData0 = bytes12(receiveFromData0_) | bytes32(uint256(uint160(msg.sender)));
+        bytes32 orderHash = FlexEfficientHash.calc(receiveData0, receiveData1_, receiveData2_);
         orderHash = FlexEfficientHash.calc(_domain | bytes32(uint256(uint160(uint256(receiveFromData0_)))), orderHash);
         orderHash = MerkleProof.processProofCalldata(componentBranch_, orderHash);
 
         address sender = address(uint160(uint256(receiveFromData0_)));
         FlexSignatureConstraint.validate(uint256(receiveFromData0_ >> 254), sender, orderHash, senderSignature_);
 
-        FlexReceiveStateUpdate.toReceived(msg.sender, uint48(uint256(receiveFromData0_) >> 160), orderHash);
+        FlexReceiveStateUpdate.toReceived(receiveData0, orderHash);
 
         SafeERC20.safeTransferFrom(IERC20(address(uint160(uint256(receiveData2_)))), sender, address(this), uint256(receiveData1_));
-
-        emit FlexReceive(orderHash);
     }
 }

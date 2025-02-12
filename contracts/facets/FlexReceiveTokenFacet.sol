@@ -8,8 +8,6 @@ import {SafeERC20, IERC20} from "@openzeppelin/contracts/token/ERC20/utils/SafeE
 
 import {IFlexReceiveToken} from "../interfaces/IFlexReceiveToken.sol";
 
-import {FlexReceive} from "../interfaces/events/FlexReceive.sol";
-
 import {FlexDeadlineConstraint} from "../libraries/constraints/FlexDeadlineConstraint.sol";
 import {FlexSignatureConstraint} from "../libraries/constraints/FlexSignatureConstraint.sol";
 
@@ -37,10 +35,8 @@ contract FlexReceiveTokenFacet is IFlexReceiveToken {
         address receiver = address(uint160(uint256(receiveData0_)));
         FlexSignatureConstraint.validate(uint256(receiveData0_ >> 254), receiver, orderHash, receiverSignature_);
 
-        FlexReceiveStateUpdate.toReceived(receiver, uint48(uint256(receiveData0_) >> 160), orderHash);
+        FlexReceiveStateUpdate.toReceived(receiveData0_, orderHash);
 
         SafeERC20.safeTransferFrom(IERC20(address(uint160(uint256(receiveData2_)))), msg.sender, address(this), uint256(receiveData1_));
-
-        emit FlexReceive(orderHash);
     }
 }

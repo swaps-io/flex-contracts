@@ -7,8 +7,6 @@ import {SignatureChecker} from "@openzeppelin/contracts/utils/cryptography/Signa
 
 import {IFlexReceiveNative} from "../interfaces/IFlexReceiveNative.sol";
 
-import {FlexReceive} from "../interfaces/events/FlexReceive.sol";
-
 import {FlexDeadlineConstraint} from "../libraries/constraints/FlexDeadlineConstraint.sol";
 import {FlexSignatureConstraint} from "../libraries/constraints/FlexSignatureConstraint.sol";
 
@@ -31,11 +29,8 @@ contract FlexReceiveNativeFacet is IFlexReceiveNative {
         orderHash = FlexEfficientHash.calc(_domain | bytes32(uint256(uint160(msg.sender))), orderHash);
         orderHash = MerkleProof.processProofCalldata(componentBranch_, orderHash);
 
-        address receiver = address(uint160(uint256(receiveData0_)));
-        FlexSignatureConstraint.validate(uint256(receiveData0_ >> 254), receiver, orderHash, receiverSignature_);
+        FlexSignatureConstraint.validate(uint256(receiveData0_ >> 254), address(uint160(uint256(receiveData0_))), orderHash, receiverSignature_);
 
-        FlexReceiveStateUpdate.toReceived(receiver, uint48(uint256(receiveData0_) >> 160), orderHash);
-
-        emit FlexReceive(orderHash);
+        FlexReceiveStateUpdate.toReceived(receiveData0_, orderHash);
     }
 }
