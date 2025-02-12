@@ -59,12 +59,6 @@ const config: HardhatUserConfig = {
 
       'contracts/facets/views/FlexProofVerifierFacet.sol',
 
-      'contracts/standalone/receive/FlexReceiveNativeStandalone.sol',
-      'contracts/standalone/receive/FlexReceiveTokenStandalone.sol',
-      'contracts/standalone/receive/FlexReceiveStandalone.sol',
-      'contracts/standalone/send/FlexSendNativeStandalone.sol',
-      'contracts/standalone/send/FlexSendTokenStandalone.sol',
-      'contracts/standalone/send/FlexSendStandalone.sol',
       'contracts/standalone/FlexStandalone.sol',
     ],
   },
