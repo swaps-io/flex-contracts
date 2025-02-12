@@ -2,6 +2,8 @@
 
 pragma solidity ^0.8.28;
 
+import {FlexSend} from "../../interfaces/events/FlexSend.sol";
+
 import {FlexChronologyConstraint} from "../constraints/FlexChronologyConstraint.sol";
 
 import {FlexSendStateStorage} from "../storages/FlexSendStateStorage.sol";
@@ -28,5 +30,6 @@ library FlexSendStateUpdate {
         bucketState = FlexSendStateAccess.writeHash(bucketState, sendHash);
 
         FlexSendStateStorage.data()[bucket] = bucketState;
+        emit FlexSend(orderHash_);
     }
 }
