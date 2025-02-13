@@ -10,28 +10,25 @@ import {IFlexSendToken} from "../interfaces/IFlexSendToken.sol";
 import {FlexEarlinessConstraint} from "../libraries/constraints/FlexEarlinessConstraint.sol";
 import {FlexDeadlineConstraint} from "../libraries/constraints/FlexDeadlineConstraint.sol";
 
+import {FlexSendData} from "../libraries/data/FlexSendData.sol";
+
 import {FlexSendStateUpdate} from "../libraries/states/FlexSendStateUpdate.sol";
 
 import {FlexDomain, FlexEfficientHash} from "../libraries/utilities/FlexDomain.sol";
 
 contract FlexSendTokenFacet is IFlexSendToken {
-    bytes32 private immutable _domain = FlexDomain.calc(IFlexSendToken.flexSendToken.selector);
+    bytes8 private immutable _domain = FlexDomain.calc(IFlexSendToken.flexSendToken.selector);
 
-    function flexSendToken(
-        bytes32 sendData1_, // Content: send start (48), time to send (32), sender group (16), receiver (160)
-        bytes32 sendData2_, // Content: token amount (256)
-        bytes32 sendData3_, // Content: <unused> (96), token (160)
-        bytes32[] calldata orderBranch_
-    ) external override {
-        uint48 start = uint48(uint256(sendData1_) >> 208);
+    function flexSendToken(bytes32 sendData1_, bytes32 sendData2_, bytes32 sendData3_, bytes32[] calldata orderBranch_) external override {
+        uint48 start = FlexSendData.readStart(sendData1_);
         FlexEarlinessConstraint.validate(start);
-        FlexDeadlineConstraint.validate(start + uint32(uint256(sendData1_) >> 176));
+        FlexDeadlineConstraint.validate(start + FlexSendData.readTime(sendData1_));
 
-        bytes32 orderHash = FlexEfficientHash.calc(_domain | bytes32(uint256(uint160(msg.sender))), sendData1_, sendData2_, sendData3_);
+        bytes32 orderHash = FlexEfficientHash.calc(FlexSendData.make0(_domain, msg.sender), sendData1_, sendData2_, sendData3_);
         orderHash = MerkleProof.processProofCalldata(orderBranch_, orderHash);
 
-        FlexSendStateUpdate.toSent(msg.sender, uint16(uint256(sendData1_ >> 160)), start, orderHash);
+        FlexSendStateUpdate.toSent(msg.sender, FlexSendData.readGroup(sendData1_), start, orderHash);
 
-        SafeERC20.safeTransferFrom(IERC20(address(uint160(uint256(sendData3_)))), msg.sender, address(uint160(uint256(sendData1_))), uint256(sendData2_));
+        SafeERC20.safeTransferFrom(IERC20(FlexSendData.readToken(sendData3_)), msg.sender, FlexSendData.readReceiver(sendData1_), FlexSendData.readAmount(sendData2_));
     }
 }

@@ -3,7 +3,5 @@
 pragma solidity ^0.8.28;
 
 interface IFlexAllocateReceive {
-    function flexAllocateReceive(
-        bytes32 allocateData0 // Content: total buckets (48), start receiver nonce (48), receiver (160)
-    ) external;
+    function flexAllocateReceive(bytes32 allocateData0) external;
 }

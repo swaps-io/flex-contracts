@@ -4,11 +4,12 @@ pragma solidity ^0.8.28;
 
 import {FlexSend} from "../../interfaces/events/FlexSend.sol";
 
-import {FlexChronologyConstraint} from "../constraints/FlexChronologyConstraint.sol";
+import {FlexSendChronologyConstraint} from "../constraints/FlexSendChronologyConstraint.sol";
 
+import {FlexSendBucketStateData} from "../data/FlexSendBucketStateData.sol";
+
+import {FlexSendStateBucket} from "../storages/FlexSendStateBucket.sol";
 import {FlexSendStateStorage} from "../storages/FlexSendStateStorage.sol";
-
-import {FlexSendStateAccess} from "../accesses/FlexSendStateAccess.sol";
 
 import {FlexHashAccumulator} from "../utilities/FlexHashAccumulator.sol";
 
@@ -19,15 +20,15 @@ library FlexSendStateUpdate {
         uint48 start_,
         bytes32 orderHash_
     ) internal {
-        bytes32 bucket = FlexSendStateAccess.calcBucket(sender_, group_);
+        bytes32 bucket = FlexSendStateBucket.calcBucket(sender_, group_);
 
         bytes32 bucketState = FlexSendStateStorage.data()[bucket];
-        FlexChronologyConstraint.validate(bucketState, start_);
-        bucketState = FlexSendStateAccess.writeTime(bucketState, start_);
+        FlexSendChronologyConstraint.validate(bucketState, start_);
+        bucketState = FlexSendBucketStateData.writeTime(bucketState, start_);
 
-        bytes20 sendHash = FlexSendStateAccess.readHash(bucketState);
+        bytes20 sendHash = FlexSendBucketStateData.readHash(bucketState);
         sendHash = FlexHashAccumulator.accumulate(sendHash, orderHash_);
-        bucketState = FlexSendStateAccess.writeHash(bucketState, sendHash);
+        bucketState = FlexSendBucketStateData.writeHash(bucketState, sendHash);
 
         FlexSendStateStorage.data()[bucket] = bucketState;
         emit FlexSend(orderHash_);

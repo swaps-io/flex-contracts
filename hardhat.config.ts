@@ -33,17 +33,29 @@ const config: HardhatUserConfig = {
       'contracts/facets/views/FlexReceiveStateFacet.sol',
       'contracts/facets/views/FlexReceiveHashFacet.sol',
 
-      'contracts/facets/FlexSettleNativeFacet.sol',
-      'contracts/facets/views/domains/FlexSettleNativeDomainFacet.sol',
+      'contracts/facets/FlexConfirmNativeFacet.sol',
+      'contracts/facets/views/domains/FlexConfirmNativeDomainFacet.sol',
 
-      'contracts/facets/FlexSettleNativeProofFacet.sol',
-      'contracts/facets/views/domains/FlexSettleNativeProofDomainFacet.sol',
+      'contracts/facets/FlexConfirmNativeProofFacet.sol',
+      'contracts/facets/views/domains/FlexConfirmNativeProofDomainFacet.sol',
 
-      'contracts/facets/FlexSettleTokenFacet.sol',
-      'contracts/facets/views/domains/FlexSettleTokenDomainFacet.sol',
+      'contracts/facets/FlexConfirmTokenFacet.sol',
+      'contracts/facets/views/domains/FlexConfirmTokenDomainFacet.sol',
 
-      'contracts/facets/FlexSettleTokenProofFacet.sol',
-      'contracts/facets/views/domains/FlexSettleTokenProofDomainFacet.sol',
+      'contracts/facets/FlexConfirmTokenProofFacet.sol',
+      'contracts/facets/views/domains/FlexConfirmTokenProofDomainFacet.sol',
+
+      'contracts/facets/FlexRefundNativeFacet.sol',
+      'contracts/facets/views/domains/FlexRefundNativeDomainFacet.sol',
+
+      'contracts/facets/FlexRefundNativeProofFacet.sol',
+      'contracts/facets/views/domains/FlexRefundNativeProofDomainFacet.sol',
+
+      'contracts/facets/FlexRefundTokenFacet.sol',
+      'contracts/facets/views/domains/FlexRefundTokenDomainFacet.sol',
+
+      'contracts/facets/FlexRefundTokenProofFacet.sol',
+      'contracts/facets/views/domains/FlexRefundTokenProofDomainFacet.sol',
 
       'contracts/facets/FlexSendNativeFacet.sol',
       'contracts/facets/views/domains/FlexSendNativeDomainFacet.sol',

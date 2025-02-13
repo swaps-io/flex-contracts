@@ -10,26 +10,25 @@ import {IFlexSendNative} from "../interfaces/IFlexSendNative.sol";
 import {FlexEarlinessConstraint} from "../libraries/constraints/FlexEarlinessConstraint.sol";
 import {FlexDeadlineConstraint} from "../libraries/constraints/FlexDeadlineConstraint.sol";
 
+import {FlexSendData} from "../libraries/data/FlexSendData.sol";
+
 import {FlexSendStateUpdate} from "../libraries/states/FlexSendStateUpdate.sol";
 
 import {FlexDomain, FlexEfficientHash} from "../libraries/utilities/FlexDomain.sol";
 
 contract FlexSendNativeFacet is IFlexSendNative {
-    bytes32 private immutable _domain = FlexDomain.calc(IFlexSendNative.flexSendNative.selector);
+    bytes8 private immutable _domain = FlexDomain.calc(IFlexSendNative.flexSendNative.selector);
 
-    function flexSendNative(
-        bytes32 sendData1_, // Content: send start (48), time to send (32), sender group (16), receiver (160)
-        bytes32[] calldata orderBranch_
-    ) external payable override {
-        uint48 start = uint48(uint256(sendData1_) >> 208);
+    function flexSendNative(bytes32 sendData1_, bytes32[] calldata orderBranch_) external payable override {
+        uint48 start = FlexSendData.readStart(sendData1_);
         FlexEarlinessConstraint.validate(start);
-        FlexDeadlineConstraint.validate(start + uint32(uint256(sendData1_) >> 176));
+        FlexDeadlineConstraint.validate(start + FlexSendData.readTime(sendData1_));
 
-        bytes32 orderHash = FlexEfficientHash.calc(_domain | bytes32(uint256(uint160(msg.sender))), sendData1_, bytes32(msg.value));
+        bytes32 orderHash = FlexEfficientHash.calc(FlexSendData.make0(_domain, msg.sender), sendData1_, FlexSendData.make2(msg.value));
         orderHash = MerkleProof.processProofCalldata(orderBranch_, orderHash);
 
-        FlexSendStateUpdate.toSent(msg.sender, uint16(uint256(sendData1_ >> 160)), start, orderHash);
+        FlexSendStateUpdate.toSent(msg.sender, FlexSendData.readGroup(sendData1_), start, orderHash);
 
-        Address.sendValue(payable(address(uint160(uint256(sendData1_)))), msg.value);
+        Address.sendValue(payable(FlexSendData.readReceiver(sendData1_)), msg.value);
     }
 }

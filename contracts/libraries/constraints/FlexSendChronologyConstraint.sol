@@ -4,10 +4,10 @@ pragma solidity ^0.8.28;
 
 import {FlexChronologyError} from "../../interfaces/errors/FlexChronologyError.sol";
 
-import {FlexSendStateAccess} from "../accesses/FlexSendStateAccess.sol";
+import {FlexSendBucketStateData} from "../data/FlexSendBucketStateData.sol";
 
-library FlexChronologyConstraint {
+library FlexSendChronologyConstraint {
     function validate(bytes32 bucketState_, uint256 start_) internal pure {
-        require(FlexSendStateAccess.readTime(bucketState_) <= start_, FlexChronologyError());
+        require(FlexSendBucketStateData.readTime(bucketState_) <= start_, FlexChronologyError());
     }
 }
