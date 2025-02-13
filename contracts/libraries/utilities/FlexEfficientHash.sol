@@ -38,16 +38,4 @@ library FlexEfficientHash {
             hash := keccak256(ptr, 0x80)
         }
     }
-
-    function calc(bytes32 data0_, bytes32 data1_, bytes32 data2_, bytes32 data3_, bytes32 data4_) internal pure returns (bytes32 hash) {
-        assembly ("memory-safe") {
-            let ptr := mload(0x40)
-            mstore(ptr, data0_)
-            mstore(add(ptr, 0x20), data1_)
-            mstore(add(ptr, 0x40), data2_)
-            mstore(add(ptr, 0x60), data3_)
-            mstore(add(ptr, 0x80), data4_)
-            hash := keccak256(ptr, 0xa0)
-        }
-    }
 }
