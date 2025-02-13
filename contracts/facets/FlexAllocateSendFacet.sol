@@ -16,13 +16,12 @@ contract FlexAllocateSendFacet is IFlexAllocateSend {
     function flexAllocateSend(bytes32 allocateData0_) external {
         uint256 bucket = uint256(FlexSendStateBucket.calcBucket(FlexSendAllocateData.readSender(allocateData0_), FlexSendAllocateData.readStartGroup(allocateData0_)));
         uint256 endBucket = bucket + FlexSendAllocateData.readTotalBuckets(allocateData0_);
-        while (bucket < endBucket) {
+        for (; bucket < endBucket; bucket++) {
             bytes32 bucketState = FlexSendStateStorage.data()[bytes32(bucket)];
             if (FlexSendBucketStateData.readHash(bucketState) == FlexStateAllocation.UNALLOCATED_HASH) {
                 bucketState = FlexSendBucketStateData.writeHash(bucketState, FlexStateAllocation.ALLOCATED_HASH);
                 FlexSendStateStorage.data()[bytes32(bucket)] = bucketState;
             }
-            unchecked { bucket++; }
         }
     }
 }

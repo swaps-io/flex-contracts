@@ -16,13 +16,12 @@ contract FlexAllocateReceiveFacet is IFlexAllocateReceive {
     function flexAllocateReceive(bytes32 allocateData0_) external {
         uint256 bucket = uint256(FlexReceiveStateBucket.calcBucket(FlexReceiveAllocateData.readReceiver(allocateData0_), FlexReceiveAllocateData.readStartNonce(allocateData0_)));
         uint256 endBucket = bucket + FlexReceiveAllocateData.readTotalBuckets(allocateData0_);
-        while (bucket < endBucket) {
+        for (; bucket < endBucket; bucket++) {
             bytes32 bucketState = FlexReceiveStateStorage.data()[bytes32(bucket)];
             if (FlexReceiveBucketStateData.readHash(bucketState) == FlexStateAllocation.UNALLOCATED_HASH) {
                 bucketState = FlexReceiveBucketStateData.writeHash(bucketState, FlexStateAllocation.ALLOCATED_HASH);
                 FlexReceiveStateStorage.data()[bytes32(bucket)] = bucketState;
             }
-            unchecked { bucket++; }
         }
     }
 }
