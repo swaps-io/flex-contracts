@@ -33,13 +33,13 @@ library FlexReceiveStateUpdate {
         emit FlexReceive(orderHash_);
     }
 
-    function toSettled(address receiver_, uint96 nonce_, bytes32 orderHash_, bytes20 receiveHashBefore_, bytes32[] calldata receiveOrderHashesAfter_, bool confirm_) internal {
+    function toSettled(address receiver_, uint96 nonce_, bytes32 orderHash_, bytes32[] calldata orderBranch_, bool confirm_) internal {
         bytes32 bucket = FlexReceiveStateBucket.calcBucket(receiver_, nonce_);
         uint8 offset = FlexReceiveStateBucket.calcOffset(nonce_);
 
         bytes32 bucketState = FlexReceiveStateStorage.data()[bucket];
         FlexReceiveStateConstraint.validate(bucketState, offset, FlexReceiveState.Received);
-        FlexAccumulatorConstraint.validate(FlexReceiveBucketStateData.readHash(bucketState), receiveHashBefore_, orderHash_, receiveOrderHashesAfter_);
+        FlexAccumulatorConstraint.validate(FlexReceiveBucketStateData.readHash(bucketState), orderBranch_, orderHash_);
         bucketState = FlexReceiveBucketStateData.writeState(bucketState, offset, confirm_ ? FlexReceiveState.Confirmed : FlexReceiveState.Refunded);
 
         FlexReceiveStateStorage.data()[bucket] = bucketState;

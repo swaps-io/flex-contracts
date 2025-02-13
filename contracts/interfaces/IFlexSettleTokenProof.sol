@@ -10,8 +10,6 @@ interface IFlexSettleTokenProof {
         bytes32 settleData0,
         bytes32 settleData1,
         bytes calldata settleProof,
-        bytes32[] calldata orderBranch,
-        bytes20 receiveHashBefore,
-        bytes32[] calldata receiveOrderHashesAfter
+        bytes32[] calldata orderBranch
     ) external;
 }

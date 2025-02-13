@@ -2,7 +2,6 @@
 
 pragma solidity ^0.8.28;
 
-import {MerkleProof} from "@openzeppelin/contracts/utils/cryptography/MerkleProof.sol";
 import {SafeERC20, IERC20} from "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
 
 import {IFlexReceiveTokenFrom} from "../interfaces/IFlexReceiveTokenFrom.sol";
@@ -16,6 +15,7 @@ import {FlexReceiveFromData} from "../libraries/data/FlexReceiveFromData.sol";
 import {FlexReceiveStateUpdate} from "../libraries/states/FlexReceiveStateUpdate.sol";
 
 import {FlexDomain, FlexEfficientHash} from "../libraries/utilities/FlexDomain.sol";
+import {FlexHashTree} from "../libraries/utilities/FlexHashTree.sol";
 
 contract FlexReceiveTokenFromFacet is IFlexReceiveTokenFrom {
     bytes8 private immutable _domain = FlexDomain.calc(IFlexReceiveTokenFrom.flexReceiveTokenFrom.selector);
@@ -33,7 +33,7 @@ contract FlexReceiveTokenFromFacet is IFlexReceiveTokenFrom {
 
         bytes32 orderHash = FlexEfficientHash.calc(FlexReceiveData.writeReceiver(receiveFromData0_, msg.sender), receiveData1_, receiveData2_);
         orderHash = FlexEfficientHash.calc(FlexReceiveFromData.make0(_domain, sender), FlexReceiveFromData.make1(orderHash));
-        orderHash = MerkleProof.processProofCalldata(orderBranch_, orderHash);
+        orderHash = FlexHashTree.calcBranch(orderBranch_, orderHash);
 
         FlexSignatureConstraint.validate(FlexReceiveData.readSignFlags(receiveFromData0_), sender, orderHash, senderSignature_);
 

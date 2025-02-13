@@ -9,8 +9,6 @@ interface IFlexSettleNative {
         bytes32 settleData0,
         bytes32 settleData1,
         bytes32 settleKey,
-        bytes32[] calldata orderBranch,
-        bytes20 receiveHashBefore,
-        bytes32[] calldata receiveOrderHashesAfter
+        bytes32[] calldata orderBranch
     ) external;
 }

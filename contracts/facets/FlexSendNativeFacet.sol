@@ -2,7 +2,6 @@
 
 pragma solidity ^0.8.28;
 
-import {MerkleProof} from "@openzeppelin/contracts/utils/cryptography/MerkleProof.sol";
 import {Address} from "@openzeppelin/contracts/utils/Address.sol";
 
 import {IFlexSendNative} from "../interfaces/IFlexSendNative.sol";
@@ -15,6 +14,7 @@ import {FlexSendData} from "../libraries/data/FlexSendData.sol";
 import {FlexSendStateUpdate} from "../libraries/states/FlexSendStateUpdate.sol";
 
 import {FlexDomain, FlexEfficientHash} from "../libraries/utilities/FlexDomain.sol";
+import {FlexHashTree} from "../libraries/utilities/FlexHashTree.sol";
 
 contract FlexSendNativeFacet is IFlexSendNative {
     bytes8 private immutable _domain = FlexDomain.calc(IFlexSendNative.flexSendNative.selector);
@@ -25,7 +25,7 @@ contract FlexSendNativeFacet is IFlexSendNative {
         FlexDeadlineConstraint.validate(start + FlexSendData.readTime(sendData1_));
 
         bytes32 orderHash = FlexEfficientHash.calc(FlexSendData.make0(_domain, msg.sender), sendData1_, FlexSendData.make2(msg.value));
-        orderHash = MerkleProof.processProofCalldata(orderBranch_, orderHash);
+        orderHash = FlexHashTree.calcBranch(orderBranch_, orderHash);
 
         FlexSendStateUpdate.toSent(msg.sender, FlexSendData.readGroup(sendData1_), start, orderHash);
 
