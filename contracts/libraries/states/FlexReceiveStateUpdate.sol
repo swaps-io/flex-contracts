@@ -33,21 +33,17 @@ library FlexReceiveStateUpdate {
         emit FlexReceive(orderHash_);
     }
 
-    function toSettled(address receiver_, uint96 nonce_, bytes32 orderHash_, bytes20 receiveHashBefore_, bytes32[] calldata receiveOrderHashesAfter_, FlexReceiveState stateAfter_) internal {
+    function toSettled(address receiver_, uint96 nonce_, bytes32 orderHash_, bytes20 receiveHashBefore_, bytes32[] calldata receiveOrderHashesAfter_, bool confirm_) internal {
         bytes32 bucket = FlexReceiveStateBucket.calcBucket(receiver_, nonce_);
         uint8 offset = FlexReceiveStateBucket.calcOffset(nonce_);
 
         bytes32 bucketState = FlexReceiveStateStorage.data()[bucket];
         FlexReceiveStateConstraint.validate(bucketState, offset, FlexReceiveState.Received);
         FlexAccumulatorConstraint.validate(FlexReceiveBucketStateData.readHash(bucketState), receiveHashBefore_, orderHash_, receiveOrderHashesAfter_);
+        bucketState = FlexReceiveBucketStateData.writeState(bucketState, offset, confirm_ ? FlexReceiveState.Confirmed : FlexReceiveState.Refunded);
 
-        bucketState = FlexReceiveBucketStateData.writeState(bucketState, offset, stateAfter_);
         FlexReceiveStateStorage.data()[bucket] = bucketState;
-
-        if (stateAfter_ == FlexReceiveState.Confirmed) {
-            emit FlexConfirm(orderHash_);
-        } else {
-            emit FlexRefund(orderHash_);
-        }
+        if (confirm_) emit FlexConfirm(orderHash_);
+        else emit FlexRefund(orderHash_);
     }
 }

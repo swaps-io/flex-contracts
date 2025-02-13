@@ -40,7 +40,7 @@ contract FlexSettleNativeProofFacet is IFlexSettleNativeProof {
 
         FlexProofConstraint.verify(_proofVerifier, FlexSettleProofData.readEventSignature(settleData1_), orderHash, FlexSettleProofData.readEventChain(settleData0_), settleProof_);
 
-        FlexReceiveStateUpdate.toSettled(FlexReceiveData.readReceiver(receiveData0_), FlexReceiveData.readNonce(receiveData0_), orderHash, receiveHashBefore_, receiveOrderHashesAfter_, FlexSettleProofData.readState(settleData0_));
+        FlexReceiveStateUpdate.toSettled(FlexReceiveData.readReceiver(receiveData0_), FlexReceiveData.readNonce(receiveData0_), orderHash, receiveHashBefore_, receiveOrderHashesAfter_, FlexSettleProofData.readConfirm(settleData0_));
 
         Address.sendValue(payable(FlexSettleProofData.readReceiver(settleData0_)), FlexReceiveData.readAmount(receiveData1_));
     }
