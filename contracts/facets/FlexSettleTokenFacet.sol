@@ -5,7 +5,7 @@ pragma solidity ^0.8.28;
 import {MerkleProof} from "@openzeppelin/contracts/utils/cryptography/MerkleProof.sol";
 import {SafeERC20, IERC20} from "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
 
-import {IFlexRefundToken} from "../interfaces/IFlexRefundToken.sol";
+import {IFlexSettleToken} from "../interfaces/IFlexSettleToken.sol";
 
 import {FlexKeyConstraint} from "../libraries/constraints/FlexKeyConstraint.sol";
 
@@ -16,28 +16,28 @@ import {FlexReceiveStateUpdate} from "../libraries/states/FlexReceiveStateUpdate
 
 import {FlexDomain, FlexEfficientHash} from "../libraries/utilities/FlexDomain.sol";
 
-contract FlexRefundTokenFacet is IFlexRefundToken {
-    bytes8 private immutable _domain = FlexDomain.calc(IFlexRefundToken.flexRefundToken.selector);
+contract FlexSettleTokenFacet is IFlexSettleToken {
+    bytes8 private immutable _domain = FlexDomain.calc(IFlexSettleToken.flexSettleToken.selector);
 
-    function flexRefundToken(
+    function flexSettleToken(
         bytes32 receiveData0_,
         bytes32 receiveData1_,
         bytes32 receiveData2_,
-        bytes32 refundData0_,
-        bytes32 refundData1_,
-        bytes32 refundKey_,
+        bytes32 settleData0_,
+        bytes32 settleData1_,
+        bytes32 settleKey_,
         bytes32[] calldata orderBranch_,
         bytes20 receiveHashBefore_,
         bytes32[] calldata receiveOrderHashesAfter_
     ) external override {
-        FlexKeyConstraint.validate(FlexSettleData.readKeyHash(refundData1_), refundKey_);
+        FlexKeyConstraint.validate(FlexSettleData.readKeyHash(settleData1_), settleKey_);
 
         bytes32 orderHash = FlexEfficientHash.calc(receiveData0_, receiveData1_, receiveData2_);
-        orderHash = FlexEfficientHash.calc(FlexSettleData.writeDomain(refundData0_, _domain), refundData1_, FlexSettleData.make2(orderHash));
+        orderHash = FlexEfficientHash.calc(FlexSettleData.writeDomain(settleData0_, _domain), settleData1_, FlexSettleData.make2(orderHash));
         orderHash = MerkleProof.processProofCalldata(orderBranch_, orderHash);
 
-        FlexReceiveStateUpdate.toRefunded(FlexReceiveData.readReceiver(receiveData0_), FlexReceiveData.readNonce(receiveData0_), orderHash, receiveHashBefore_, receiveOrderHashesAfter_);
+        FlexReceiveStateUpdate.toSettled(FlexReceiveData.readReceiver(receiveData0_), FlexReceiveData.readNonce(receiveData0_), orderHash, receiveHashBefore_, receiveOrderHashesAfter_, FlexSettleData.readState(settleData0_));
 
-        SafeERC20.safeTransfer(IERC20(FlexReceiveData.readToken(receiveData2_)), FlexSettleData.readReceiver(refundData0_), FlexReceiveData.readAmount(receiveData1_));
+        SafeERC20.safeTransfer(IERC20(FlexReceiveData.readToken(receiveData2_)), FlexSettleData.readReceiver(settleData0_), FlexReceiveData.readAmount(receiveData1_));
     }
 }

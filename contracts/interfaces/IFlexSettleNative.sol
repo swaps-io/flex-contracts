@@ -2,14 +2,13 @@
 
 pragma solidity ^0.8.28;
 
-interface IFlexRefundTokenProof {
-    function flexRefundTokenProof(
+interface IFlexSettleNative {
+    function flexSettleNative(
         bytes32 receiveData0,
         bytes32 receiveData1,
-        bytes32 receiveData2,
-        bytes32 refundData0,
-        bytes32 refundData1,
-        bytes calldata refundProof,
+        bytes32 settleData0,
+        bytes32 settleData1,
+        bytes32 settleKey,
         bytes32[] calldata orderBranch,
         bytes20 receiveHashBefore,
         bytes32[] calldata receiveOrderHashesAfter

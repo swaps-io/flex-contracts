@@ -2,11 +2,17 @@
 
 pragma solidity ^0.8.28;
 
+import {FlexReceiveState} from "../../interfaces/enums/FlexReceiveState.sol";
+
 library FlexSettleData {
     // Content:
-    // - data #0: domain (64), <unused> (32), receiver (160)
+    // - data #0: domain (64), confirm flag (1), <unused> (31), receiver (160)
     // - data #1: key hash (256)
     // - data #2: receive hash (256)
+
+    function readState(bytes32 data0_) internal pure returns (FlexReceiveState) {
+        return uint256(data0_ >> 191) & 1 == 0 ? FlexReceiveState.Refunded : FlexReceiveState.Confirmed;
+    }
 
     function readReceiver(bytes32 data0_) internal pure returns (address) {
         return address(uint160(uint256(data0_)));

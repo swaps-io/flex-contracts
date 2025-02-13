@@ -33,17 +33,7 @@ library FlexReceiveStateUpdate {
         emit FlexReceive(orderHash_);
     }
 
-    function toConfirmed(address receiver_, uint96 nonce_, bytes32 orderHash_, bytes20 receiveHashBefore_, bytes32[] calldata receiveOrderHashesAfter_) internal {
-        _toSettled(receiver_, nonce_, orderHash_, receiveHashBefore_, receiveOrderHashesAfter_, FlexReceiveState.Confirmed);
-        emit FlexConfirm(orderHash_);
-    }
-
-    function toRefunded(address receiver_, uint96 nonce_, bytes32 orderHash_, bytes20 receiveHashBefore_, bytes32[] calldata receiveOrderHashesAfter_) internal {
-        _toSettled(receiver_, nonce_, orderHash_, receiveHashBefore_, receiveOrderHashesAfter_, FlexReceiveState.Refunded);
-        emit FlexRefund(orderHash_);
-    }
-
-    function _toSettled(address receiver_, uint96 nonce_, bytes32 orderHash_, bytes20 receiveHashBefore_, bytes32[] calldata receiveOrderHashesAfter_, FlexReceiveState stateAfter_) private {
+    function toSettled(address receiver_, uint96 nonce_, bytes32 orderHash_, bytes20 receiveHashBefore_, bytes32[] calldata receiveOrderHashesAfter_, FlexReceiveState stateAfter_) internal {
         bytes32 bucket = FlexReceiveStateBucket.calcBucket(receiver_, nonce_);
         uint8 offset = FlexReceiveStateBucket.calcOffset(nonce_);
 
@@ -53,5 +43,11 @@ library FlexReceiveStateUpdate {
 
         bucketState = FlexReceiveBucketStateData.writeState(bucketState, offset, stateAfter_);
         FlexReceiveStateStorage.data()[bucket] = bucketState;
+
+        if (stateAfter_ == FlexReceiveState.Confirmed) {
+            emit FlexConfirm(orderHash_);
+        } else {
+            emit FlexRefund(orderHash_);
+        }
     }
 }
