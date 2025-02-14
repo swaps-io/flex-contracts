@@ -1,17 +1,9 @@
-import { Hex, keccak256, concatHex, AsHexValue, asHex } from '../external';
+import { Hex } from '../external';
 
-export interface FlexCalcConfirmTokenHashParams {
-  domain: AsHexValue;
-  data0: AsHexValue;
-  data1: AsHexValue;
-}
+import { flexCalcSettleTokenHash, FlexCalcSettleTokenHashParams } from '../settleToken';
+
+export type FlexCalcConfirmTokenHashParams = FlexCalcSettleTokenHashParams;
 
 export function flexCalcConfirmTokenHash(params: FlexCalcConfirmTokenHashParams): Hex {
-  return keccak256(
-    concatHex([
-      asHex(params.domain, 32),
-      asHex(params.data0, 32),
-      asHex(params.data1, 32),
-    ]),
-  );
+  return flexCalcSettleTokenHash(params);
 }
