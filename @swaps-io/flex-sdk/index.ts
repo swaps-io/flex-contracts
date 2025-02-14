@@ -10,6 +10,7 @@ export * from './confirmTokenProof';
 export * from './constants';
 export * from './flags';
 export * from './receive';
+export * from './receiveFrom';
 export * from './receiveNative';
 export * from './receiveToken';
 export * from './receiveTokenFrom';
