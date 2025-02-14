@@ -13,7 +13,7 @@ export interface FlexEncodeSettleProofData0Params {
 export function flexEncodeSettleProofData0(params: FlexEncodeSettleProofData0Params): Hex {
   const eventChain = BigInt(asHex(params.eventChain, 4));
   if (eventChain > FLEX_MAX_PROOF_CHAIN) {
-    throw new Error('Flex proof chain exceeded max value');
+    throw new Error('Flex proof chain exceeds max value');
   }
 
   return concatHex([
