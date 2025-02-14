@@ -1,4 +1,4 @@
-import { AsHexValue } from '../external';
+import { AsHexValue, Hex } from '../external';
 
 import { flexEncodeSendData0, flexEncodeSendData1, flexEncodeSendData2, flexEncodeSendData3 } from '../send';
 
@@ -13,7 +13,7 @@ export interface FlexEncodeSendTokenDataParams {
 }
 
 export interface FlexSendTokenData {
-  sendData: [AsHexValue, AsHexValue, AsHexValue, AsHexValue],
+  sendData: [Hex, Hex, Hex, Hex],
 }
 
 export function flexEncodeSendTokenData(params: FlexEncodeSendTokenDataParams): FlexSendTokenData {

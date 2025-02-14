@@ -1,4 +1,4 @@
-import { AsHexValue } from '../external';
+import { AsHexValue, Hex } from '../external';
 
 import { flexCalcReceiveHash, flexEncodeReceiveData0, flexEncodeReceiveData1, flexEncodeReceiveData2 } from '../receive';
 import { flexEncodeReceiveFromData0, flexEncodeReceiveFromData1 } from '../receiveFrom';
@@ -14,8 +14,8 @@ export interface FlexEncodeReceiveTokenFromDataParams {
 }
 
 export interface FlexReceiveTokenFromData {
-  receiveData: [AsHexValue, AsHexValue, AsHexValue],
-  receiveFromData: [AsHexValue, AsHexValue],
+  receiveData: [Hex, Hex, Hex],
+  receiveFromData: [Hex, Hex],
 }
 
 export function flexEncodeReceiveTokenFromData(params: FlexEncodeReceiveTokenFromDataParams): FlexReceiveTokenFromData {

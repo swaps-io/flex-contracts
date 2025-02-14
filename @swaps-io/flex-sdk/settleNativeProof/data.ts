@@ -1,4 +1,4 @@
-import { AsHexValue } from '../external';
+import { AsHexValue, Hex } from '../external';
 
 import { flexCalcReceiveHash, flexEncodeReceiveData0, flexEncodeReceiveData1 } from '../receive';
 import { flexEncodeSettleProofData0, flexEncodeSettleProofData1, flexEncodeSettleProofData2 } from '../settleProof';
@@ -15,8 +15,8 @@ export interface FlexEncodeSettleNativeProofDataParams {
 }
 
 export interface FlexSettleNativeProofData {
-  receiveData: [AsHexValue, AsHexValue],
-  settleProofData: [AsHexValue, AsHexValue, AsHexValue],
+  receiveData: [Hex, Hex],
+  settleProofData: [Hex, Hex, Hex],
 }
 
 export function flexEncodeSettleNativeProofData(params: FlexEncodeSettleNativeProofDataParams): FlexSettleNativeProofData {
