@@ -18,67 +18,44 @@ import {
 
 const TOTAL_ALLOCATE_BUCKETS = 5n;
 
-describe('FlexAllocateReceive', function () {
+describe('FlexAllocateReceiveFacet', function () {
   async function deployFixture() {
     const publicClient = await viem.getPublicClient();
 
     const [walletClient] = await viem.getWalletClients();
 
-    const receiveNativeDomain = '0xc0ffeec0ffeec0ffeec0ffeec0ffeec0ffeec0ffeec0ffeec0ffeec0ffeec0ff'; // For standalone
-    const confirmNativeDomain = '0xdeadbeefdeadbeefdeadbeefdeadbeefdeadbeefdeadbeefdeadbeefdeadbeef'; // For standalone
-    const confirmNativeProofDomain = '0xb0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0'; // For standalone
-    const refundNativeDomain = '0x4e4e4e4e4e4e4e4e4e4e4e4e4e4e4e4e4e4e4e4e4e4e4e4e4e4e4e4e4e4e4e4e'; // For standalone
-    const refundNativeProofDomain = '0x3a3a3a3a3a3a3a3a3a3a3a3a3a3a3a3a3a3a3a3a3a3a3a3a3a3a3a3a3a3a3a3a'; // For standalone
-    const proofVerifier = zeroAddress; // For standalone
-
-    // Includes `FlexAllocateReceiveFacet`
-    const flexReceiveStandalone = await viem.deployContract(
-      'FlexReceiveNativeStandalone',
-      [
-        receiveNativeDomain,
-        confirmNativeDomain,
-        confirmNativeProofDomain,
-        refundNativeDomain,
-        refundNativeProofDomain,
-        proofVerifier,
-      ],
-    );
-
-    const flexAllocateReceiveFacet = await viem.deployContract('FlexAllocateReceiveFacet');
+    const flex = await viem.deployContract('FlexStandalone', [zeroAddress]);
+    const facet = await viem.deployContract('FlexAllocateReceiveFacet');
 
     return {
       publicClient,
       walletClient,
-      flexReceiveStandalone,
-      flexAllocateReceiveFacet,
+      flex,
+      facet,
     };
   }
 
-  it('Should show FlexAllocateReceiveFacet code', async function () {
-    const { publicClient, flexAllocateReceiveFacet } = await loadFixture(deployFixture);
+  it('Should show facet code', async function () {
+    const { publicClient, facet } = await loadFixture(deployFixture);
 
-    const code = await publicClient.getCode({ address: flexAllocateReceiveFacet.address });
-    console.log(`flexAllocateReceiveFacet code: ${code}`);
+    const code = await publicClient.getCode({ address: facet.address });
+    console.log(`Facet code: ${code}`);
   });
 
-  it('Should show FlexAllocateReceiveFacet function selectors', async function () {
-    const { flexAllocateReceiveFacet } = await loadFixture(deployFixture);
+  it('Should show facet selectors', async function () {
+    const { facet } = await loadFixture(deployFixture);
 
-    console.log('FlexAllocateReceiveFacet selectors:');
-    for (const abi of flexAllocateReceiveFacet.abi) {
-      if (abi.type !== 'function') {
-        continue;
+    console.log('Facet selectors:');
+    for (const abi of facet.abi) {
+      if (abi.type === 'function') {
+        const item = getAbiItem({ abi: facet.abi, name: abi.name });
+        console.log(`- ${toFunctionSelector(item)}: ${toFunctionSignature(item)}`);
       }
-
-      const item = getAbiItem({ abi: flexAllocateReceiveFacet.abi, name: abi.name });
-      const signature = toFunctionSignature(item);
-      const selector = toFunctionSelector(item);
-      console.log(`- ${selector}: ${signature}`);
     }
   });
 
   it('Should allocate receive state', async function () {
-    const { publicClient, walletClient, flexReceiveStandalone } = await loadFixture(deployFixture);
+    const { publicClient, walletClient, flex } = await loadFixture(deployFixture);
 
     const receiver = '0xdeadbeefdeadbeefdeadbeefdeadbeefdeadbeef';
     const startNonce = 3n * FLEX_RECEIVE_NONCES_PER_BUCKET + 5n;
@@ -95,8 +72,8 @@ describe('FlexAllocateReceive', function () {
 
     async function readReceiveHash(nonce: bigint): Promise<Hex> {
       const hash = await publicClient.readContract({
-        abi: flexReceiveStandalone.abi,
-        address: flexReceiveStandalone.address,
+        abi: flex.abi,
+        address: flex.address,
         functionName: 'flexReceiveHash',
         args: [
           receiver,
@@ -128,8 +105,8 @@ describe('FlexAllocateReceive', function () {
 
     {
       const hash = await walletClient.writeContract({
-        abi: flexReceiveStandalone.abi,
-        address: flexReceiveStandalone.address,
+        abi: flex.abi,
+        address: flex.address,
         functionName: 'flexAllocateReceive',
         args: [
           allocateData0,

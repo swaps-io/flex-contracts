@@ -6,6 +6,7 @@ import {
   Hex,
   toFunctionSelector,
   toFunctionSignature,
+  zeroAddress,
 } from 'viem';
 
 import {
@@ -16,57 +17,44 @@ import {
 
 const TOTAL_ALLOCATE_BUCKETS = 5;
 
-describe('FlexAllocateSend', function () {
+describe('FlexAllocateSendFacet', function () {
   async function deployFixture() {
     const publicClient = await viem.getPublicClient();
 
     const [walletClient] = await viem.getWalletClients();
 
-    const sendNativeDomain = '0xabababababababababababababababababababababababababababababababab'; // For standalone
-
-    // Includes `FlexAllocateSendFacet`
-    const flexSendStandalone = await viem.deployContract(
-      'FlexSendNativeStandalone',
-      [
-        sendNativeDomain,
-      ],
-    );
-
-    const flexAllocateSendFacet = await viem.deployContract('FlexAllocateSendFacet');
+    const flex = await viem.deployContract('FlexStandalone', [zeroAddress]);
+    const facet = await viem.deployContract('FlexAllocateSendFacet');
 
     return {
       publicClient,
       walletClient,
-      flexSendStandalone,
-      flexAllocateSendFacet,
+      flex,
+      facet,
     };
   }
 
-  it('Should show FlexAllocateSendFacet code', async function () {
-    const { publicClient, flexAllocateSendFacet } = await loadFixture(deployFixture);
+  it('Should show facet code', async function () {
+    const { publicClient, facet } = await loadFixture(deployFixture);
 
-    const code = await publicClient.getCode({ address: flexAllocateSendFacet.address });
-    console.log(`flexAllocateSendFacet code: ${code}`);
+    const code = await publicClient.getCode({ address: facet.address });
+    console.log(`Facet code: ${code}`);
   });
 
-  it('Should show FlexAllocateSendFacet function selectors', async function () {
-    const { flexAllocateSendFacet } = await loadFixture(deployFixture);
+  it('Should show facet selectors', async function () {
+    const { facet } = await loadFixture(deployFixture);
 
-    console.log('FlexAllocateSendFacet selectors:');
-    for (const abi of flexAllocateSendFacet.abi) {
-      if (abi.type !== 'function') {
-        continue;
+    console.log('Facet selectors:');
+    for (const abi of facet.abi) {
+      if (abi.type === 'function') {
+        const item = getAbiItem({ abi: facet.abi, name: abi.name });
+        console.log(`- ${toFunctionSelector(item)}: ${toFunctionSignature(item)}`);
       }
-
-      const item = getAbiItem({ abi: flexAllocateSendFacet.abi, name: abi.name });
-      const signature = toFunctionSignature(item);
-      const selector = toFunctionSelector(item);
-      console.log(`- ${selector}: ${signature}`);
     }
   });
 
-  it('Should allocate receive state', async function () {
-    const { publicClient, walletClient, flexSendStandalone } = await loadFixture(deployFixture);
+  it('Should allocate send state', async function () {
+    const { publicClient, walletClient, flex } = await loadFixture(deployFixture);
 
     const sender = '0xdeadbeefdeadbeefdeadbeefdeadbeefdeadbeef';
     const startGroup = 3; // Included
@@ -82,8 +70,8 @@ describe('FlexAllocateSend', function () {
 
     async function readSendHash(group: number): Promise<Hex> {
       const hash = await publicClient.readContract({
-        abi: flexSendStandalone.abi,
-        address: flexSendStandalone.address,
+        abi: flex.abi,
+        address: flex.address,
         functionName: 'flexSendHash',
         args: [
           sender,
@@ -112,8 +100,8 @@ describe('FlexAllocateSend', function () {
 
     {
       const hash = await walletClient.writeContract({
-        abi: flexSendStandalone.abi,
-        address: flexSendStandalone.address,
+        abi: flex.abi,
+        address: flex.address,
         functionName: 'flexAllocateSend',
         args: [
           allocateData0,
