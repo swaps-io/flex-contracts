@@ -10,6 +10,7 @@ export interface FlexEncodeSettleTokenDataParams {
   token: AsHexValue;
   amount: AsHexValue;
   deadline: AsHexValue;
+  nonce: AsHexValue;
   keyHash: AsHexValue;
   confirm: boolean;
 }
@@ -26,6 +27,7 @@ export function flexEncodeSettleTokenData(params: FlexEncodeSettleTokenDataParam
       noRetryAsContractSignature: params.receiverNoRetryAsContract,
       deadline: params.deadline,
       receiver: params.receiver,
+      nonce: params.nonce,
     }),
     flexEncodeReceiveData1({
       amount: params.amount,

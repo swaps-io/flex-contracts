@@ -11,6 +11,7 @@ export interface FlexEncodeReceiveTokenFromDataParams {
   token: AsHexValue;
   amount: AsHexValue;
   deadline: AsHexValue;
+  nonce: AsHexValue;
 }
 
 export interface FlexReceiveTokenFromData {
@@ -25,6 +26,7 @@ export function flexEncodeReceiveTokenFromData(params: FlexEncodeReceiveTokenFro
       noRetryAsContractSignature: params.senderNoRetryAsContract,
       deadline: params.deadline,
       receiver: params.receiver,
+      nonce: params.nonce,
     }),
     flexEncodeReceiveData1({
       amount: params.amount,

@@ -9,6 +9,7 @@ export interface FlexEncodeSettleNativeDataParams {
   receiverNoRetryAsContract?: boolean;
   amount: AsHexValue;
   deadline: AsHexValue;
+  nonce: AsHexValue;
   keyHash: AsHexValue;
   confirm: boolean;
 }
@@ -25,6 +26,7 @@ export function flexEncodeSettleNativeData(params: FlexEncodeSettleNativeDataPar
       noRetryAsContractSignature: params.receiverNoRetryAsContract,
       deadline: params.deadline,
       receiver: params.receiver,
+      nonce: params.nonce,
     }),
     flexEncodeReceiveData1({
       amount: params.amount,

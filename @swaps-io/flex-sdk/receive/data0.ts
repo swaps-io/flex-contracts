@@ -9,6 +9,7 @@ export interface FlexEncodeReceiveData0Params {
   noRetryAsContractSignature?: boolean;
   deadline: AsHexValue;
   receiver: AsHexValue;
+  nonce: AsHexValue;
 }
 
 export function flexEncodeReceiveData0(params: FlexEncodeReceiveData0Params): Hex {
@@ -25,7 +26,7 @@ export function flexEncodeReceiveData0(params: FlexEncodeReceiveData0Params): He
       ], 46) | deadline,
       6,
     ),
-    asHex(params.deadline, 6),
+    asHex(params.nonce, 6),
     asHex(params.receiver, 20),
   ]);
 }
