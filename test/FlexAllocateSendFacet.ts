@@ -1,13 +1,7 @@
 import { viem } from 'hardhat';
 import { loadFixture } from '@nomicfoundation/hardhat-network-helpers';
 import { expect } from 'chai';
-import {
-  getAbiItem,
-  Hex,
-  toFunctionSelector,
-  toFunctionSignature,
-  zeroAddress,
-} from 'viem';
+import { Hex, zeroAddress } from 'viem';
 
 import {
   flexEncodeAllocateSendData0,
@@ -24,33 +18,17 @@ describe('FlexAllocateSendFacet', function () {
     const [walletClient] = await viem.getWalletClients();
 
     const flex = await viem.deployContract('FlexStandalone', [zeroAddress]);
-    const facet = await viem.deployContract('FlexAllocateSendFacet');
 
     return {
       publicClient,
       walletClient,
       flex,
-      facet,
     };
   }
 
-  it('Should show facet code', async function () {
-    const { publicClient, facet } = await loadFixture(deployFixture);
-
-    const code = await publicClient.getCode({ address: facet.address });
-    console.log(`Facet code: ${code}`);
-  });
-
-  it('Should show facet selectors', async function () {
-    const { facet } = await loadFixture(deployFixture);
-
-    console.log('Facet selectors:');
-    for (const abi of facet.abi) {
-      if (abi.type === 'function') {
-        const item = getAbiItem({ abi: facet.abi, name: abi.name });
-        console.log(`- ${toFunctionSelector(item)}: ${toFunctionSignature(item)}`);
-      }
-    }
+  it('Should show facet info', async function () {
+    const { facetInfo } = await import('./utils/facetInfo');
+    await facetInfo(await viem.deployContract('FlexAllocateSendFacet'));
   });
 
   it('Should allocate send state', async function () {
