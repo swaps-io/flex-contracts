@@ -1,0 +1,42 @@
+import { AsHexValue } from '../external';
+
+import { flexEncodeSendData0, flexEncodeSendData1, flexEncodeSendData2, flexEncodeSendData3 } from '../send';
+
+export interface FlexEncodeSendTokenDataParams {
+  sender: AsHexValue;
+  receiver: AsHexValue;
+  token: AsHexValue;
+  amount: AsHexValue;
+  start: AsHexValue;
+  time: AsHexValue;
+  group: AsHexValue;
+}
+
+export interface FlexSendTokenData {
+  sendData: [AsHexValue, AsHexValue, AsHexValue, AsHexValue],
+}
+
+export function flexEncodeSendTokenData(params: FlexEncodeSendTokenDataParams): FlexSendTokenData {
+  const sendData: FlexSendTokenData['sendData'] = [
+    flexEncodeSendData0({
+      sender: params.sender,
+    }),
+    flexEncodeSendData1({
+      start: params.start,
+      time: params.time,
+      group: params.group,
+      receiver: params.receiver,
+    }),
+    flexEncodeSendData2({
+      amount: params.amount,
+    }),
+    flexEncodeSendData3({
+      token: params.token,
+    }),
+  ];
+
+  const data: FlexSendTokenData = {
+    sendData,
+  };
+  return data;
+};

@@ -1,21 +1,14 @@
-import { Hex, keccak256, concatHex, AsHexValue, asHex } from '../external';
+import { Hex, AsHexValue } from '../external';
+
+import { flexCalcSendHash } from '../send';
+
+import { FlexSendTokenData } from './data';
 
 export interface FlexCalcSendTokenHashParams {
   domain: AsHexValue;
-  data0: AsHexValue;
-  data1: AsHexValue;
-  data2: AsHexValue;
-  data3: AsHexValue;
+  data: Pick<FlexSendTokenData, 'sendData'>,
 }
 
 export function flexCalcSendTokenHash(params: FlexCalcSendTokenHashParams): Hex {
-  return keccak256(
-    concatHex([
-      asHex(params.domain, 32),
-      asHex(params.data0, 32),
-      asHex(params.data1, 32),
-      asHex(params.data2, 32),
-      asHex(params.data3, 32),
-    ]),
-  );
+  return flexCalcSendHash({ domain: params.domain, data: params.data.sendData });
 }

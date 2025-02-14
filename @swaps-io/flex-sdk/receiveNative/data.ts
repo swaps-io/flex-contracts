@@ -18,7 +18,7 @@ export interface FlexReceiveNativeData {
 }
 
 export function flexEncodeReceiveNativeData(params: FlexEncodeReceiveNativeDataParams): FlexReceiveNativeData {
-  const receiveData: [AsHexValue, AsHexValue] = [
+  const receiveData: FlexReceiveNativeData['receiveData'] = [
     flexEncodeReceiveData0({
       contractSignature: params.receiverContract,
       noRetryAsContractSignature: params.receiverNoRetryAsContract,
@@ -30,7 +30,7 @@ export function flexEncodeReceiveNativeData(params: FlexEncodeReceiveNativeDataP
     }),
   ];
 
-  const receiveFromData: [AsHexValue, AsHexValue] = [
+  const receiveFromData: FlexReceiveNativeData['receiveFromData'] = [
     flexEncodeReceiveFromData0({
       sender: params.sender,
     }),

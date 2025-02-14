@@ -19,7 +19,7 @@ export interface FlexReceiveTokenData {
 }
 
 export function flexEncodeReceiveTokenData(params: FlexEncodeReceiveTokenDataParams): FlexReceiveTokenData {
-  const receiveData: [AsHexValue, AsHexValue, AsHexValue] = [
+  const receiveData: FlexReceiveTokenData['receiveData'] = [
     flexEncodeReceiveData0({
       contractSignature: params.receiverContract,
       noRetryAsContractSignature: params.receiverNoRetryAsContract,
@@ -34,7 +34,7 @@ export function flexEncodeReceiveTokenData(params: FlexEncodeReceiveTokenDataPar
     }),
   ];
 
-  const receiveFromData: [AsHexValue, AsHexValue] = [
+  const receiveFromData: FlexReceiveTokenData['receiveFromData'] = [
     flexEncodeReceiveFromData0({
       sender: params.sender,
     }),
