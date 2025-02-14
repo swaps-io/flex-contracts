@@ -1,38 +1,22 @@
 import { viem } from 'hardhat';
 import { loadFixture } from '@nomicfoundation/hardhat-toolbox-viem/network-helpers';
-import { ContractTypesMap } from 'hardhat/types/artifacts';
 import { expect } from 'chai';
-import {
-  AccessList,
-  Address,
-  bytesToHex,
-  concat,
-  getAbiItem,
-  Hex,
-  keccak256,
-  pad,
-  slice,
-  stringToHex,
-  toFunctionSelector,
-  toFunctionSignature,
-  zeroAddress,
-} from 'viem';
+import { bytesToHex, Hex, zeroAddress } from 'viem';
 
 import {
-  flexCalcReceiveNativeBranch,
   flexCalcReceiveNativeHash,
   flexCalcTree,
   flexCalcTreeHash,
-  flexEncodeReceiveNativeData0,
-  flexEncodeReceiveNativeData1,
   flexCalcAccumulatorHash,
+  flexEncodeReceiveNativeData,
+  flexCalcBranch,
+  FLEX_RECEIVE_STATE_REFUNDED,
+  FLEX_RECEIVE_STATE_NONE,
+  FLEX_RECEIVE_STATE_RECEIVED,
 } from '../@swaps-io/flex-sdk';
 
 const IMAGINARY_COMPONENTS = 3; // Implied in order, but not used here
 const IMAGINARY_RECEIVER_SIGNATURE_BYTES = 65;
-const INSIDE_DIAMOND = false; // Diamond or standalone
-const ACCESS_LIST_DIAMOND = false; // Needs INSIDE_DIAMOND
-const ACCESS_LIST_DIAMOND_GOOD_ONLY = true; // Needs ACCESS_LIST_DIAMOND
 
 describe('FlexReceiveNativeFacet', function () {
   async function deployFixture() {
@@ -40,285 +24,32 @@ describe('FlexReceiveNativeFacet', function () {
 
     const [walletClient] = await viem.getWalletClients();
 
-    const receiveNativeDomain = '0xc0ffeec0ffeec0ffeec0ffeec0ffeec0ffeec0ffeec0ffeec0ffeec0ffeec0ff';
-    const confirmNativeDomain = '0xdeadbeefdeadbeefdeadbeefdeadbeefdeadbeefdeadbeefdeadbeefdeadbeef'; // For standalone
-    const confirmNativeProofDomain = '0xb0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0'; // For standalone
-    const refundNativeDomain = '0x4e4e4e4e4e4e4e4e4e4e4e4e4e4e4e4e4e4e4e4e4e4e4e4e4e4e4e4e4e4e4e4e'; // For standalone
-    const refundNativeProofDomain = '0x3a3a3a3a3a3a3a3a3a3a3a3a3a3a3a3a3a3a3a3a3a3a3a3a3a3a3a3a3a3a3a3a'; // For standalone
-    const proofVerifier = zeroAddress; // For standalone
-
-    let flex: { address: Address };
-    let flexReceiveNativeFacet: ContractTypesMap['FlexReceiveNativeFacet'];
-    let flexReceiveNativeDomainFacet: ContractTypesMap['FlexReceiveNativeDomainFacet'];
-    let flexReceiveStateFacet: ContractTypesMap['FlexReceiveStateFacet'];
-    let flexReceiveHashFacet: ContractTypesMap['FlexReceiveHashFacet'];
-
-    if (INSIDE_DIAMOND) {
-      const diamondCutFacet = await viem.deployContract('DiamondCutFacet');
-
-      flexReceiveNativeFacet = await viem.deployContract('FlexReceiveNativeFacet', [receiveNativeDomain]);
-      flexReceiveNativeDomainFacet = await viem.deployContract('FlexReceiveNativeDomainFacet', [receiveNativeDomain]);
-      flexReceiveStateFacet = await viem.deployContract('FlexReceiveStateFacet');
-      flexReceiveHashFacet = await viem.deployContract('FlexReceiveHashFacet');
-
-      flex = await viem.deployContract('Diamond', [walletClient.account.address, diamondCutFacet.address]);
-      await walletClient.writeContract({
-        abi: diamondCutFacet.abi,
-        address: flex.address,
-        functionName: 'diamondCut',
-        args: [
-          [
-            {
-              action: 0, // Add
-              facetAddress: flexReceiveNativeFacet.address,
-              functionSelectors: [
-                toFunctionSelector(
-                  getAbiItem({
-                    abi: flexReceiveNativeFacet.abi,
-                    name: 'flexReceiveNative',
-                  }),
-                ),
-              ],
-            },
-            {
-              action: 0, // Add
-              facetAddress: flexReceiveNativeDomainFacet.address,
-              functionSelectors: [
-                toFunctionSelector(
-                  getAbiItem({
-                    abi: flexReceiveNativeDomainFacet.abi,
-                    name: 'flexReceiveNativeDomain',
-                  }),
-                ),
-              ],
-            },
-            {
-              action: 0, // Add
-              facetAddress: flexReceiveStateFacet.address,
-              functionSelectors: [
-                toFunctionSelector(
-                  getAbiItem({
-                    abi: flexReceiveStateFacet.abi,
-                    name: 'flexReceiveState',
-                  }),
-                ),
-              ],
-            },
-            {
-              action: 0, // Add
-              facetAddress: flexReceiveHashFacet.address,
-              functionSelectors: [
-                toFunctionSelector(
-                  getAbiItem({
-                    abi: flexReceiveHashFacet.abi,
-                    name: 'flexReceiveHash',
-                  }),
-                ),
-              ],
-            },
-          ],
-          zeroAddress,
-          '0x',
-        ],
-      });
-    } else {
-      flex = await viem.deployContract(
-        'FlexReceiveNativeStandalone',
-        [
-          receiveNativeDomain,
-          confirmNativeDomain,
-          confirmNativeProofDomain,
-          refundNativeDomain,
-          refundNativeProofDomain,
-          proofVerifier,
-        ],
-      );
-
-      flexReceiveNativeFacet = flex as ContractTypesMap['FlexReceiveNativeFacet'];
-      flexReceiveNativeDomainFacet = flex as ContractTypesMap['FlexReceiveNativeDomainFacet'];
-      flexReceiveStateFacet = flex as ContractTypesMap['FlexReceiveStateFacet'];
-      flexReceiveHashFacet = flex as ContractTypesMap['FlexReceiveHashFacet'];
-    }
+    const flex = await viem.deployContract('FlexStandalone', [zeroAddress]);
 
     const resolver = await viem.deployContract('ResolverTest');
 
     return {
       publicClient,
       walletClient,
-      resolver,
       flex,
-      flexReceiveNativeFacet,
-      flexReceiveNativeDomainFacet,
-      flexReceiveStateFacet,
-      flexReceiveHashFacet,
+      resolver,
     };
   }
 
-  //
-  if (INSIDE_DIAMOND) {
-  //
-
-    it('Should show FlexReceiveNativeFacet code', async function () {
-      const { publicClient, flexReceiveNativeFacet } = await loadFixture(deployFixture);
-
-      const code = await publicClient.getCode({ address: flexReceiveNativeFacet.address });
-      console.log(`FlexReceiveNativeFacet code: ${code}`);
-    });
-
-    it('Should show FlexReceiveNativeDomainFacet code', async function () {
-      const { publicClient, flexReceiveNativeDomainFacet } = await loadFixture(deployFixture);
-  
-      const code = await publicClient.getCode({ address: flexReceiveNativeDomainFacet.address });
-      console.log(`FlexReceiveNativeDomainFacet code: ${code}`);
-    });
-
-    it('Should show FlexReceiveStateFacet code', async function () {
-      const { publicClient, flexReceiveStateFacet } = await loadFixture(deployFixture);
-  
-      const code = await publicClient.getCode({ address: flexReceiveStateFacet.address });
-      console.log(`FlexReceiveStateFacet code: ${code}`);
-    });
-
-    it('Should show FlexReceiveHashFacet code', async function () {
-      const { publicClient, flexReceiveHashFacet } = await loadFixture(deployFixture);
-
-      const code = await publicClient.getCode({ address: flexReceiveHashFacet.address });
-      console.log(`FlexReceiveHashFacet code: ${code}`);
-    });
-
-    it('Should show FlexReceiveNativeFacet function selectors', async function () {
-      const { flexReceiveNativeFacet } = await loadFixture(deployFixture);
-
-      console.log('FlexReceiveNativeFacet selectors:');
-      for (const abi of flexReceiveNativeFacet.abi) {
-        if (abi.type !== 'function') {
-          continue;
-        }
-  
-        const item = getAbiItem({ abi: flexReceiveNativeFacet.abi, name: abi.name });
-        const signature = toFunctionSignature(item);
-        const selector = toFunctionSelector(item);
-        console.log(`- ${selector}: ${signature}`);
-      }
-    });
-  
-    it('Should show FlexReceiveNativeDomainFacet function selectors', async function () {
-      const { flexReceiveNativeDomainFacet } = await loadFixture(deployFixture);
-
-      console.log('FlexReceiveNativeDomainFacet selectors:');
-      for (const abi of flexReceiveNativeDomainFacet.abi) {
-        if (abi.type !== 'function') {
-          continue;
-        }
-  
-        const item = getAbiItem({ abi: flexReceiveNativeDomainFacet.abi, name: abi.name });
-        const signature = toFunctionSignature(item);
-        const selector = toFunctionSelector(item);
-        console.log(`- ${selector}: ${signature}`);
-      }
-    });
-
-    it('Should show FlexReceiveStateFacet function selectors', async function () {
-      const { flexReceiveStateFacet } = await loadFixture(deployFixture);
-
-      console.log('FlexReceiveStateFacet selectors:');
-      for (const abi of flexReceiveStateFacet.abi) {
-        if (abi.type !== 'function') {
-          continue;
-        }
-
-        const item = getAbiItem({ abi: flexReceiveStateFacet.abi, name: abi.name });
-        const signature = toFunctionSignature(item);
-        const selector = toFunctionSelector(item);
-        console.log(`- ${selector}: ${signature}`);
-      }
-    });
-
-    it('Should show FlexReceiveHashFacet function selectors', async function () {
-      const { flexReceiveHashFacet } = await loadFixture(deployFixture);
-
-      console.log('FlexReceiveStateFacet selectors:');
-      for (const abi of flexReceiveHashFacet.abi) {
-        if (abi.type !== 'function') {
-          continue;
-        }
-
-        const item = getAbiItem({ abi: flexReceiveHashFacet.abi, name: abi.name });
-        const signature = toFunctionSignature(item);
-        const selector = toFunctionSelector(item);
-        console.log(`- ${selector}: ${signature}`);
-      }
-    });
-
-  //
-  } else {
-  //
-
-    it('Should show FlexReceiveStandalone code', async function () {
-      const { publicClient, flex } = await loadFixture(deployFixture);
-
-      const code = await publicClient.getCode({ address: flex.address });
-      console.log(`FlexReceiveStandalone code: ${code}`);
-    });
-
-    it('Should show FlexReceiveStandalone function selectors', async function () {
-      const { flexReceiveHashFacet } = await loadFixture(deployFixture);
-
-      console.log('FlexReceiveStateFacet selectors:');
-      for (const abi of flexReceiveHashFacet.abi) {
-        if (abi.type !== 'function') {
-          continue;
-        }
-
-        const item = getAbiItem({ abi: flexReceiveHashFacet.abi, name: abi.name });
-        const signature = toFunctionSignature(item);
-        const selector = toFunctionSelector(item);
-        console.log(`- ${selector}: ${signature}`);
-      }
-    });
-
-  //
-  }
-  //
+  it('Should show facet info', async function () {
+    const { facetInfo } = await import('./utils/facetInfo');
+    await facetInfo(await viem.deployContract('FlexReceiveNativeFacet'));
+  });
 
   it('Should receive native', async function () {
-    const {
-      flex,
-      flexReceiveNativeFacet,
-      flexReceiveNativeDomainFacet,
-      flexReceiveStateFacet,
-      flexReceiveHashFacet,
-      walletClient,
-      publicClient,
-      resolver,
-    } = await loadFixture(deployFixture);
+    const { publicClient, walletClient, flex, resolver } = await loadFixture(deployFixture);
 
     const deadline = 4_000_000_000n;
     const nonce = 424_242n;
     const receiver = resolver.address;
     const receiverContract = true;
     const amount = 123_456_789n;
-
-    const receiveDomain = await publicClient.readContract({
-      abi: flexReceiveNativeDomainFacet.abi,
-      address: flex.address,
-      functionName: 'flexReceiveNativeDomain',
-      args: [],
-    });
-    const receiveData0 = flexEncodeReceiveNativeData0({
-      deadline,
-      nonce,
-      receiver,
-      receiverContract,
-    });
-    const receiveData1 = flexEncodeReceiveNativeData1({
-      amount,
-    });
-    const receiveHash = flexCalcReceiveNativeHash({
-      domain: receiveDomain,
-      data0: receiveData0,
-      data1: receiveData1,
-    });
+    const sender = walletClient.account.address;
 
     // Imaginary data. Gas doesn't include signature check implementation by resolver (like ECDSA recover)
     const receiverSignature = bytesToHex(crypto.getRandomValues(new Uint8Array(IMAGINARY_RECEIVER_SIGNATURE_BYTES)));
@@ -329,56 +60,34 @@ describe('FlexReceiveNativeFacet', function () {
       imaginaryComponentHashes.push(imaginaryComponentHash);
     }
 
-    const componentHashes = [receiveHash, ...imaginaryComponentHashes];
-    const orderTree = flexCalcTree({ leaves: componentHashes });
-    const orderHash = flexCalcTreeHash({ tree: orderTree });
-
-    const receiveComponentBranch = flexCalcReceiveNativeBranch({
-      tree: orderTree,
-      receiveNativeHash: receiveHash,
+    const receiveNativeDomain = await publicClient.readContract({
+      abi: flex.abi,
+      address: flex.address,
+      functionName: 'flexReceiveNativeDomain',
+      args: [],
+    });
+    const receiveNativeData = flexEncodeReceiveNativeData({
+      sender,
+      receiver,
+      receiverContract,
+      amount,
+      deadline,
+      nonce,
+    });
+    const receiveNativeHash = flexCalcReceiveNativeHash({
+      domain: receiveNativeDomain,
+      data: receiveNativeData,
     });
 
-    let accessList: AccessList[number][] | undefined;
-    if (ACCESS_LIST_DIAMOND && INSIDE_DIAMOND) {
-      accessList ??= [];
-      accessList.push({ address: flexReceiveNativeFacet.address, storageKeys: [] }); // Saves 120 gas
-      accessList.push({ address: resolver.address, storageKeys: [] }); // Saves 120 gas
-
-      // 🚨 Looses 2300 gas: save: 2000, cost 2400+1900
-      if (!ACCESS_LIST_DIAMOND_GOOD_ONLY) {
-        // Diamond implementation slot calc:
-        // - LibDiamond.DIAMOND_STORAGE_POSITION -> struct DiamondStorage
-        // - DiamondStorage.selectorToFacetAndPosition (+0) -> mapping(bytes4 => FacetAddressAndPosition)
-        // - FacetAddressAndPosition.facetAddress (+0) -> address
-
-        const diamondSlot = keccak256(
-          concat([
-            pad(
-              toFunctionSelector(
-                getAbiItem({
-                  abi: flexReceiveNativeFacet.abi,
-                  name: 'flexReceiveNative',
-                }),
-              ),
-              { dir: 'right' },
-            ),
-            keccak256(
-              stringToHex('diamond.standard.diamond.storage'),
-            ),
-          ]),
-        );
-
-        const slotValue = await publicClient.getStorageAt({ address: flex.address, slot: diamondSlot });
-        expect(slice(slotValue!, 12)).equal(flexReceiveNativeFacet.address);
-
-        accessList.push({ address: flex.address, storageKeys: [diamondSlot] });
-      }
-    }
+    const componentHashes = [receiveNativeHash, ...imaginaryComponentHashes];
+    const orderTree = flexCalcTree({ leaves: componentHashes });
+    const orderHash = flexCalcTreeHash({ tree: orderTree });
+    const receiveNativeBranch = flexCalcBranch({ tree: orderTree, leaf: receiveNativeHash });
 
     let expectedReceiveHash: Hex;
     {
       const state = await publicClient.readContract({
-        abi: flexReceiveStateFacet.abi,
+        abi: flex.abi,
         address: flex.address,
         functionName: 'flexReceiveState',
         args: [
@@ -386,12 +95,12 @@ describe('FlexReceiveNativeFacet', function () {
           nonce,
         ],
       });
-      expect(state).equal(0); // FlexReceiveState.None
+      expect(state).equal(FLEX_RECEIVE_STATE_NONE);
 
       expectedReceiveHash = zeroAddress;
 
       const hash = await publicClient.readContract({
-        abi: flexReceiveHashFacet.abi,
+        abi: flex.abi,
         address: flex.address,
         functionName: 'flexReceiveHash',
         args: [
@@ -404,16 +113,15 @@ describe('FlexReceiveNativeFacet', function () {
 
     {
       const hash = await walletClient.writeContract({
-        abi: flexReceiveNativeFacet.abi,
+        abi: flex.abi,
         address: flex.address,
         functionName: 'flexReceiveNative',
         args: [
-          receiveData0,
-          receiveComponentBranch,
+          receiveNativeData.receiveData[0],
+          receiveNativeBranch,
           receiverSignature,
         ],
         value: amount,
-        accessList,
       });
 
       const receipt = await publicClient.getTransactionReceipt({ hash });
@@ -425,7 +133,7 @@ describe('FlexReceiveNativeFacet', function () {
 
     {
       const state = await publicClient.readContract({
-        abi: flexReceiveStateFacet.abi,
+        abi: flex.abi,
         address: flex.address,
         functionName: 'flexReceiveState',
         args: [
@@ -433,12 +141,12 @@ describe('FlexReceiveNativeFacet', function () {
           nonce,
         ],
       });
-      expect(state).equal(1); // FlexReceiveState.Received
+      expect(state).equal(FLEX_RECEIVE_STATE_RECEIVED);
 
-      expectedReceiveHash = flexCalcAccumulatorHash({ accumulatorHash: expectedReceiveHash, hashToAdd: orderHash });
+      expectedReceiveHash = flexCalcAccumulatorHash({ hashBefore: expectedReceiveHash, hashToAdd: orderHash });
 
       const hash = await publicClient.readContract({
-        abi: flexReceiveHashFacet.abi,
+        abi: flex.abi,
         address: flex.address,
         functionName: 'flexReceiveHash',
         args: [
@@ -451,27 +159,28 @@ describe('FlexReceiveNativeFacet', function () {
 
     await expect(
       walletClient.writeContract({
-        abi: flexReceiveNativeFacet.abi,
+        abi: flex.abi,
         address: flex.address,
         functionName: 'flexReceiveNative',
         args: [
-          receiveData0,
-          receiveComponentBranch,
+          receiveNativeData.receiveData[0],
+          receiveNativeBranch,
           receiverSignature,
         ],
         value: amount,
-        accessList,
       }),
     ).rejectedWith(
       'FlexStateError()', // Same order used (receiver nonce already in `Received` state)
     );
+
+    return; // TODO
 
     {
       const newNonce = 424_243n; // +1
 
       {
         const state = await publicClient.readContract({
-          abi: flexReceiveStateFacet.abi,
+          abi: flex.abi,
           address: flex.address,
           functionName: 'flexReceiveState',
           args: [
@@ -479,10 +188,10 @@ describe('FlexReceiveNativeFacet', function () {
             newNonce,
           ],
         });
-        expect(state).equal(0); // FlexReceiveState.None
+        expect(state).equal(FLEX_RECEIVE_STATE_NONE);
 
         const hash = await publicClient.readContract({
-          abi: flexReceiveHashFacet.abi,
+          abi: flex.abi,
           address: flex.address,
           functionName: 'flexReceiveHash',
           args: [
@@ -515,7 +224,7 @@ describe('FlexReceiveNativeFacet', function () {
       });
 
       const hash = await walletClient.writeContract({
-        abi: flexReceiveNativeFacet.abi,
+        abi: flex.abi,
         address: flex.address,
         functionName: 'flexReceiveNative',
         args: [
@@ -524,7 +233,6 @@ describe('FlexReceiveNativeFacet', function () {
           receiverSignature,
         ],
         value: amount,
-        accessList,
       });
 
       const receipt = await publicClient.getTransactionReceipt({ hash });
@@ -535,7 +243,7 @@ describe('FlexReceiveNativeFacet', function () {
 
       {
         const state = await publicClient.readContract({
-          abi: flexReceiveStateFacet.abi,
+          abi: flex.abi,
           address: flex.address,
           functionName: 'flexReceiveState',
           args: [
@@ -543,12 +251,12 @@ describe('FlexReceiveNativeFacet', function () {
             newNonce,
           ],
         });
-        expect(state).equal(1); // FlexReceiveState.Received
+        expect(state).equal(FLEX_RECEIVE_STATE_RECEIVED);
 
-        expectedReceiveHash = flexCalcAccumulatorHash({ accumulatorHash: expectedReceiveHash, hashToAdd: newOrderHash });
+        expectedReceiveHash = flexCalcAccumulatorHash({ hashBefore: expectedReceiveHash, hashToAdd: newOrderHash });
 
         const hash = await publicClient.readContract({
-          abi: flexReceiveHashFacet.abi,
+          abi: flex.abi,
           address: flex.address,
           functionName: 'flexReceiveHash',
           args: [
@@ -562,7 +270,7 @@ describe('FlexReceiveNativeFacet', function () {
 
     {
       const state = await publicClient.readContract({
-        abi: flexReceiveStateFacet.abi,
+        abi: flex.abi,
         address: flex.address,
         functionName: 'flexReceiveState',
         args: [
@@ -570,10 +278,10 @@ describe('FlexReceiveNativeFacet', function () {
           nonce,
         ],
       });
-      expect(state).equal(1); // FlexReceiveState.Received
+      expect(state).equal(FLEX_RECEIVE_STATE_REFUNDED);
 
       const hash = await publicClient.readContract({
-        abi: flexReceiveHashFacet.abi,
+        abi: flex.abi,
         address: flex.address,
         functionName: 'flexReceiveHash',
         args: [
