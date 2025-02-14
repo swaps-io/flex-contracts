@@ -1,19 +1,14 @@
-import { Hex, keccak256, concatHex, AsHexValue, asHex } from '../external';
+import { Hex, AsHexValue } from '../external';
+
+import { flexCalcReceiveFromHash } from '../receiveFrom';
+
+import { FlexReceiveNativeData } from './data';
 
 export interface FlexCalcReceiveNativeHashParams {
   domain: AsHexValue;
-  data0: AsHexValue;
-  data1: AsHexValue;
-  data2: AsHexValue;
+  data: Pick<FlexReceiveNativeData, 'receiveFromData'>,
 }
 
 export function flexCalcReceiveNativeHash(params: FlexCalcReceiveNativeHashParams): Hex {
-  return keccak256(
-    concatHex([
-      asHex(params.domain, 32),
-      asHex(params.data0, 32),
-      asHex(params.data1, 32),
-      asHex(params.data2, 32),
-    ]),
-  );
+  return flexCalcReceiveFromHash({ domain: params.domain, data: params.data.receiveFromData });
 }
