@@ -4,11 +4,11 @@ pragma solidity ^0.8.28;
 
 library FlexReceiveData {
     // Content:
-    // - data #0: sign flags (2), deadline (46), nonce (48), receiver (160)
+    // - data #0: signature flags (2), deadline (46), nonce (48), receiver (160)
     // - data #1: amount (256)
     // - data #2: <unused> (96), token (160)
 
-    function readSignFlags(bytes32 data0_) internal pure returns (uint256) {
+    function readSignatureFlags(bytes32 data0_) internal pure returns (uint256) {
         return uint256(data0_ >> 254);
     }
 

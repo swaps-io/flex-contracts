@@ -34,7 +34,7 @@ contract FlexReceiveTokenFacet is IFlexReceiveToken {
         orderHash = FlexHashTree.calcBranch(orderBranch_, orderHash);
 
         address receiver = FlexReceiveData.readReceiver(receiveData0_);
-        FlexSignatureConstraint.validate(FlexReceiveData.readSignFlags(receiveData0_), receiver, orderHash, receiverSignature_);
+        FlexSignatureConstraint.validate(FlexReceiveData.readSignatureFlags(receiveData0_), receiver, orderHash, receiverSignature_);
 
         FlexReceiveStateUpdate.toReceived(receiver, FlexReceiveData.readNonce(receiveData0_), orderHash);
 
