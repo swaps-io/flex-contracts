@@ -1,21 +1,9 @@
-import { Hex, keccak256, concatHex, AsHexValue, asHex } from '../external';
+import { Hex } from '../external';
 
-export interface FlexCalcRefundNativeProofHashParams {
-  domain: AsHexValue;
-  data0: AsHexValue;
-  data1: AsHexValue;
-  data2: AsHexValue;
-  data3: AsHexValue;
-}
+import { flexCalcSettleNativeProofHash, FlexCalcSettleNativeProofHashParams } from '../settleNativeProof';
+
+export type FlexCalcRefundNativeProofHashParams = FlexCalcSettleNativeProofHashParams;
 
 export function flexCalcRefundNativeProofHash(params: FlexCalcRefundNativeProofHashParams): Hex {
-  return keccak256(
-    concatHex([
-      asHex(params.domain, 32),
-      asHex(params.data0, 32),
-      asHex(params.data1, 32),
-      asHex(params.data2, 32),
-      asHex(params.data3, 32),
-    ]),
-  );
+  return flexCalcSettleNativeProofHash(params);
 }
