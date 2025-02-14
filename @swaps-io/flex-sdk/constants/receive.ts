@@ -1,2 +1,7 @@
 export const FLEX_RECEIVE_NONCES_PER_BUCKET = 48n;
 export const FLEX_MAX_RECEIVE_DEADLINE = (1n << 46n) - 1n;
+
+export const FLEX_RECEIVE_STATE_NONE = 0;
+export const FLEX_RECEIVE_STATE_RECEIVED = 1;
+export const FLEX_RECEIVE_STATE_CONFIRMED = 2;
+export const FLEX_RECEIVE_STATE_REFUNDED = 3;
