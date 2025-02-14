@@ -385,7 +385,7 @@ describe('FlexSendNativeFacet', function () {
       });
       expect(time).equal(start);
 
-      expectedSendHash = flexCalcAccumulatorHash({ accumulatorHash: expectedSendHash, hashToAdd: orderHash });
+      expectedSendHash = flexCalcAccumulatorHash({ hashBefore: expectedSendHash, hashToAdd: orderHash });
 
       const hash = await publicClient.readContract({
         abi: flexSendHashFacet.abi,
@@ -493,7 +493,7 @@ describe('FlexSendNativeFacet', function () {
       });
       expect(time).equal(start + 1);
 
-      expectedSendHash = flexCalcAccumulatorHash({ accumulatorHash: expectedSendHash, hashToAdd: newOrderHash });
+      expectedSendHash = flexCalcAccumulatorHash({ hashBefore: expectedSendHash, hashToAdd: newOrderHash });
 
       const hash = await publicClient.readContract({
         abi: flexSendHashFacet.abi,

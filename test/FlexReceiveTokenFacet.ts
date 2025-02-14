@@ -440,7 +440,7 @@ describe('FlexReceiveTokenFacet', function () {
       });
       expect(state).equal(1); // FlexReceiveState.Received
 
-      expectedReceiveHash = flexCalcAccumulatorHash({ accumulatorHash: expectedReceiveHash, hashToAdd: orderHash });
+      expectedReceiveHash = flexCalcAccumulatorHash({ hashBefore: expectedReceiveHash, hashToAdd: orderHash });
 
       const hash = await publicClient.readContract({
         abi: flexReceiveHashFacet.abi,
@@ -558,7 +558,7 @@ describe('FlexReceiveTokenFacet', function () {
         });
         expect(state).equal(1); // FlexReceiveState.Received
 
-        expectedReceiveHash = flexCalcAccumulatorHash({ accumulatorHash: expectedReceiveHash, hashToAdd: newOrderHash });
+        expectedReceiveHash = flexCalcAccumulatorHash({ hashBefore: expectedReceiveHash, hashToAdd: newOrderHash });
 
         const hash = await publicClient.readContract({
           abi: flexReceiveHashFacet.abi,

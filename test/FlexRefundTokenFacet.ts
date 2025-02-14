@@ -427,7 +427,7 @@ describe('FlexRefundTokenFacet', function () {
       });
       expect(state).equal(1); // FlexReceiveState.Received
 
-      expectedReceiveHash = flexCalcAccumulatorHash({ accumulatorHash: zeroAddress, hashToAdd: orderHash });
+      expectedReceiveHash = flexCalcAccumulatorHash({ hashBefore: zeroAddress, hashToAdd: orderHash });
 
       const hash = await publicClient.readContract({
         abi: flexReceiveHashFacet.abi,
