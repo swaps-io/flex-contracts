@@ -16,24 +16,20 @@ library FlexHashTree {
     //   - rest words: tree branch
 
     function calcBranch(bytes32[] calldata branch_, bytes32 leaf_) internal pure returns (bytes32) {
-        return _calcBranch(branch_, leaf_, 0);
+        return _calcBranchAt(branch_, leaf_, 0);
     }
 
-    function calcBranchLimited(bytes32[] calldata branch_, bytes32 leaf_) internal pure returns (bytes32) {
-        return _calcBranch(branch_, leaf_, uint96(uint256(branch_[0])));
-    }
-
-    function calcAccumulator(bytes32[] calldata branch_, bytes32 leaf_) internal pure returns (bytes20) {
+    function calcAccBranch(bytes32[] calldata branch_, bytes32 leaf_) internal pure returns (bytes32 branchHash, bytes20 accumulator) {
         bytes32 header = branch_[0];
-        uint256 end = uint96(uint256(header));
-        bytes20 accumulator = FlexHashAccumulator.accumulate(bytes20(header), leaf_);
-        for (uint256 cursor = 1; cursor < end; cursor++) {
+        uint256 offset = uint96(uint256(header));
+        branchHash = _calcBranchAt(branch_, leaf_, offset);
+        accumulator = FlexHashAccumulator.accumulate(bytes20(header), branchHash);
+        for (uint256 cursor = 1; cursor < offset; cursor++) {
             accumulator = FlexHashAccumulator.accumulate(accumulator, branch_[cursor]);
         }
-        return accumulator;
     }
 
-    function _calcBranch(bytes32[] calldata branch_, bytes32 leaf_, uint256 cursor_) private pure returns (bytes32) {
+    function _calcBranchAt(bytes32[] calldata branch_, bytes32 leaf_, uint256 cursor_) private pure returns (bytes32) {
         for (; cursor_ < branch_.length; cursor_++) {
             leaf_ = Hashes.commutativeKeccak256(leaf_, branch_[cursor_]);
         }
