@@ -31,7 +31,7 @@ contract FlexSettleNativeFacet is IFlexSettleNative {
 
         bytes32 orderHash = FlexEfficientHash.calc(receiveData0_, receiveData1_);
         orderHash = FlexEfficientHash.calc(FlexSettleData.writeDomain(settleData0_, _domain), settleData1_, FlexSettleData.make2(orderHash));
-        bytes20 accumulator; (orderHash, accumulator) = FlexHashTree.calcAccBranch(orderBranch_, orderHash);
+        bytes20 accumulator; (orderHash, accumulator) = FlexHashTree.calcAccumulatorBranch(orderBranch_, orderHash);
 
         FlexReceiveStateUpdate.toSettled(FlexReceiveData.readReceiver(receiveData0_), FlexReceiveData.readNonce(receiveData0_), orderHash, accumulator, FlexSettleData.readConfirm(settleData0_));
 

@@ -19,7 +19,7 @@ library FlexHashTree {
         return _calcBranchAt(branch_, leaf_, 0);
     }
 
-    function calcAccBranch(bytes32[] calldata branch_, bytes32 leaf_) internal pure returns (bytes32 branchHash, bytes20 accumulator) {
+    function calcAccumulatorBranch(bytes32[] calldata branch_, bytes32 leaf_) internal pure returns (bytes32 branchHash, bytes20 accumulator) {
         bytes32 header = branch_[0];
         uint256 offset = uint96(uint256(header));
         branchHash = _calcBranchAt(branch_, leaf_, offset);

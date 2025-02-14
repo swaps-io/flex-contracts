@@ -35,7 +35,7 @@ contract FlexSettleTokenProofFacet is IFlexSettleTokenProof {
     ) external override {
         bytes32 orderHash = FlexEfficientHash.calc(receiveData0_, receiveData1_, receiveData2_);
         orderHash = FlexEfficientHash.calc(FlexSettleProofData.writeDomain(settleData0_, _domain), settleData1_, FlexSettleProofData.make2(orderHash));
-        bytes20 accumulator; (orderHash, accumulator) = FlexHashTree.calcAccBranch(orderBranch_, orderHash);
+        bytes20 accumulator; (orderHash, accumulator) = FlexHashTree.calcAccumulatorBranch(orderBranch_, orderHash);
 
         FlexProofConstraint.verify(_proofVerifier, FlexSettleProofData.readEventSignature(settleData1_), orderHash, FlexSettleProofData.readEventChain(settleData0_), settleProof_);
 
