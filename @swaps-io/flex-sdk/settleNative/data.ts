@@ -12,6 +12,7 @@ export interface FlexEncodeSettleNativeDataParams {
   nonce: AsHexValue;
   keyHash: AsHexValue;
   confirm: boolean;
+  settleReceiver: AsHexValue;
 }
 
 export interface FlexSettleNativeData {
@@ -36,7 +37,7 @@ export function flexEncodeSettleNativeData(params: FlexEncodeSettleNativeDataPar
   const settleData: FlexSettleNativeData['settleData'] = [
     flexEncodeSettleData0({
       confirm: params.confirm,
-      receiver: params.receiver,
+      receiver: params.settleReceiver,
     }),
     flexEncodeSettleData1({
       keyHash: params.keyHash,
