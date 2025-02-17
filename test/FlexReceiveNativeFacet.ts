@@ -1,7 +1,7 @@
 import { viem } from 'hardhat';
 import { loadFixture } from '@nomicfoundation/hardhat-toolbox-viem/network-helpers';
 import { expect } from 'chai';
-import { bytesToHex, Hex, zeroAddress } from 'viem';
+import { bytesToHex, Hex, parseEventLogs, zeroAddress } from 'viem';
 
 import {
   flexCalcReceiveNativeHash,
@@ -10,7 +10,6 @@ import {
   flexCalcAccumulatorHash,
   flexEncodeReceiveNativeData,
   flexCalcBranch,
-  FLEX_RECEIVE_STATE_REFUNDED,
   FLEX_RECEIVE_STATE_NONE,
   FLEX_RECEIVE_STATE_RECEIVED,
 } from '../@swaps-io/flex-sdk';
@@ -127,6 +126,16 @@ describe('FlexReceiveNativeFacet', function () {
       const receipt = await publicClient.getTransactionReceipt({ hash });
       console.log(`flexReceiveNative gas (1st): ${receipt.gasUsed}`);
 
+      const logs = parseEventLogs({
+        abi: flex.abi,
+        logs: receipt.logs,
+        eventName: 'FlexReceive',
+        args: {
+          orderHash,
+        },
+      });
+      expect(logs.length).equal(1);
+
       const balance = await publicClient.getBalance({ address: flex.address });
       expect(balance).equal(amount);
     }
@@ -173,8 +182,6 @@ describe('FlexReceiveNativeFacet', function () {
       'FlexStateError()', // Same order used (receiver nonce already in `Received` state)
     );
 
-    return; // TODO
-
     {
       const newNonce = 424_243n; // +1
 
@@ -202,34 +209,31 @@ describe('FlexReceiveNativeFacet', function () {
         expect(hash).equal(expectedReceiveHash);
       }
 
-      const newReceiveData0 = flexEncodeReceiveNativeData0({
-        deadline,
-        nonce: newNonce,
+      const newReceiveNativeData = flexEncodeReceiveNativeData({
+        sender,
         receiver,
         receiverContract,
+        amount,
+        deadline,
+        nonce: newNonce,
       });
-      const newReceiveHash = flexCalcReceiveNativeHash({
-        domain: receiveDomain,
-        data0: newReceiveData0,
-        data1: receiveData1,
+      const newReceiveNativeHash = flexCalcReceiveNativeHash({
+        domain: receiveNativeDomain,
+        data: newReceiveNativeData,
       });
 
-      const newComponentHashes = [newReceiveHash, ...imaginaryComponentHashes];
+      const newComponentHashes = [newReceiveNativeHash, ...imaginaryComponentHashes];
       const newOrderTree = flexCalcTree({ leaves: newComponentHashes });
       const newOrderHash = flexCalcTreeHash({ tree: newOrderTree });
-
-      const receiveComponentBranch = flexCalcReceiveNativeBranch({
-        tree: newOrderTree,
-        receiveNativeHash: newReceiveHash,
-      });
+      const newReceiveComponentBranch = flexCalcBranch({ tree: newOrderTree, leaf: newReceiveNativeHash });
 
       const hash = await walletClient.writeContract({
         abi: flex.abi,
         address: flex.address,
         functionName: 'flexReceiveNative',
         args: [
-          newReceiveData0,
-          receiveComponentBranch,
+          newReceiveNativeData.receiveData[0],
+          newReceiveComponentBranch,
           receiverSignature,
         ],
         value: amount,
@@ -237,6 +241,16 @@ describe('FlexReceiveNativeFacet', function () {
 
       const receipt = await publicClient.getTransactionReceipt({ hash });
       console.log(`flexReceiveNative gas (2nd): ${receipt.gasUsed}`);
+
+      const logs = parseEventLogs({
+        abi: flex.abi,
+        logs: receipt.logs,
+        eventName: 'FlexReceive',
+        args: {
+          orderHash: newOrderHash,
+        },
+      });
+      expect(logs.length).equal(1);
 
       const balance = await publicClient.getBalance({ address: flex.address });
       expect(balance).equal(amount + amount);
@@ -278,7 +292,7 @@ describe('FlexReceiveNativeFacet', function () {
           nonce,
         ],
       });
-      expect(state).equal(FLEX_RECEIVE_STATE_REFUNDED);
+      expect(state).equal(FLEX_RECEIVE_STATE_RECEIVED);
 
       const hash = await publicClient.readContract({
         abi: flex.abi,
