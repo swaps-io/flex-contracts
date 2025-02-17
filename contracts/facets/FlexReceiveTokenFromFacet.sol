@@ -21,23 +21,23 @@ contract FlexReceiveTokenFromFacet is IFlexReceiveTokenFrom {
     bytes8 private immutable _domain = FlexDomain.calc(IFlexReceiveTokenFrom.flexReceiveTokenFrom.selector);
 
     function flexReceiveTokenFrom(
-        bytes32 receiveFromData0_,
+        bytes32 receivePackData0_,
         bytes32 receiveData1_,
         bytes32 receiveData2_,
         bytes32[] calldata orderBranch_,
         bytes calldata senderSignature_
     ) external override {
-        FlexDeadlineConstraint.validate(FlexReceiveData.readDeadline(receiveFromData0_));
+        FlexDeadlineConstraint.validate(FlexReceiveData.readDeadline(receivePackData0_));
 
-        address sender = FlexReceiveData.readReceiver(receiveFromData0_);
+        address sender = FlexReceiveData.readReceiver(receivePackData0_);
 
-        bytes32 orderHash = FlexEfficientHash.calc(FlexReceiveData.writeReceiver(receiveFromData0_, msg.sender), receiveData1_, receiveData2_);
+        bytes32 orderHash = FlexEfficientHash.calc(FlexReceiveData.writeReceiver(receivePackData0_, msg.sender), receiveData1_, receiveData2_);
         orderHash = FlexEfficientHash.calc(FlexReceiveFromData.make0(_domain, sender), FlexReceiveFromData.make1(orderHash));
         orderHash = FlexHashTree.calcBranch(orderBranch_, orderHash);
 
-        FlexSignatureConstraint.validate(FlexReceiveData.readSignatureFlags(receiveFromData0_), sender, orderHash, senderSignature_);
+        FlexSignatureConstraint.validate(FlexReceiveData.readSignatureFlags(receivePackData0_), sender, orderHash, senderSignature_);
 
-        FlexReceiveStateUpdate.toReceived(msg.sender, FlexReceiveData.readNonce(receiveFromData0_), orderHash);
+        FlexReceiveStateUpdate.toReceived(msg.sender, FlexReceiveData.readNonce(receivePackData0_), orderHash);
 
         SafeERC20.safeTransferFrom(IERC20(FlexReceiveData.readToken(receiveData2_)), sender, address(this), FlexReceiveData.readAmount(receiveData1_));
     }

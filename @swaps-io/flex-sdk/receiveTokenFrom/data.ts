@@ -17,6 +17,7 @@ export interface FlexEncodeReceiveTokenFromDataParams {
 export interface FlexReceiveTokenFromData {
   receiveData: [Hex, Hex, Hex],
   receiveFromData: [Hex, Hex],
+  receivePackData: [Hex],
 }
 
 export function flexEncodeReceiveTokenFromData(params: FlexEncodeReceiveTokenFromDataParams): FlexReceiveTokenFromData {
@@ -45,9 +46,20 @@ export function flexEncodeReceiveTokenFromData(params: FlexEncodeReceiveTokenFro
     }),
   ];
 
+  const receivePackData: FlexReceiveTokenFromData['receivePackData'] = [
+    flexEncodeReceiveData0({
+      contractSignature: params.senderContract,
+      noRetryAsContractSignature: params.senderNoRetryAsContract,
+      deadline: params.deadline,
+      receiver: params.sender, // Replaced with receiver during unpack
+      nonce: params.nonce,
+    }),
+  ];
+
   const data: FlexReceiveTokenFromData = {
     receiveData,
     receiveFromData,
+    receivePackData,
   };
   return data;
 };
