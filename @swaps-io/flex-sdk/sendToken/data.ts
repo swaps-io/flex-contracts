@@ -8,7 +8,7 @@ export interface FlexEncodeSendTokenDataParams {
   token: AsHexValue;
   amount: AsHexValue;
   start: AsHexValue;
-  time: AsHexValue;
+  duration: AsHexValue;
   group: AsHexValue;
 }
 
@@ -23,7 +23,7 @@ export function flexEncodeSendTokenData(params: FlexEncodeSendTokenDataParams): 
     }),
     flexEncodeSendData1({
       start: params.start,
-      time: params.time,
+      duration: params.duration,
       group: params.group,
       receiver: params.receiver,
     }),

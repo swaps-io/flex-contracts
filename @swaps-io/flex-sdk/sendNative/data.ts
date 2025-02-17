@@ -7,7 +7,7 @@ export interface FlexEncodeSendNativeDataParams {
   receiver: AsHexValue;
   amount: AsHexValue;
   start: AsHexValue;
-  time: AsHexValue;
+  duration: AsHexValue;
   group: AsHexValue;
 }
 
@@ -22,7 +22,7 @@ export function flexEncodeSendNativeData(params: FlexEncodeSendNativeDataParams)
     }),
     flexEncodeSendData1({
       start: params.start,
-      time: params.time,
+      duration: params.duration,
       group: params.group,
       receiver: params.receiver,
     }),

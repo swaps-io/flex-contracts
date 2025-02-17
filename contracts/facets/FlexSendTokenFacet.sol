@@ -22,7 +22,7 @@ contract FlexSendTokenFacet is IFlexSendToken {
     function flexSendToken(bytes32 sendData1_, bytes32 sendData2_, bytes32 sendData3_, bytes32[] calldata orderBranch_) external override {
         uint48 start = FlexSendData.readStart(sendData1_);
         FlexEarlinessConstraint.validate(start);
-        FlexDeadlineConstraint.validate(start + FlexSendData.readTime(sendData1_));
+        FlexDeadlineConstraint.validate(start + FlexSendData.readDuration(sendData1_));
 
         bytes32 orderHash = FlexEfficientHash.calc(FlexSendData.make0(_domain, msg.sender), sendData1_, sendData2_, sendData3_);
         orderHash = FlexHashTree.calcBranch(orderBranch_, orderHash);

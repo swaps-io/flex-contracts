@@ -5,7 +5,7 @@ pragma solidity ^0.8.28;
 library FlexSendData {
     // Content:
     // - data #0: domain (64), <unused> (32), sender (160)
-    // - data #1: start (48), time (32), group (16), receiver (160)
+    // - data #1: start (48), duration (32), group (16), receiver (160)
     // - data #2: amount (256)
     // - data #3: <unused> (96), token (160)
 
@@ -13,7 +13,7 @@ library FlexSendData {
         return uint48(uint256(data1_) >> 208);
     }
 
-    function readTime(bytes32 data1_) internal pure returns (uint32) {
+    function readDuration(bytes32 data1_) internal pure returns (uint32) {
         return uint32(uint256(data1_) >> 176);
     }
 
