@@ -57,8 +57,6 @@ const config: HardhatUserConfig = {
       'contracts/facets/FlexAllocateReceiveFacet.sol',
       'contracts/facets/FlexAllocateSendFacet.sol',
 
-      'contracts/facets/FlexPreserveSendFacet.sol',
-
       'contracts/facets/views/FlexProofVerifierFacet.sol',
 
       'contracts/standalone/FlexStandalone.sol',
