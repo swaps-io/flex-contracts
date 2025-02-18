@@ -32,6 +32,7 @@ const config: HardhatUserConfig = {
 
       'contracts/facets/views/FlexReceiveStateFacet.sol',
       'contracts/facets/views/FlexReceiveHashFacet.sol',
+      'contracts/facets/views/FlexReceiveBucketFacet.sol',
 
       'contracts/facets/FlexSettleNativeFacet.sol',
       'contracts/facets/views/domains/FlexSettleNativeDomainFacet.sol',
@@ -53,6 +54,7 @@ const config: HardhatUserConfig = {
 
       'contracts/facets/views/FlexSendTimeFacet.sol',
       'contracts/facets/views/FlexSendHashFacet.sol',
+      'contracts/facets/views/FlexSendBucketFacet.sol',
 
       'contracts/facets/FlexAllocateReceiveFacet.sol',
       'contracts/facets/FlexAllocateSendFacet.sol',

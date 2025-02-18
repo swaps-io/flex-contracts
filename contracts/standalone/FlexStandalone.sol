@@ -17,8 +17,10 @@ import {FlexSettleTokenProofFacet} from "../facets/FlexSettleTokenProofFacet.sol
 import {FlexProofVerifierFacet} from "../facets/views/FlexProofVerifierFacet.sol";
 import {FlexReceiveHashFacet} from "../facets/views/FlexReceiveHashFacet.sol";
 import {FlexReceiveStateFacet} from "../facets/views/FlexReceiveStateFacet.sol";
+import {FlexReceiveBucketFacet} from "../facets/views/FlexReceiveBucketFacet.sol";
 import {FlexSendHashFacet} from "../facets/views/FlexSendHashFacet.sol";
 import {FlexSendTimeFacet} from "../facets/views/FlexSendTimeFacet.sol";
+import {FlexSendBucketFacet} from "../facets/views/FlexSendBucketFacet.sol";
 
 import {FlexReceiveNativeDomainFacet} from "../facets/views/domains/FlexReceiveNativeDomainFacet.sol";
 import {FlexReceiveTokenDomainFacet} from "../facets/views/domains/FlexReceiveTokenDomainFacet.sol";
@@ -45,8 +47,10 @@ contract FlexStandalone is
     FlexProofVerifierFacet,
     FlexReceiveHashFacet,
     FlexReceiveStateFacet,
+    FlexReceiveBucketFacet,
     FlexSendHashFacet,
     FlexSendTimeFacet,
+    FlexSendBucketFacet,
     FlexReceiveNativeDomainFacet,
     FlexReceiveTokenDomainFacet,
     FlexReceiveTokenFromDomainFacet,
