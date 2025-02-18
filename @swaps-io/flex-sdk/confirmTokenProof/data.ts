@@ -1,9 +1,17 @@
+import { AsHexValue } from '../external';
+
 import { flexEncodeSettleTokenProofData, FlexEncodeSettleTokenProofDataParams, FlexSettleTokenProofData } from '../settleTokenProof';
 
-export type FlexEncodeConfirmTokenProofDataParams = Omit<FlexEncodeSettleTokenProofDataParams, 'confirm'>;
+export interface FlexEncodeConfirmTokenProofDataParams extends Omit<FlexEncodeSettleTokenProofDataParams, 'confirm' | 'settleReceiver'> {
+  confirmReceiver: AsHexValue;
+}
 
 export type FlexConfirmTokenProofData = FlexSettleTokenProofData;
 
 export function flexEncodeConfirmTokenProofData(params: FlexEncodeConfirmTokenProofDataParams): FlexConfirmTokenProofData {
-  return flexEncodeSettleTokenProofData({ ...params, confirm: true });
+  return flexEncodeSettleTokenProofData({
+    ...params,
+    confirm: true,
+    settleReceiver: params.confirmReceiver,
+  });
 };

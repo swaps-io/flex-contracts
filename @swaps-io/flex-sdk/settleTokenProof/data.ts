@@ -14,6 +14,7 @@ export interface FlexEncodeSettleTokenProofDataParams {
   eventChain: AsHexValue;
   eventSignature: AsHexValue;
   confirm: boolean;
+  settleReceiver: AsHexValue;
 }
 
 export interface FlexSettleTokenProofData {
@@ -41,7 +42,7 @@ export function flexEncodeSettleTokenProofData(params: FlexEncodeSettleTokenProo
   const settleProofData: FlexSettleTokenProofData['settleProofData'] = [
     flexEncodeSettleProofData0({
       confirm: params.confirm,
-      receiver: params.receiver,
+      receiver: params.settleReceiver,
       eventChain: params.eventChain,
     }),
     flexEncodeSettleProofData1({

@@ -13,6 +13,7 @@ export interface FlexEncodeSettleNativeProofDataParams {
   eventChain: AsHexValue;
   eventSignature: AsHexValue;
   confirm: boolean;
+  settleReceiver: AsHexValue;
 }
 
 export interface FlexSettleNativeProofData {
@@ -37,7 +38,7 @@ export function flexEncodeSettleNativeProofData(params: FlexEncodeSettleNativePr
   const settleProofData: FlexSettleNativeProofData['settleProofData'] = [
     flexEncodeSettleProofData0({
       confirm: params.confirm,
-      receiver: params.receiver,
+      receiver: params.settleReceiver,
       eventChain: params.eventChain,
     }),
     flexEncodeSettleProofData1({
