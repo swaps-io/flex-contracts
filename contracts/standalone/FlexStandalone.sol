@@ -7,6 +7,7 @@ import {FlexAllocateSendFacet} from "../facets/FlexAllocateSendFacet.sol";
 import {FlexReceiveNativeFacet} from "../facets/FlexReceiveNativeFacet.sol";
 import {FlexReceiveTokenFacet} from "../facets/FlexReceiveTokenFacet.sol";
 import {FlexReceiveTokenFromFacet} from "../facets/FlexReceiveTokenFromFacet.sol";
+import {FlexSaveSendFacet} from "../facets/FlexSaveSendFacet.sol";
 import {FlexSendNativeFacet} from "../facets/FlexSendNativeFacet.sol";
 import {FlexSendTokenFacet} from "../facets/FlexSendTokenFacet.sol";
 import {FlexSettleNativeFacet} from "../facets/FlexSettleNativeFacet.sol";
@@ -17,6 +18,7 @@ import {FlexSettleTokenProofFacet} from "../facets/FlexSettleTokenProofFacet.sol
 import {FlexProofVerifierFacet} from "../facets/views/FlexProofVerifierFacet.sol";
 import {FlexReceiveHashFacet} from "../facets/views/FlexReceiveHashFacet.sol";
 import {FlexReceiveStateFacet} from "../facets/views/FlexReceiveStateFacet.sol";
+import {FlexSendSaveFacet} from "../facets/views/FlexSendSaveFacet.sol";
 import {FlexSendHashFacet} from "../facets/views/FlexSendHashFacet.sol";
 import {FlexSendTimeFacet} from "../facets/views/FlexSendTimeFacet.sol";
 
@@ -36,6 +38,7 @@ contract FlexStandalone is
     FlexReceiveNativeFacet,
     FlexReceiveTokenFacet,
     FlexReceiveTokenFromFacet,
+    FlexSaveSendFacet,
     FlexSendNativeFacet,
     FlexSendTokenFacet,
     FlexSettleNativeFacet,
@@ -45,6 +48,7 @@ contract FlexStandalone is
     FlexProofVerifierFacet,
     FlexReceiveHashFacet,
     FlexReceiveStateFacet,
+    FlexSendSaveFacet,
     FlexSendHashFacet,
     FlexSendTimeFacet,
     FlexReceiveNativeDomainFacet,
