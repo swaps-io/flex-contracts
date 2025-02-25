@@ -3,5 +3,11 @@
 pragma solidity ^0.8.28;
 
 interface IFlexSendTokenFloat {
-    function flexSendTokenFloat(bytes32 sendData1, bytes32 sendData2, bytes32 newSendData2, bytes32 sendData3, bytes32[] calldata orderBranch) external;
+    function flexSendTokenFloat(
+        bytes32 sendData1,
+        bytes32 sendData2,
+        bytes32 sendData3,
+        uint256 amount,
+        bytes32[] calldata orderBranch
+    ) external;
 }

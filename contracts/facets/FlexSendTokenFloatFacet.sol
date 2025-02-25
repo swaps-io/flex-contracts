@@ -6,7 +6,8 @@ import {SafeERC20, IERC20} from "@openzeppelin/contracts/token/ERC20/utils/SafeE
 
 import {IFlexSendTokenFloat} from "../interfaces/IFlexSendTokenFloat.sol";
 
-import {FlexFloat} from "../interfaces/events/FlexFloat.sol";
+import {FlexSendAmount} from "../interfaces/events/FlexSendAmount.sol";
+import {FlexSendFloatData} from "../libraries/data/FlexSendFloatData.sol";
 
 import {FlexEarlinessConstraint} from "../libraries/constraints/FlexEarlinessConstraint.sol";
 import {FlexDeadlineConstraint} from "../libraries/constraints/FlexDeadlineConstraint.sol";
@@ -22,19 +23,24 @@ import {FlexHashTree} from "../libraries/utilities/FlexHashTree.sol";
 contract FlexSendTokenFloatFacet is IFlexSendTokenFloat {
     bytes8 private immutable _domain = FlexDomain.calc(IFlexSendTokenFloat.flexSendTokenFloat.selector);
 
-    function flexSendTokenFloat(bytes32 sendData1_, bytes32 sendData2_, bytes32 newSendData2_, bytes32 sendData3_, bytes32[] calldata orderBranch_) external override {
+    function flexSendTokenFloat(
+        bytes32 sendData1_,
+        bytes32 sendData2_,
+        bytes32 sendData3_,
+        uint256 amount_,
+        bytes32[] calldata orderBranch_
+    ) external override {
         uint48 start = FlexSendData.readStart(sendData1_);
         FlexEarlinessConstraint.validate(start);
         FlexDeadlineConstraint.validate(start + FlexSendData.readDuration(sendData1_));
-        uint256 amount = FlexSendData.readAmount(newSendData2_);
-        FlexAmountConstraint.validate(amount, FlexSendData.readAmount(sendData2_));
+        FlexAmountConstraint.validate(amount_, FlexSendFloatData.readAmount(sendData2_));
 
         bytes32 orderHash = FlexEfficientHash.calc(FlexSendData.make0(_domain, msg.sender), sendData1_, sendData2_, sendData3_);
         orderHash = FlexHashTree.calcBranch(orderBranch_, orderHash);
 
         FlexSendStateUpdate.toSent(msg.sender, FlexSendData.readGroup(sendData1_), start, orderHash);
-        emit FlexFloat(orderHash, amount);
+        if (FlexSendFloatData.readEmitAmount(sendData2_)) emit FlexSendAmount(orderHash, amount_);
 
-        SafeERC20.safeTransferFrom(IERC20(FlexSendData.readToken(sendData3_)), msg.sender, FlexSendData.readReceiver(sendData1_), amount);
+        SafeERC20.safeTransferFrom(IERC20(FlexSendData.readToken(sendData3_)), msg.sender, FlexSendData.readReceiver(sendData1_), amount_);
     }
 }

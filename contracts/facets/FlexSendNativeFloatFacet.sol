@@ -6,13 +6,14 @@ import {Address} from "@openzeppelin/contracts/utils/Address.sol";
 
 import {IFlexSendNativeFloat} from "../interfaces/IFlexSendNativeFloat.sol";
 
-import {FlexFloat} from "../interfaces/events/FlexFloat.sol";
+import {FlexSendAmount} from "../interfaces/events/FlexSendAmount.sol";
 
 import {FlexEarlinessConstraint} from "../libraries/constraints/FlexEarlinessConstraint.sol";
 import {FlexDeadlineConstraint} from "../libraries/constraints/FlexDeadlineConstraint.sol";
 import {FlexAmountConstraint} from "../libraries/constraints/FlexAmountConstraint.sol";
 
 import {FlexSendData} from "../libraries/data/FlexSendData.sol";
+import {FlexSendFloatData} from "../libraries/data/FlexSendFloatData.sol";
 
 import {FlexSendStateUpdate} from "../libraries/states/FlexSendStateUpdate.sol";
 
@@ -26,13 +27,13 @@ contract FlexSendNativeFloatFacet is IFlexSendNativeFloat {
         uint48 start = FlexSendData.readStart(sendData1_);
         FlexEarlinessConstraint.validate(start);
         FlexDeadlineConstraint.validate(start + FlexSendData.readDuration(sendData1_));
-        FlexAmountConstraint.validate(msg.value, FlexSendData.readAmount(sendData2_));
+        FlexAmountConstraint.validate(msg.value, FlexSendFloatData.readAmount(sendData2_));
 
         bytes32 orderHash = FlexEfficientHash.calc(FlexSendData.make0(_domain, msg.sender), sendData1_, sendData2_);
         orderHash = FlexHashTree.calcBranch(orderBranch_, orderHash);
 
         FlexSendStateUpdate.toSent(msg.sender, FlexSendData.readGroup(sendData1_), start, orderHash);
-        emit FlexFloat(orderHash, msg.value);
+        if (FlexSendFloatData.readEmitAmount(sendData2_)) emit FlexSendAmount(orderHash, msg.value);
 
         Address.sendValue(payable(FlexSendData.readReceiver(sendData1_)), msg.value);
     }

@@ -2,4 +2,4 @@
 
 pragma solidity ^0.8.28;
 
-event FlexFloat(bytes32 orderHash, uint256 amount);
+event FlexSendAmount(bytes32 orderHash, uint256 amount);
