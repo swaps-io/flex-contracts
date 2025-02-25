@@ -8,8 +8,8 @@ import {FlexSaveSendStateBucket} from "../../libraries/storages/FlexSaveSendStat
 import {FlexSaveSendStateStorage} from "../../libraries/storages/FlexSaveSendStateStorage.sol";
 
 contract FlexSendSaveFacet is IFlexSendSave {
-    function flexSendSave(address saver_, uint48 group_) external view override returns (bytes32) {
-        bytes32 saveBucket = FlexSaveSendStateBucket.calcBucket(saver_, group_);
+    function flexSendSave(address saver_, uint96 slot_) external view override returns (bytes32) {
+        bytes32 saveBucket = FlexSaveSendStateBucket.calcBucket(saver_, slot_);
         return FlexSaveSendStateStorage.data()[saveBucket];
     }
 }

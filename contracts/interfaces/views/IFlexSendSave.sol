@@ -3,5 +3,5 @@
 pragma solidity ^0.8.28;
 
 interface IFlexSendSave {
-    function flexSendSave(address saver, uint48 group) external view returns (bytes32);
+    function flexSendSave(address saver, uint96 slot) external view returns (bytes32);
 }

@@ -4,7 +4,7 @@ pragma solidity ^0.8.28;
 
 import {IFlexSaveSend} from "../interfaces/IFlexSaveSend.sol";
 
-import {FlexSaveSend} from "../interfaces/events/FlexSaveSend.sol";
+import {FlexSendSave} from "../interfaces/events/FlexSendSave.sol";
 
 import {FlexSaveSendData} from "../libraries/data/FlexSaveSendData.sol";
 
@@ -21,6 +21,6 @@ contract FlexSaveSendFacet is IFlexSaveSend {
         bytes32 bucketState = FlexSendStateStorage.data()[bucket];
         bytes32 saveBucket = FlexSaveSendStateBucket.calcBucket(msg.sender, FlexSaveSendData.readSlot(saveData0_));
         FlexSaveSendStateStorage.data()[saveBucket] = FlexEfficientHash.calc(bucket, bucketState);
-        emit FlexSaveSend(bucket, bucketState, saveBucket);
+        emit FlexSendSave(bucket, bucketState, saveBucket);
     }
 }
