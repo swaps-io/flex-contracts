@@ -9,7 +9,9 @@ import {FlexReceiveTokenFacet} from "../facets/FlexReceiveTokenFacet.sol";
 import {FlexReceiveTokenFromFacet} from "../facets/FlexReceiveTokenFromFacet.sol";
 import {FlexSaveSendFacet} from "../facets/FlexSaveSendFacet.sol";
 import {FlexSendNativeFacet} from "../facets/FlexSendNativeFacet.sol";
+import {FlexSendNativeFloatFacet} from "../facets/FlexSendNativeFloatFacet.sol";
 import {FlexSendTokenFacet} from "../facets/FlexSendTokenFacet.sol";
+import {FlexSendTokenFloatFacet} from "../facets/FlexSendTokenFloatFacet.sol";
 import {FlexSettleNativeFacet} from "../facets/FlexSettleNativeFacet.sol";
 import {FlexSettleNativeProofFacet} from "../facets/FlexSettleNativeProofFacet.sol";
 import {FlexSettleTokenFacet} from "../facets/FlexSettleTokenFacet.sol";
@@ -26,7 +28,9 @@ import {FlexReceiveNativeDomainFacet} from "../facets/views/domains/FlexReceiveN
 import {FlexReceiveTokenDomainFacet} from "../facets/views/domains/FlexReceiveTokenDomainFacet.sol";
 import {FlexReceiveTokenFromDomainFacet} from "../facets/views/domains/FlexReceiveTokenFromDomainFacet.sol";
 import {FlexSendNativeDomainFacet} from "../facets/views/domains/FlexSendNativeDomainFacet.sol";
+import {FlexSendNativeFloatDomainFacet} from "../facets/views/domains/FlexSendNativeFloatDomainFacet.sol";
 import {FlexSendTokenDomainFacet} from "../facets/views/domains/FlexSendTokenDomainFacet.sol";
+import {FlexSendTokenFloatDomainFacet} from "../facets/views/domains/FlexSendTokenFloatDomainFacet.sol";
 import {FlexSettleNativeDomainFacet} from "../facets/views/domains/FlexSettleNativeDomainFacet.sol";
 import {FlexSettleNativeProofDomainFacet} from "../facets/views/domains/FlexSettleNativeProofDomainFacet.sol";
 import {FlexSettleTokenDomainFacet} from "../facets/views/domains/FlexSettleTokenDomainFacet.sol";
@@ -40,7 +44,9 @@ contract FlexStandalone is
     FlexReceiveTokenFromFacet,
     FlexSaveSendFacet,
     FlexSendNativeFacet,
+    FlexSendNativeFloatFacet,
     FlexSendTokenFacet,
+    FlexSendTokenFloatFacet,
     FlexSettleNativeFacet,
     FlexSettleNativeProofFacet,
     FlexSettleTokenFacet,
@@ -55,7 +61,9 @@ contract FlexStandalone is
     FlexReceiveTokenDomainFacet,
     FlexReceiveTokenFromDomainFacet,
     FlexSendNativeDomainFacet,
+    FlexSendNativeFloatDomainFacet,
     FlexSendTokenDomainFacet,
+    FlexSendTokenFloatDomainFacet,
     FlexSettleNativeDomainFacet,
     FlexSettleNativeProofDomainFacet,
     FlexSettleTokenDomainFacet,
@@ -73,6 +81,8 @@ contract FlexStandalone is
         FlexSettleTokenDomainFacet(address(this))
         FlexSettleTokenProofDomainFacet(address(this))
         FlexSendNativeDomainFacet(address(this))
+        FlexSendNativeFloatDomainFacet(address(this))
         FlexSendTokenDomainFacet(address(this))
+        FlexSendTokenFloatDomainFacet(address(this))
     {}
 }
