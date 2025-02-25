@@ -69,6 +69,8 @@ const config: HardhatUserConfig = {
       'contracts/facets/views/FlexProofVerifierFacet.sol',
 
       'contracts/standalone/FlexStandalone.sol',
+
+      'contracts/proofs/send/FlexSendProofVerifier.sol',
     ],
   },
   gasReporter: {
