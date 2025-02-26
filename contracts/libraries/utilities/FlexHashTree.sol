@@ -16,23 +16,31 @@ library FlexHashTree {
     //   - rest words: tree branch
 
     function calcBranch(bytes32[] calldata branch_, bytes32 leaf_) internal pure returns (bytes32) {
-        return _calcBranchAt(branch_, leaf_, 0);
+        return calcBranchSlice(branch_, leaf_, 0, branch_.length);
     }
 
     function calcAccumulatorBranch(bytes32[] calldata branch_, bytes32 leaf_) internal pure returns (bytes32 branchHash, bytes20 accumulator) {
-        bytes32 header = branch_[0];
-        uint256 offset = uint96(uint256(header));
-        branchHash = _calcBranchAt(branch_, leaf_, offset);
-        accumulator = FlexHashAccumulator.accumulate(bytes20(header), branchHash);
-        for (uint256 cursor = 1; cursor < offset; cursor++) {
-            accumulator = FlexHashAccumulator.accumulate(accumulator, branch_[cursor]);
-        }
+        uint256 offset; (accumulator, offset) = readAccumulatorHeader(branch_);
+        branchHash = calcBranchSlice(branch_, leaf_, offset, branch_.length);
+        accumulator = FlexHashAccumulator.accumulate(accumulator, branchHash);
+        accumulator = calcAccumulatorSlice(branch_, accumulator, 1, offset);
     }
 
-    function _calcBranchAt(bytes32[] calldata branch_, bytes32 leaf_, uint256 cursor_) private pure returns (bytes32) {
-        for (; cursor_ < branch_.length; cursor_++) {
+    function readAccumulatorHeader(bytes32[] calldata branch_) internal pure returns (bytes20 hashBefore, uint96 branchOffset) {
+        bytes32 header = branch_[0];
+        hashBefore = bytes20(header);
+        branchOffset = uint96(uint256(header));
+    }
+
+    function calcBranchSlice(bytes32[] calldata branch_, bytes32 leaf_, uint256 cursor_, uint256 end_) internal pure returns (bytes32) {
+        for (; cursor_ < end_; cursor_++)
             leaf_ = Hashes.commutativeKeccak256(leaf_, branch_[cursor_]);
-        }
         return leaf_;
+    }
+
+    function calcAccumulatorSlice(bytes32[] calldata branch_, bytes20 hash_, uint256 cursor_, uint256 end_) internal pure returns (bytes20) {
+        for (; cursor_ < end_; cursor_++)
+            hash_ = FlexHashAccumulator.accumulate(hash_, branch_[cursor_]);
+        return hash_;
     }
 }
