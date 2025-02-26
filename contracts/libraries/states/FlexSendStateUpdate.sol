@@ -14,12 +14,7 @@ import {FlexSendStateStorage} from "../storages/FlexSendStateStorage.sol";
 import {FlexHashAccumulator} from "../utilities/FlexHashAccumulator.sol";
 
 library FlexSendStateUpdate {
-    function toSent(
-        address sender_,
-        uint96 group_,
-        uint48 start_,
-        bytes32 orderHash_
-    ) internal {
+    function toSent(address sender_, uint96 group_, uint48 start_, bytes32 orderHash_) internal {
         bytes32 bucket = FlexSendStateBucket.calcBucket(sender_, group_);
 
         bytes32 bucketState = FlexSendStateStorage.data()[bucket];
