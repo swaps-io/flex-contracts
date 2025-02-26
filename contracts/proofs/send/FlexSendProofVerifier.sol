@@ -59,7 +59,7 @@ contract FlexSendProofVerifier is IFlexSendProofVerifier {
 
     function _calcSendSave(FlexSendProofData calldata data_, bytes20 accumulator_) private pure returns (bytes32) {
         bytes32 bucket = FlexSendStateBucket.calcBucket(FlexSendData.readSender(data_.sendData0), FlexSendData.readGroup(data_.sendData1));
-        bytes32 bucketState = FlexSendBucketStateData.make(accumulator_, data_.bucketTime);
+        bytes32 bucketState = FlexSendBucketStateData.make(accumulator_, data_.saveTime);
         return FlexEfficientHash.calc(bucket, bucketState);
     }
 

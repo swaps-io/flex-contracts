@@ -8,6 +8,6 @@ struct FlexSendProofData {
     bytes32 sendData2;
     bytes32 sendData3; // Zero for native
     bytes32[] orderBranch;
-    uint48 bucketTime;
     bytes32 saveBucket;
+    uint48 saveTime;
 }
