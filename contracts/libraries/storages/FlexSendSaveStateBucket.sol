@@ -2,7 +2,7 @@
 
 pragma solidity ^0.8.28;
 
-library FlexSaveSendStateBucket {
+library FlexSendSaveStateBucket {
     // Content:
     // - bucket: saver (160), slot (96)
 

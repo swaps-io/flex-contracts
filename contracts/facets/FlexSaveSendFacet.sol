@@ -10,8 +10,8 @@ import {FlexSaveSendData} from "../libraries/data/FlexSaveSendData.sol";
 
 import {FlexSendStateBucket} from "../libraries/storages/FlexSendStateBucket.sol";
 import {FlexSendStateStorage} from "../libraries/storages/FlexSendStateStorage.sol";
-import {FlexSaveSendStateBucket} from "../libraries/storages/FlexSaveSendStateBucket.sol";
-import {FlexSaveSendStateStorage} from "../libraries/storages/FlexSaveSendStateStorage.sol";
+import {FlexSendSaveStateBucket} from "../libraries/storages/FlexSendSaveStateBucket.sol";
+import {FlexSendSaveStateStorage} from "../libraries/storages/FlexSendSaveStateStorage.sol";
 
 import {FlexEfficientHash} from "../libraries/utilities/FlexEfficientHash.sol";
 
@@ -19,8 +19,8 @@ contract FlexSaveSendFacet is IFlexSaveSend {
     function flexSaveSend(bytes32 saveData0_) external override {
         bytes32 bucket = FlexSendStateBucket.calcBucket(FlexSaveSendData.readSender(saveData0_), FlexSaveSendData.readGroup(saveData0_));
         bytes32 bucketState = FlexSendStateStorage.data()[bucket];
-        bytes32 saveBucket = FlexSaveSendStateBucket.calcBucket(msg.sender, FlexSaveSendData.readSlot(saveData0_));
-        FlexSaveSendStateStorage.data()[saveBucket] = FlexEfficientHash.calc(bucket, bucketState);
+        bytes32 saveBucket = FlexSendSaveStateBucket.calcBucket(msg.sender, FlexSaveSendData.readSlot(saveData0_));
+        FlexSendSaveStateStorage.data()[saveBucket] = FlexEfficientHash.calc(bucket, bucketState);
         emit FlexSendSave(bucket, bucketState, saveBucket);
     }
 }
