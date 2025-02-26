@@ -6,3 +6,4 @@ error FlexProofChainError();
 error FlexProofEventError();
 error FlexProofHashError();
 error FlexProofSendSaveError();
+error FlexProofPresentedError();

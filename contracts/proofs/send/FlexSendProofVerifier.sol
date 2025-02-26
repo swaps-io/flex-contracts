@@ -15,7 +15,7 @@ import {FlexSendStateBucket} from "../../libraries/storages/FlexSendStateBucket.
 import {IFlexSendProofVerifier} from "./interfaces/IFlexSendProofVerifier.sol";
 import {FlexSendProofData} from "./interfaces/FlexSendProofData.sol";
 import {FLEX_SEND_EVENT_SIGNATURE, FLEX_NO_SEND_EVENT_SIGNATURE} from "./interfaces/FlexSendProofEventSignatures.sol";
-import {FlexProofChainError, FlexProofEventError, FlexProofHashError, FlexProofSendSaveError} from "./interfaces/FlexSendProofErrors.sol";
+import {FlexProofChainError, FlexProofEventError, FlexProofHashError, FlexProofSendSaveError, FlexProofPresentedError} from "./interfaces/FlexSendProofErrors.sol";
 
 contract FlexSendProofVerifier is IFlexSendProofVerifier {
     address public immutable flexSendSave;
@@ -25,36 +25,50 @@ contract FlexSendProofVerifier is IFlexSendProofVerifier {
     }
 
     function verifyHashEventProof(bytes32 sig_, bytes32 hash_, uint256 chain_, bytes calldata proof_) external view override {
-        // // // // // // // // // // // // // // // // // // // // // // // // // //
-        require(sig_ == FLEX_SEND_EVENT_SIGNATURE, "TODO: no-send event proofing");
-        // // // // // // // // // // // // // // // // // // // // // // // // // //
-
         _verifyChain(chain_);
-        _verifyEvent(sig_);
+        bool presented = _verifyEvent(sig_);
         FlexSendProofData calldata data = _parseData(proof_);
-        bytes20 accumulator = _verifyOrderHash(data, hash_);
-        bytes32 sendSave = _calcSendSave(data, accumulator);
-        _verifySendSave(sendSave, data.saveBucket);
+        _verifyHash(data, hash_);
+        if (presented) {
+            bytes20 accumulator = _calcAccumulator(data, hash_);
+            bytes32 sendSave = _calcSendSave(data, accumulator);
+            _verifySendSave(sendSave, data.saveBucket);
+        } else {
+            _verifyNotPresented(data, hash_);
+            revert(); // TODO
+            // _verifyDeadlineExceeded(...);
+            // bytes20 accumulator = _calcAccumulator(data, hash_);
+            // _verifySendSave(sendSave, data.saveBucket);
+        }
     }
 
     function _verifyChain(uint256 chain_) private view {
         require(chain_ == block.chainid, FlexProofChainError());
     }
 
-    function _verifyEvent(bytes32 sig_) private pure {
-        require(sig_ == FLEX_SEND_EVENT_SIGNATURE || sig_ == FLEX_NO_SEND_EVENT_SIGNATURE, FlexProofEventError());
+    function _verifyEvent(bytes32 sig_) private pure returns (bool presented) {
+        presented = sig_ == FLEX_SEND_EVENT_SIGNATURE;
+        require(presented || sig_ == FLEX_NO_SEND_EVENT_SIGNATURE, FlexProofEventError());
     }
 
     function _parseData(bytes calldata proof_) private pure returns (FlexSendProofData calldata data) {
         assembly { data := add(proof_.offset, 64) } // prettier-ignore
     }
 
-    function _verifyOrderHash(FlexSendProofData calldata data_, bytes32 hash_) private pure returns (bytes20 accumulator) {
+    function _verifyHash(FlexSendProofData calldata data_, bytes32 hash_) private pure {
         bytes32 orderHash = data_.sendData3 == bytes32(0)
             ? FlexEfficientHash.calc(data_.sendData0, data_.sendData1, data_.sendData2)
             : FlexEfficientHash.calc(data_.sendData0, data_.sendData1, data_.sendData2, data_.sendData3);
-        (orderHash, accumulator) = FlexHashTree.calcAccumulatorBranch(data_.orderBranch, orderHash);
+        orderHash = FlexHashTree.calcBranchPart(data_.orderBranch, orderHash);
         require(orderHash == hash_, FlexProofHashError());
+    }
+
+    function _calcAccumulator(FlexSendProofData calldata data_, bytes32 hash_) private pure returns (bytes20) {
+        return FlexHashTree.calcAccumulatorPart(data_.orderBranch, hash_);
+    }
+
+    function _verifyNotPresented(FlexSendProofData calldata data_, bytes32 hash_) private pure {
+        require(!FlexHashTree.checkAccumulatorPartIncludes(data_.orderBranch, hash_), FlexProofPresentedError());
     }
 
     function _calcSendSave(FlexSendProofData calldata data_, bytes20 accumulator_) private pure returns (bytes32) {
