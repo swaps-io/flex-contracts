@@ -23,4 +23,10 @@ library FlexSendBucketStateData {
     function writeTime(bytes32 bucketState_, uint48 time_) internal pure returns (bytes32) {
         return bytes26(bucketState_) | bytes32(uint256(time_));
     }
+
+    //
+
+    function make(bytes20 hash_, uint48 time_) internal pure returns (bytes32) {
+        return hash_ | bytes32(uint256(time_));
+    }
 }

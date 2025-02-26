@@ -9,6 +9,10 @@ library FlexSendData {
     // - data #2: amount (256)
     // - data #3: <unused> (96), token (160)
 
+    function readSender(bytes32 data0_) internal pure returns (address) {
+        return address(uint160(uint256(data0_)));
+    }
+
     function readStart(bytes32 data1_) internal pure returns (uint48) {
         return uint48(uint256(data1_) >> 208);
     }
