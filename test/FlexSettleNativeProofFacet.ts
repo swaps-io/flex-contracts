@@ -1,13 +1,12 @@
 import { viem } from 'hardhat';
 import { loadFixture } from '@nomicfoundation/hardhat-toolbox-viem/network-helpers';
 import { expect } from 'chai';
-import { bytesToHex, Hex, keccak256, parseEventLogs, toEventSelector, zeroAddress } from 'viem';
+import { bytesToHex, Hex, parseEventLogs, toEventSelector, zeroAddress } from 'viem';
 
 import {
   flexCalcReceiveNativeHash,
   flexCalcTree,
   flexCalcTreeHash,
-  flexCalcAccumulatorHash,
   flexEncodeReceiveNativeData,
   flexCalcConfirmNativeProofHash,
   flexEncodeConfirmNativeProofData,
@@ -18,6 +17,8 @@ import {
   FLEX_RECEIVE_STATE_REFUNDED,
   flexEncodeRefundNativeProofData,
   flexCalcRefundNativeProofHash,
+  flexCalcReceiveAccumulatorHash,
+  FLEX_UNALLOCATED_HASH,
 } from '../@swaps-io/flex-sdk';
 
 const IMAGINARY_COMPONENTS = 2; // Implied in order, but not used here
@@ -121,7 +122,7 @@ describe('FlexSettleNativeProofFacet', function () {
     const receiveNativeBranch = flexCalcBranch({ tree: orderTree, leaf: receiveNativeHash });
     const confirmNativeBranch = flexCalcAccumulatorBranch({
       branch: flexCalcBranch({ tree: orderTree, leaf: confirmNativeHash }),
-      hashBefore: zeroAddress,
+      hashBefore: FLEX_UNALLOCATED_HASH,
       hashesAfter: [],
     });
 
@@ -193,7 +194,7 @@ describe('FlexSettleNativeProofFacet', function () {
       });
       expect(state).equal(FLEX_RECEIVE_STATE_RECEIVED);
 
-      expectedReceiveHash = flexCalcAccumulatorHash({ hashBefore: zeroAddress, hashToAdd: orderHash });
+      expectedReceiveHash = flexCalcReceiveAccumulatorHash({ hashBefore: FLEX_UNALLOCATED_HASH, orderHash });
 
       const hash = await publicClient.readContract({
         abi: flex.abi,
@@ -331,7 +332,7 @@ describe('FlexSettleNativeProofFacet', function () {
     const receiveNativeBranch = flexCalcBranch({ tree: orderTree, leaf: receiveNativeHash });
     const refundNativeBranch = flexCalcAccumulatorBranch({
       branch: flexCalcBranch({ tree: orderTree, leaf: refundNativeHash }),
-      hashBefore: zeroAddress,
+      hashBefore: FLEX_UNALLOCATED_HASH,
       hashesAfter: [],
     });
 
@@ -403,7 +404,7 @@ describe('FlexSettleNativeProofFacet', function () {
       });
       expect(state).equal(FLEX_RECEIVE_STATE_RECEIVED);
 
-      expectedReceiveHash = flexCalcAccumulatorHash({ hashBefore: zeroAddress, hashToAdd: orderHash });
+      expectedReceiveHash = flexCalcReceiveAccumulatorHash({ hashBefore: FLEX_UNALLOCATED_HASH, orderHash });
 
       const hash = await publicClient.readContract({
         abi: flex.abi,

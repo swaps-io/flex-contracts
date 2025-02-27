@@ -7,9 +7,10 @@ import {
   flexCalcSendNativeFloatHash,
   flexCalcTree,
   flexCalcTreeHash,
-  flexCalcAccumulatorHash,
   flexEncodeSendNativeFloatData,
   flexCalcBranch,
+  flexCalcSendAccumulatorHash,
+  FLEX_UNALLOCATED_HASH,
 } from '../@swaps-io/flex-sdk';
 
 const IMAGINARY_COMPONENTS = 3; // Implied in order, but not used here
@@ -86,7 +87,7 @@ describe('FlexSendNativeFloatFacet', function () {
       });
       expect(time).equal(0);
 
-      expectedSendHash = zeroAddress;
+      expectedSendHash = FLEX_UNALLOCATED_HASH;
 
       const hash = await publicClient.readContract({
         abi: flex.abi,
@@ -165,7 +166,11 @@ describe('FlexSendNativeFloatFacet', function () {
       });
       expect(time).equal(start);
 
-      expectedSendHash = flexCalcAccumulatorHash({ hashBefore: expectedSendHash, hashToAdd: orderHash });
+      expectedSendHash = flexCalcSendAccumulatorHash({
+        hashBefore: expectedSendHash,
+        orderHash,
+        start,
+      });
 
       const hash = await publicClient.readContract({
         abi: flex.abi,
@@ -300,7 +305,11 @@ describe('FlexSendNativeFloatFacet', function () {
       });
       expect(time).equal(start + 1);
 
-      expectedSendHash = flexCalcAccumulatorHash({ hashBefore: expectedSendHash, hashToAdd: newOrderHash });
+      expectedSendHash = flexCalcSendAccumulatorHash({
+        hashBefore: expectedSendHash,
+        orderHash: newOrderHash,
+        start: start + 1,
+      });
 
       const hash = await publicClient.readContract({
         abi: flex.abi,

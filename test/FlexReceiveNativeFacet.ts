@@ -7,11 +7,12 @@ import {
   flexCalcReceiveNativeHash,
   flexCalcTree,
   flexCalcTreeHash,
-  flexCalcAccumulatorHash,
   flexEncodeReceiveNativeData,
   flexCalcBranch,
   FLEX_RECEIVE_STATE_NONE,
   FLEX_RECEIVE_STATE_RECEIVED,
+  flexCalcReceiveAccumulatorHash,
+  FLEX_UNALLOCATED_HASH,
 } from '../@swaps-io/flex-sdk';
 
 const IMAGINARY_COMPONENTS = 3; // Implied in order, but not used here
@@ -96,7 +97,7 @@ describe('FlexReceiveNativeFacet', function () {
       });
       expect(state).equal(FLEX_RECEIVE_STATE_NONE);
 
-      expectedReceiveHash = zeroAddress;
+      expectedReceiveHash = FLEX_UNALLOCATED_HASH;
 
       const hash = await publicClient.readContract({
         abi: flex.abi,
@@ -152,7 +153,7 @@ describe('FlexReceiveNativeFacet', function () {
       });
       expect(state).equal(FLEX_RECEIVE_STATE_RECEIVED);
 
-      expectedReceiveHash = flexCalcAccumulatorHash({ hashBefore: expectedReceiveHash, hashToAdd: orderHash });
+      expectedReceiveHash = flexCalcReceiveAccumulatorHash({ hashBefore: expectedReceiveHash, orderHash });
 
       const hash = await publicClient.readContract({
         abi: flex.abi,
@@ -267,7 +268,7 @@ describe('FlexReceiveNativeFacet', function () {
         });
         expect(state).equal(FLEX_RECEIVE_STATE_RECEIVED);
 
-        expectedReceiveHash = flexCalcAccumulatorHash({ hashBefore: expectedReceiveHash, hashToAdd: newOrderHash });
+        expectedReceiveHash = flexCalcReceiveAccumulatorHash({ hashBefore: expectedReceiveHash, orderHash: newOrderHash });
 
         const hash = await publicClient.readContract({
           abi: flex.abi,

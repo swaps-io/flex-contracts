@@ -7,7 +7,6 @@ import {
   flexCalcReceiveTokenHash,
   flexCalcTree,
   flexCalcTreeHash,
-  flexCalcAccumulatorHash,
   flexEncodeReceiveTokenData,
   flexCalcConfirmTokenProofHash,
   flexEncodeConfirmTokenProofData,
@@ -18,6 +17,8 @@ import {
   FLEX_RECEIVE_STATE_REFUNDED,
   flexEncodeRefundTokenProofData,
   flexCalcRefundTokenProofHash,
+  flexCalcReceiveAccumulatorHash,
+  FLEX_UNALLOCATED_HASH,
 } from '../@swaps-io/flex-sdk';
 
 const IMAGINARY_COMPONENTS = 2; // Implied in order, but not used here
@@ -168,7 +169,7 @@ describe('FlexSettleTokenProofFacet', function () {
     const receiveTokenBranch = flexCalcBranch({ tree: orderTree, leaf: receiveTokenHash });
     const confirmTokenBranch = flexCalcAccumulatorBranch({
       branch: flexCalcBranch({ tree: orderTree, leaf: confirmTokenHash }),
-      hashBefore: zeroAddress,
+      hashBefore: FLEX_UNALLOCATED_HASH,
       hashesAfter: [],
     });
 
@@ -243,7 +244,7 @@ describe('FlexSettleTokenProofFacet', function () {
       });
       expect(state).equal(FLEX_RECEIVE_STATE_RECEIVED);
 
-      expectedReceiveHash = flexCalcAccumulatorHash({ hashBefore: zeroAddress, hashToAdd: orderHash });
+      expectedReceiveHash = flexCalcReceiveAccumulatorHash({ hashBefore: FLEX_UNALLOCATED_HASH, orderHash });
 
       const hash = await publicClient.readContract({
         abi: flex.abi,
@@ -447,7 +448,7 @@ describe('FlexSettleTokenProofFacet', function () {
     const receiveTokenBranch = flexCalcBranch({ tree: orderTree, leaf: receiveTokenHash });
     const refundTokenBranch = flexCalcAccumulatorBranch({
       branch: flexCalcBranch({ tree: orderTree, leaf: refundTokenHash }),
-      hashBefore: zeroAddress,
+      hashBefore: FLEX_UNALLOCATED_HASH,
       hashesAfter: [],
     });
 
@@ -522,7 +523,7 @@ describe('FlexSettleTokenProofFacet', function () {
       });
       expect(state).equal(FLEX_RECEIVE_STATE_RECEIVED);
 
-      expectedReceiveHash = flexCalcAccumulatorHash({ hashBefore: zeroAddress, hashToAdd: orderHash });
+      expectedReceiveHash = flexCalcReceiveAccumulatorHash({ hashBefore: FLEX_UNALLOCATED_HASH, orderHash });
 
       const hash = await publicClient.readContract({
         abi: flex.abi,
