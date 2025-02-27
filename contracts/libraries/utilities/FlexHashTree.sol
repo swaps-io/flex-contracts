@@ -30,7 +30,7 @@ library FlexHashTree {
         accumulator = _calcAccumulator(branch_, accumulator, hash_, offset);
     }
 
-    function checkAccumulatorPartIncludes(bytes32[] calldata branch_, bytes32 hash_) internal pure returns (bool) {
+    function accumulatorPartIncludes(bytes32[] calldata branch_, bytes32 hash_) internal pure returns (bool) {
         (, uint256 offset) = _readHeader(branch_);
         for (uint256 cursor = 1; cursor < offset; cursor++)
             if (branch_[cursor] == hash_) return true;

@@ -7,3 +7,6 @@ error FlexProofEventError();
 error FlexProofHashError();
 error FlexProofSendSaveError();
 error FlexProofPresentedError();
+error FlexProofAccumulatorPresenceError();
+error FlexProofBasePresenceError();
+error FlexProofDeadlinePresenceError();
