@@ -6,8 +6,7 @@ import {Address} from "@openzeppelin/contracts/utils/Address.sol";
 
 import {IFlexSendNative} from "../interfaces/IFlexSendNative.sol";
 
-import {FlexEarlinessConstraint} from "../libraries/constraints/FlexEarlinessConstraint.sol";
-import {FlexDeadlineConstraint} from "../libraries/constraints/FlexDeadlineConstraint.sol";
+import {FlexSendPeriodConstraint} from "../libraries/constraints/FlexSendPeriodConstraint.sol";
 
 import {FlexSendData} from "../libraries/data/FlexSendData.sol";
 
@@ -21,8 +20,7 @@ contract FlexSendNativeFacet is IFlexSendNative {
 
     function flexSendNative(bytes32 sendData1_, bytes32[] calldata orderBranch_) external payable override {
         uint48 start = FlexSendData.readStart(sendData1_);
-        FlexEarlinessConstraint.validate(start);
-        FlexDeadlineConstraint.validate(start + FlexSendData.readDuration(sendData1_));
+        FlexSendPeriodConstraint.validate(start, FlexSendData.readDuration(sendData1_));
 
         bytes32 orderHash = FlexEfficientHash.calc(FlexSendData.make0(_domain, msg.sender), sendData1_, FlexSendData.make2(msg.value));
         orderHash = FlexHashTree.calcBranch(orderBranch_, orderHash);
