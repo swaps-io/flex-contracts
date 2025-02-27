@@ -22,7 +22,7 @@ library FlexSendStateUpdate {
         bucketState = FlexSendBucketStateData.writeTime(bucketState, start_);
 
         bytes20 sendHash = FlexSendBucketStateData.readHash(bucketState);
-        sendHash = FlexHashAccumulator.accumulate(sendHash, orderHash_);
+        sendHash = FlexHashAccumulator.accumulate(sendHash, bytes26(orderHash_) | bytes32(uint256(start_)));
         bucketState = FlexSendBucketStateData.writeHash(bucketState, sendHash);
 
         FlexSendStateStorage.data()[bucket] = bucketState;
