@@ -59,7 +59,7 @@ contract FlexSendProofVerifier is IFlexSendProofVerifier {
 
     function _verifyEvent(bytes32 sig_) private pure returns (bool presented) {
         presented = sig_ == 0x4cea8b710e627c582bfc256cb3c9376be297ee5431867ac173e1f2b08b372613; // keccak256("FlexSend(bytes32)")
-        require(presented || sig_ == 0x569c08810aaedd68112aa715bf6d168e718f27b03fed3c3bcce26e8010fcb89e, FlexProofEventError()); // keccak256("FlexNoSend(bytes32)")
+        require(presented || sig_ == 0xff0a1efb6bc8bbe9de4826e06fdd6ae11433a17120695e65a4f96b4f7fb62563, FlexProofEventError()); // keccak256("FlexSendFail(bytes32)")
     }
 
     function _parseData(bytes calldata proof_) private pure returns (FlexSendProofData calldata data) {
