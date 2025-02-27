@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: BUSL-1.1
 
-pragma solidity ^0.8.28;
+pragma solidity ^0.8.26;
 
 library FlexStateAllocation {
     bytes20 internal constant UNALLOCATED_HASH = bytes20(0);

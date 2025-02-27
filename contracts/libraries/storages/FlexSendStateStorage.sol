@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: BUSL-1.1
 
-pragma solidity ^0.8.28;
+pragma solidity ^0.8.26;
 
 library FlexSendStateStorage {
     function data() internal pure returns (mapping(bytes32 bucket => bytes32 state) storage d) {
