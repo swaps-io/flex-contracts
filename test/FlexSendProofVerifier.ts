@@ -76,7 +76,7 @@ describe('FlexSendProofVerifier', function () {
 
   it('Should encode expected token send proof data', async function () {
     const start = 123_456;
-    const duration = 4_003_002_001n;
+    const duration = 4_003_002_001;
     const group = 777;
     const sender = '0xdeadbeefdeadbeefdeadbeefdeadbeefdeadbeef';
     const receiver = '0xc0debeefc0debeefc0debeefc0debeefc0debeef';
@@ -154,7 +154,7 @@ describe('FlexSendProofVerifier', function () {
 
   it('Should encode expected native send proof data', async function () {
     const start = 123_456;
-    const duration = 4_003_002_001n;
+    const duration = 4_003_002_001;
     const group = 777;
     const sender = '0xdeadbeefdeadbeefdeadbeefdeadbeefdeadbeef';
     const receiver = '0xc0debeefc0debeefc0debeefc0debeefc0debeef';
@@ -230,7 +230,7 @@ describe('FlexSendProofVerifier', function () {
 
   it('Should encode expected token send fail proof data', async function () {
     const start = 123_456;
-    const duration = 4_003_002_001n;
+    const duration = 4_003_002_001;
     const group = 777;
     const sender = '0xdeadbeefdeadbeefdeadbeefdeadbeefdeadbeef';
     const receiver = '0xc0debeefc0debeefc0debeefc0debeefc0debeef';
@@ -265,8 +265,8 @@ describe('FlexSendProofVerifier', function () {
     const slot = 999;
     const saveBucket = flexEncodeSendSaveBucket({ saver, slot });
     const saveTime = 1_750_750_750;
-    const failBaseHash = '0xafafafaf00000000000000000000000000000000000000000000000000000000';
 
+    const failBaseHash = '0xafafafaf00000000000000000000000000000000000000000000000000000000';
     const branch = flexCalcAccumulatorBranch({
       branch: orderBranch,
       hashBefore: '0xbef0bef0bef0bef0bef0bef0bef0bef0bef0bef0',
@@ -310,7 +310,7 @@ describe('FlexSendProofVerifier', function () {
 
   it('Should encode expected native send fail proof data', async function () {
     const start = 123_456;
-    const duration = 4_003_002_001n;
+    const duration = 4_003_002_001;
     const group = 777;
     const sender = '0xdeadbeefdeadbeefdeadbeefdeadbeefdeadbeef';
     const receiver = '0xc0debeefc0debeefc0debeefc0debeefc0debeef';
@@ -343,8 +343,8 @@ describe('FlexSendProofVerifier', function () {
     const slot = 999;
     const saveBucket = flexEncodeSendSaveBucket({ saver, slot });
     const saveTime = 1_750_750_750;
-    const failBaseHash = '0xafafafaf00000000000000000000000000000000000000000000000000000000';
 
+    const failBaseHash = '0xafafafaf00000000000000000000000000000000000000000000000000000000';
     const branch = flexCalcAccumulatorBranch({
       branch: orderBranch,
       hashBefore: '0xbef0bef0bef0bef0bef0bef0bef0bef0bef0bef0',
@@ -390,7 +390,7 @@ describe('FlexSendProofVerifier', function () {
     const { verifier, testChainId } = await loadFixture(deployFixture);
 
     const start = 123_456;
-    const duration = 4_003_002_001n;
+    const duration = 4_003_002_001;
     const group = 777;
     const sender = '0xdeadbeefdeadbeefdeadbeefdeadbeefdeadbeef';
     const receiver = '0xc0debeefc0debeefc0debeefc0debeefc0debeef';
@@ -462,7 +462,7 @@ describe('FlexSendProofVerifier', function () {
     const { verifier, testChainId } = await loadFixture(deployFixture);
 
     const start = 123_456;
-    const duration = 4_003_002_001n;
+    const duration = 4_003_002_001;
     const group = 777;
     const sender = '0xdeadbeefdeadbeefdeadbeefdeadbeefdeadbeef';
     const receiver = '0xc0debeefc0debeefc0debeefc0debeefc0debeef';
@@ -535,7 +535,7 @@ describe('FlexSendProofVerifier', function () {
     const { verifier, testChainId } = await loadFixture(deployFixture);
 
     const start = 123_456;
-    const duration = 4_003_002_001n;
+    const duration = 4_003_002_001;
     const group = 777;
     const sender = '0xdeadbeefdeadbeefdeadbeefdeadbeefdeadbeef';
     const receiver = '0xc0debeefc0debeefc0debeefc0debeefc0debeef';
@@ -571,8 +571,8 @@ describe('FlexSendProofVerifier', function () {
     const slot = 999;
     const saveBucket = flexEncodeSendSaveBucket({ saver, slot });
     const saveTime = 1_750_750_750;
-    const failBaseHash = '0xafafafaf00000000000000000000000000000000000000000000000000000000';
 
+    const failBaseHash = '0xafafafaf00000000000000000000000000000000000000000000000000000000';
     const branch = flexCalcAccumulatorBranch({
       branch: orderBranch,
       hashBefore: '0xbef0bef0bef0bef0bef0bef0bef0bef0bef0bef0',
@@ -610,7 +610,7 @@ describe('FlexSendProofVerifier', function () {
     const { verifier, testChainId } = await loadFixture(deployFixture);
 
     const start = 123_456;
-    const duration = 4_003_002_001n;
+    const duration = 4_003_002_001;
     const group = 777;
     const sender = '0xdeadbeefdeadbeefdeadbeefdeadbeefdeadbeef';
     const receiver = '0xc0debeefc0debeefc0debeefc0debeefc0debeef';
@@ -646,8 +646,8 @@ describe('FlexSendProofVerifier', function () {
     const slot = 999;
     const saveBucket = flexEncodeSendSaveBucket({ saver, slot });
     const saveTime = 1_750_750_750;
-    const failBaseHash = '0xafafafaf00000000000000000000000000000000000000000000000000000000';
 
+    const failBaseHash = '0xafafafaf00000000000000000000000000000000000000000000000000000000';
     const branch = flexCalcAccumulatorBranch({
       branch: orderBranch,
       hashBefore: '0xbef0bef0bef0bef0bef0bef0bef0bef0bef0bef0',
@@ -685,7 +685,7 @@ describe('FlexSendProofVerifier', function () {
     const { verifier, testChainId } = await loadFixture(deployFixture);
 
     const start = 123_456;
-    const duration = 4_003_002_001n;
+    const duration = 4_003_002_001;
     const group = 777;
     const sender = '0xdeadbeefdeadbeefdeadbeefdeadbeefdeadbeef';
     const receiver = '0xc0debeefc0debeefc0debeefc0debeefc0debeef';
@@ -721,8 +721,8 @@ describe('FlexSendProofVerifier', function () {
     const slot = 999;
     const saveBucket = flexEncodeSendSaveBucket({ saver, slot });
     const saveTime = 1_750_750_750;
-    const failBaseHash = flexEncodeSendAccumulatorHash({ orderHash, start });
 
+    const failBaseHash = flexEncodeSendAccumulatorHash({ orderHash, start });
     const branch = flexCalcAccumulatorBranch({
       branch: orderBranch,
       hashBefore: '0xbef0bef0bef0bef0bef0bef0bef0bef0bef0bef0',
@@ -760,7 +760,7 @@ describe('FlexSendProofVerifier', function () {
     const { verifier, testChainId } = await loadFixture(deployFixture);
 
     const start = 123_456;
-    const duration = 4_003_002_001n;
+    const duration = 4_003_002_001;
     const group = 777;
     const sender = '0xdeadbeefdeadbeefdeadbeefdeadbeefdeadbeef';
     const receiver = '0xc0debeefc0debeefc0debeefc0debeefc0debeef';
@@ -796,11 +796,11 @@ describe('FlexSendProofVerifier', function () {
     const slot = 999;
     const saveBucket = flexEncodeSendSaveBucket({ saver, slot });
     const saveTime = 1_750_750_750;
+
     const failBaseHash = flexEncodeSendAccumulatorHash({
       orderHash: '0xafafafaf00000000000000000000000000000000000000000000000000000000',
       start, // The `start` value itself as `base` time will cause the fail - since there can be multiple orders with the same
     });      // `start`. To make sure no `start` hidden behind in chronological order, the verifier requires at least `start-1`.
-
     const branch = flexCalcAccumulatorBranch({
       branch: orderBranch,
       hashBefore: '0xbef0bef0bef0bef0bef0bef0bef0bef0bef0bef0',
@@ -837,8 +837,8 @@ describe('FlexSendProofVerifier', function () {
   it('Should not verify fail proof when may be presented after save time not reaching deadline', async function () {
     const { verifier, testChainId } = await loadFixture(deployFixture);
 
-    const start = 123_456n;
-    const duration = 4_003_002_001n;
+    const start = 123_456;
+    const duration = 4_003_002_001;
     const group = 777;
     const sender = '0xdeadbeefdeadbeefdeadbeefdeadbeefdeadbeef';
     const receiver = '0xc0debeefc0debeefc0debeefc0debeefc0debeef';
@@ -873,12 +873,13 @@ describe('FlexSendProofVerifier', function () {
     const saver = '0x5a7ef55a7ef55a7ef55a7ef55a7ef55a7ef55a7e';
     const slot = 999;
     const saveBucket = flexEncodeSendSaveBucket({ saver, slot });
-    const saveTime = start + duration; // The `deadline` value itself as a `save` time will cause the fail - since send
-    const failBaseHash = flexEncodeSendAccumulatorHash({   // can still be submitted. At least `deadline+1` is required.
-      orderHash: '0xafafafaf00000000000000000000000000000000000000000000000000000000',
-      start: start - 1n, // Good `base` time
-    });
+    const saveTime = start + duration; // The `deadline` value itself as a `save` time will cause the fail -
+                                       // since send can still be submitted. At least `deadline+1` is required.
 
+    const failBaseHash = flexEncodeSendAccumulatorHash({
+      orderHash: '0xafafafaf00000000000000000000000000000000000000000000000000000000',
+      start: start - 1, // Good `base` time
+    });
     const branch = flexCalcAccumulatorBranch({
       branch: orderBranch,
       hashBefore: '0xbef0bef0bef0bef0bef0bef0bef0bef0bef0bef0',
