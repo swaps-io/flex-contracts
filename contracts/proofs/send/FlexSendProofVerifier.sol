@@ -11,8 +11,6 @@ import {FlexSendBucketStateData} from "../../libraries/data/FlexSendBucketStateD
 import {FlexSendAccumulatorData} from "../../libraries/data/FlexSendAccumulatorData.sol";
 import {FlexSendData} from "../../libraries/data/FlexSendData.sol";
 
-import {FlexStateAllocation} from "../../libraries/states/FlexStateAllocation.sol";
-
 import {FlexSendStateBucket} from "../../libraries/storages/FlexSendStateBucket.sol";
 
 import {IFlexSendProofVerifier} from "./interfaces/IFlexSendProofVerifier.sol";
@@ -28,6 +26,9 @@ import {
 } from "./interfaces/FlexSendProofError.sol";
 
 contract FlexSendProofVerifier is IFlexSendProofVerifier {
+    bytes32 private constant SEND_SIG = 0x4cea8b710e627c582bfc256cb3c9376be297ee5431867ac173e1f2b08b372613; // keccak256("FlexSend(bytes32)")
+    bytes32 private constant SEND_FAIL_SIG = 0xff0a1efb6bc8bbe9de4826e06fdd6ae11433a17120695e65a4f96b4f7fb62563; // keccak256("FlexSendFail(bytes32)")
+
     address public immutable flexSendSave;
 
     constructor(address saver_) {
@@ -35,53 +36,45 @@ contract FlexSendProofVerifier is IFlexSendProofVerifier {
     }
 
     function verifyHashEventProof(bytes32 sig_, bytes32 hash_, uint256 chain_, bytes calldata proof_) external view override {
-        _verifyChain(chain_);
-        bool presented = _verifyEvent(sig_);
-        FlexSendProofData calldata data = _parseData(proof_);
-        hash_ = _verifyHash(data, hash_);
-        if (presented) {
-            bytes20 accumulator = _calcAccumulator(data, hash_);
-            bytes32 sendSave = _calcSendSave(data, accumulator);
-            _verifySendSave(sendSave, data.saveBucket);
-        } else {
-            _verifyNotInAccumulator(data, hash_);
-            _verifyNotOutsideRange(data);
-            bytes20 accumulator = _calcSkipAccumulator(data, data.failBaseHash);
-            bytes32 sendSave = _calcSendSave(data, accumulator);
-            _verifySendSave(sendSave, data.saveBucket);
-        }
-    }
-
-    function _verifyChain(uint256 chain_) private view {
         require(chain_ == block.chainid, FlexProofChainError());
+
+        FlexSendProofData calldata data;
+        assembly { data := proof_.offset }
+
+        if (sig_ == SEND_SIG) return _verifySend(data, hash_);
+        if (sig_ == SEND_FAIL_SIG) return _verifySendFail(data, hash_);
+        revert FlexProofEventError();
     }
 
-    function _verifyEvent(bytes32 sig_) private pure returns (bool presented) {
-        presented = sig_ == 0x4cea8b710e627c582bfc256cb3c9376be297ee5431867ac173e1f2b08b372613; // keccak256("FlexSend(bytes32)")
-        require(presented || sig_ == 0xff0a1efb6bc8bbe9de4826e06fdd6ae11433a17120695e65a4f96b4f7fb62563, FlexProofEventError()); // keccak256("FlexSendFail(bytes32)")
+    function _verifySend(FlexSendProofData calldata data_, bytes32 hash_) private view {
+        hash_ = _verifyHash(data_, hash_);
+        bytes20 accumulator = FlexHashTree.calcAccumulatorPart(data_.orderBranch, hash_);
+        _verifySendAccumulator(data_, accumulator);
     }
 
-    function _parseData(bytes calldata proof_) private pure returns (FlexSendProofData calldata data) {
-        assembly { data := proof_.offset } // prettier-ignore
+    function _verifySendFail(FlexSendProofData calldata data_, bytes32 hash_) private view {
+        hash_ = _verifyHash(data_, hash_);
+        _verifyNotInAccumulator(data_, hash_);
+        _verifyNotOutsideTime(data_);
+        bytes20 accumulator = _calcSkipAccumulator(data_);
+        _verifySendAccumulator(data_, accumulator);
     }
 
     function _verifyHash(FlexSendProofData calldata data_, bytes32 hash_) private pure returns (bytes32) {
-        bytes32 orderHash = data_.sendData3 == bytes32(0)
-            ? FlexEfficientHash.calc(data_.sendData0, data_.sendData1, data_.sendData2)
-            : FlexEfficientHash.calc(data_.sendData0, data_.sendData1, data_.sendData2, data_.sendData3);
-        orderHash = FlexHashTree.calcBranchPart(data_.orderBranch, orderHash);
+        bytes32 orderHash = FlexHashTree.calcBranchPart(data_.orderBranch, _calcSendHash(data_));
         require(orderHash == hash_, FlexProofHashError());
         return FlexSendAccumulatorData.make(bytes26(orderHash), FlexSendData.readStart(data_.sendData1));
     }
 
-    function _calcAccumulator(FlexSendProofData calldata data_, bytes32 hash_) private pure returns (bytes20) {
-        return FlexHashTree.calcAccumulatorPart(data_.orderBranch, hash_);
+    function _calcSendHash(FlexSendProofData calldata data_) private pure returns (bytes32) {
+        return data_.sendData3 == bytes32(0)
+            ? FlexEfficientHash.calc(data_.sendData0, data_.sendData1, data_.sendData2)
+            : FlexEfficientHash.calc(data_.sendData0, data_.sendData1, data_.sendData2, data_.sendData3);
     }
 
-    function _calcSkipAccumulator(FlexSendProofData calldata data_, bytes32 hash_) private pure returns (bytes20) {
-        if (hash_ == bytes32(FlexStateAllocation.UNALLOCATED_HASH)) return FlexStateAllocation.UNALLOCATED_HASH;
-        if (hash_ == bytes32(FlexStateAllocation.ALLOCATED_HASH)) return FlexStateAllocation.ALLOCATED_HASH;
-        return _calcAccumulator(data_, hash_);
+    function _calcSkipAccumulator(FlexSendProofData calldata data_) private pure returns (bytes20) {
+        if (data_.failBaseHash == 0) return FlexHashTree.accumulatorPartBefore(data_.orderBranch); // Skip
+        return FlexHashTree.calcAccumulatorPart(data_.orderBranch, data_.failBaseHash);
     }
 
     function _verifyNotInAccumulator(FlexSendProofData calldata data_, bytes32 hash_) private pure {
@@ -89,13 +82,18 @@ contract FlexSendProofVerifier is IFlexSendProofVerifier {
         require(!FlexHashTree.accumulatorPartIncludes(data_.orderBranch, hash_), FlexProofAccumulatorPresenceError());
     }
 
-    function _verifyNotOutsideRange(FlexSendProofData calldata data_) private pure {
+    function _verifyNotOutsideTime(FlexSendProofData calldata data_) private pure {
         uint48 start = FlexSendData.readStart(data_.sendData1);
         uint48 baseTime = FlexSendAccumulatorData.readStart(data_.failBaseHash);
         require(start > baseTime, FlexProofBasePresenceError());
 
         uint48 deadline = start + FlexSendData.readDuration(data_.sendData1);
         require(deadline < data_.saveTime, FlexProofDeadlinePresenceError());
+    }
+
+    function _verifySendAccumulator(FlexSendProofData calldata data_, bytes20 accumulator_) private view {
+        bytes32 sendSave = _calcSendSave(data_, accumulator_);
+        _verifySendSave(sendSave, data_.saveBucket);
     }
 
     function _calcSendSave(FlexSendProofData calldata data_, bytes20 accumulator_) private pure returns (bytes32) {

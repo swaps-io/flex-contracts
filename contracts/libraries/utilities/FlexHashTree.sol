@@ -42,6 +42,10 @@ library FlexHashTree {
         branchHash = _calcBranch(branch_, leaf_, offset);
     }
 
+    function accumulatorPartBefore(bytes32[] calldata branch_) internal pure returns (bytes20 hashBefore) {
+        (hashBefore, ) = _readHeader(branch_);
+    }
+
     function _readHeader(bytes32[] calldata branch_) private pure returns (bytes20 hashBefore, uint96 branchOffset) {
         bytes32 header = branch_[0];
         hashBefore = bytes20(header);
