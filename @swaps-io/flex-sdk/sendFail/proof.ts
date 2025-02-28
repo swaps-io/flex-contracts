@@ -8,7 +8,7 @@ export interface FlexEncodeSendFailProofParams {
   variant: AsHexValue;
   domain: AsHexValue;
   data: { sendData: [AsHexValue, AsHexValue, AsHexValue] | [AsHexValue, AsHexValue, AsHexValue, AsHexValue] };
-  branch: FlexBranch;
+  branch: Readonly<FlexBranch>;
   saveBucket: AsHexValue;
   saveTime: AsHexValue;
   failBaseState: AsHexValue;
