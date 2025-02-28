@@ -100,7 +100,7 @@ describe('FlexSendProofVerifier', function () {
     });
     const sendHash = flexCalcSendTokenHash({ domain: sendDomain, data: sendData });
 
-    const orderHashes: Hex[] = [
+    const orderComponentHashes: Hex[] = [
       sendHash,
       '0xe93c632bf8243f5ce2d70d0d13e76a868573c74437cdc32fea4c0e3afccd6523',
       '0x9e3cefcd2210a275f810c0e956471e061830088607b4db84becbba153a283392',
@@ -108,7 +108,7 @@ describe('FlexSendProofVerifier', function () {
       '0x81a7287cb6819d35be18e8141820f920e005da0c0832895bbdd7c90595259794',
       '0x70ab6d7fb5e05d8f3cfe66c2d92ad16063dbc36e90aad06df4ad2021924f6ef6',
     ];
-    const orderTree = flexCalcTree({ leaves: orderHashes });
+    const orderTree = flexCalcTree({ leaves: orderComponentHashes });
     const orderBranch = flexCalcBranch({ tree: orderTree, leaf: sendHash });
 
     const variant = 133713371337n;
@@ -176,7 +176,7 @@ describe('FlexSendProofVerifier', function () {
     });
     const sendHash = flexCalcSendNativeHash({ domain: sendDomain, data: sendData });
 
-    const orderHashes: Hex[] = [
+    const orderComponentHashes: Hex[] = [
       sendHash,
       '0xe93c632bf8243f5ce2d70d0d13e76a868573c74437cdc32fea4c0e3afccd6523',
       '0x9e3cefcd2210a275f810c0e956471e061830088607b4db84becbba153a283392',
@@ -184,7 +184,7 @@ describe('FlexSendProofVerifier', function () {
       '0x81a7287cb6819d35be18e8141820f920e005da0c0832895bbdd7c90595259794',
       '0x70ab6d7fb5e05d8f3cfe66c2d92ad16063dbc36e90aad06df4ad2021924f6ef6',
     ];
-    const orderTree = flexCalcTree({ leaves: orderHashes });
+    const orderTree = flexCalcTree({ leaves: orderComponentHashes });
     const orderBranch = flexCalcBranch({ tree: orderTree, leaf: sendHash });
 
     const variant = 133713371337n;
@@ -254,7 +254,7 @@ describe('FlexSendProofVerifier', function () {
     });
     const sendHash = flexCalcSendTokenHash({ domain: sendDomain, data: sendData });
 
-    const orderHashes: Hex[] = [
+    const orderComponentHashes: Hex[] = [
       sendHash,
       '0xe93c632bf8243f5ce2d70d0d13e76a868573c74437cdc32fea4c0e3afccd6523',
       '0x9e3cefcd2210a275f810c0e956471e061830088607b4db84becbba153a283392',
@@ -262,7 +262,7 @@ describe('FlexSendProofVerifier', function () {
       '0x81a7287cb6819d35be18e8141820f920e005da0c0832895bbdd7c90595259794',
       '0x70ab6d7fb5e05d8f3cfe66c2d92ad16063dbc36e90aad06df4ad2021924f6ef6',
     ];
-    const orderTree = flexCalcTree({ leaves: orderHashes });
+    const orderTree = flexCalcTree({ leaves: orderComponentHashes });
     const orderBranch = flexCalcBranch({ tree: orderTree, leaf: sendHash });
 
     const variant = 133713371337n;
@@ -332,7 +332,7 @@ describe('FlexSendProofVerifier', function () {
     });
     const sendHash = flexCalcSendNativeHash({ domain: sendDomain, data: sendData });
 
-    const orderHashes: Hex[] = [
+    const orderComponentHashes: Hex[] = [
       sendHash,
       '0xe93c632bf8243f5ce2d70d0d13e76a868573c74437cdc32fea4c0e3afccd6523',
       '0x9e3cefcd2210a275f810c0e956471e061830088607b4db84becbba153a283392',
@@ -340,7 +340,7 @@ describe('FlexSendProofVerifier', function () {
       '0x81a7287cb6819d35be18e8141820f920e005da0c0832895bbdd7c90595259794',
       '0x70ab6d7fb5e05d8f3cfe66c2d92ad16063dbc36e90aad06df4ad2021924f6ef6',
     ];
-    const orderTree = flexCalcTree({ leaves: orderHashes });
+    const orderTree = flexCalcTree({ leaves: orderComponentHashes });
     const orderBranch = flexCalcBranch({ tree: orderTree, leaf: sendHash });
 
     const variant = 133713371337n;
@@ -414,7 +414,7 @@ describe('FlexSendProofVerifier', function () {
     });
     const sendHash = flexCalcSendTokenHash({ domain: sendDomain, data: sendData });
 
-    const orderHashes: Hex[] = [
+    const orderComponentHashes: Hex[] = [
       sendHash,
       '0xe93c632bf8243f5ce2d70d0d13e76a868573c74437cdc32fea4c0e3afccd6523',
       '0x9e3cefcd2210a275f810c0e956471e061830088607b4db84becbba153a283392',
@@ -422,7 +422,7 @@ describe('FlexSendProofVerifier', function () {
       '0x81a7287cb6819d35be18e8141820f920e005da0c0832895bbdd7c90595259794',
       '0x70ab6d7fb5e05d8f3cfe66c2d92ad16063dbc36e90aad06df4ad2021924f6ef6',
     ];
-    const orderTree = flexCalcTree({ leaves: orderHashes });
+    const orderTree = flexCalcTree({ leaves: orderComponentHashes });
     const orderBranch = flexCalcBranch({ tree: orderTree, leaf: sendHash });
 
     const variant = 133713371337n;
@@ -486,7 +486,7 @@ describe('FlexSendProofVerifier', function () {
     });
     const sendHash = flexCalcSendTokenHash({ domain: sendDomain, data: sendData });
 
-    const orderHashes: Hex[] = [
+    const orderComponentHashes: Hex[] = [
       sendHash,
       '0xe93c632bf8243f5ce2d70d0d13e76a868573c74437cdc32fea4c0e3afccd6523',
       '0x9e3cefcd2210a275f810c0e956471e061830088607b4db84becbba153a283392',
@@ -494,7 +494,7 @@ describe('FlexSendProofVerifier', function () {
       '0x81a7287cb6819d35be18e8141820f920e005da0c0832895bbdd7c90595259794',
       '0x70ab6d7fb5e05d8f3cfe66c2d92ad16063dbc36e90aad06df4ad2021924f6ef6',
     ];
-    const orderTree = flexCalcTree({ leaves: orderHashes });
+    const orderTree = flexCalcTree({ leaves: orderComponentHashes });
     const orderBranch = flexCalcBranch({ tree: orderTree, leaf: sendHash });
     const orderHash = flexCalcBranchHash({ branch: orderBranch, leaf: sendHash });
 
@@ -559,7 +559,7 @@ describe('FlexSendProofVerifier', function () {
     });
     const sendHash = flexCalcSendTokenHash({ domain: sendDomain, data: sendData });
 
-    const orderHashes: Hex[] = [
+    const orderComponentHashes: Hex[] = [
       sendHash,
       '0xe93c632bf8243f5ce2d70d0d13e76a868573c74437cdc32fea4c0e3afccd6523',
       '0x9e3cefcd2210a275f810c0e956471e061830088607b4db84becbba153a283392',
@@ -567,7 +567,7 @@ describe('FlexSendProofVerifier', function () {
       '0x81a7287cb6819d35be18e8141820f920e005da0c0832895bbdd7c90595259794',
       '0x70ab6d7fb5e05d8f3cfe66c2d92ad16063dbc36e90aad06df4ad2021924f6ef6',
     ];
-    const orderTree = flexCalcTree({ leaves: orderHashes });
+    const orderTree = flexCalcTree({ leaves: orderComponentHashes });
     const orderBranch = flexCalcBranch({ tree: orderTree, leaf: sendHash });
     const orderHash = flexCalcBranchHash({ branch: orderBranch, leaf: sendHash });
 
@@ -634,7 +634,7 @@ describe('FlexSendProofVerifier', function () {
     });
     const sendHash = flexCalcSendTokenHash({ domain: sendDomain, data: sendData });
 
-    const orderHashes: Hex[] = [
+    const orderComponentHashes: Hex[] = [
       sendHash,
       '0xe93c632bf8243f5ce2d70d0d13e76a868573c74437cdc32fea4c0e3afccd6523',
       '0x9e3cefcd2210a275f810c0e956471e061830088607b4db84becbba153a283392',
@@ -642,7 +642,7 @@ describe('FlexSendProofVerifier', function () {
       '0x81a7287cb6819d35be18e8141820f920e005da0c0832895bbdd7c90595259794',
       '0x70ab6d7fb5e05d8f3cfe66c2d92ad16063dbc36e90aad06df4ad2021924f6ef6',
     ];
-    const orderTree = flexCalcTree({ leaves: orderHashes });
+    const orderTree = flexCalcTree({ leaves: orderComponentHashes });
     const orderBranch = flexCalcBranch({ tree: orderTree, leaf: sendHash });
     const orderHash = flexCalcBranchHash({ branch: orderBranch, leaf: sendHash });
 
@@ -709,7 +709,7 @@ describe('FlexSendProofVerifier', function () {
     });
     const sendHash = flexCalcSendTokenHash({ domain: sendDomain, data: sendData });
 
-    const orderHashes: Hex[] = [
+    const orderComponentHashes: Hex[] = [
       sendHash,
       '0xe93c632bf8243f5ce2d70d0d13e76a868573c74437cdc32fea4c0e3afccd6523',
       '0x9e3cefcd2210a275f810c0e956471e061830088607b4db84becbba153a283392',
@@ -717,7 +717,7 @@ describe('FlexSendProofVerifier', function () {
       '0x81a7287cb6819d35be18e8141820f920e005da0c0832895bbdd7c90595259794',
       '0x70ab6d7fb5e05d8f3cfe66c2d92ad16063dbc36e90aad06df4ad2021924f6ef6',
     ];
-    const orderTree = flexCalcTree({ leaves: orderHashes });
+    const orderTree = flexCalcTree({ leaves: orderComponentHashes });
     const orderBranch = flexCalcBranch({ tree: orderTree, leaf: sendHash });
     const orderHash = flexCalcBranchHash({ branch: orderBranch, leaf: sendHash });
 
@@ -784,7 +784,7 @@ describe('FlexSendProofVerifier', function () {
     });
     const sendHash = flexCalcSendTokenHash({ domain: sendDomain, data: sendData });
 
-    const orderHashes: Hex[] = [
+    const orderComponentHashes: Hex[] = [
       sendHash,
       '0xe93c632bf8243f5ce2d70d0d13e76a868573c74437cdc32fea4c0e3afccd6523',
       '0x9e3cefcd2210a275f810c0e956471e061830088607b4db84becbba153a283392',
@@ -792,7 +792,7 @@ describe('FlexSendProofVerifier', function () {
       '0x81a7287cb6819d35be18e8141820f920e005da0c0832895bbdd7c90595259794',
       '0x70ab6d7fb5e05d8f3cfe66c2d92ad16063dbc36e90aad06df4ad2021924f6ef6',
     ];
-    const orderTree = flexCalcTree({ leaves: orderHashes });
+    const orderTree = flexCalcTree({ leaves: orderComponentHashes });
     const orderBranch = flexCalcBranch({ tree: orderTree, leaf: sendHash });
     const orderHash = flexCalcBranchHash({ branch: orderBranch, leaf: sendHash });
 
@@ -862,7 +862,7 @@ describe('FlexSendProofVerifier', function () {
     });
     const sendHash = flexCalcSendTokenHash({ domain: sendDomain, data: sendData });
 
-    const orderHashes: Hex[] = [
+    const orderComponentHashes: Hex[] = [
       sendHash,
       '0xe93c632bf8243f5ce2d70d0d13e76a868573c74437cdc32fea4c0e3afccd6523',
       '0x9e3cefcd2210a275f810c0e956471e061830088607b4db84becbba153a283392',
@@ -870,7 +870,7 @@ describe('FlexSendProofVerifier', function () {
       '0x81a7287cb6819d35be18e8141820f920e005da0c0832895bbdd7c90595259794',
       '0x70ab6d7fb5e05d8f3cfe66c2d92ad16063dbc36e90aad06df4ad2021924f6ef6',
     ];
-    const orderTree = flexCalcTree({ leaves: orderHashes });
+    const orderTree = flexCalcTree({ leaves: orderComponentHashes });
     const orderBranch = flexCalcBranch({ tree: orderTree, leaf: sendHash });
     const orderHash = flexCalcBranchHash({ branch: orderBranch, leaf: sendHash });
 
@@ -941,7 +941,7 @@ describe('FlexSendProofVerifier', function () {
     });
     const sendHash = flexCalcSendTokenHash({ domain: sendDomain, data: sendData });
 
-    const orderHashes: Hex[] = [
+    const orderComponentHashes: Hex[] = [
       sendHash,
       '0xe93c632bf8243f5ce2d70d0d13e76a868573c74437cdc32fea4c0e3afccd6523',
       '0x9e3cefcd2210a275f810c0e956471e061830088607b4db84becbba153a283392',
@@ -949,7 +949,7 @@ describe('FlexSendProofVerifier', function () {
       '0x81a7287cb6819d35be18e8141820f920e005da0c0832895bbdd7c90595259794',
       '0x70ab6d7fb5e05d8f3cfe66c2d92ad16063dbc36e90aad06df4ad2021924f6ef6',
     ];
-    const orderTree = flexCalcTree({ leaves: orderHashes });
+    const orderTree = flexCalcTree({ leaves: orderComponentHashes });
     const orderBranch = flexCalcBranch({ tree: orderTree, leaf: sendHash });
     const orderHash = flexCalcBranchHash({ branch: orderBranch, leaf: sendHash });
 
@@ -1017,7 +1017,7 @@ describe('FlexSendProofVerifier', function () {
     });
     const sendHash = flexCalcSendNativeHash({ domain: sendDomain, data: sendData });
 
-    const orderHashes: Hex[] = [
+    const orderComponentHashes: Hex[] = [
       sendHash,
       '0xe93c632bf8243f5ce2d70d0d13e76a868573c74437cdc32fea4c0e3afccd6523',
       '0x9e3cefcd2210a275f810c0e956471e061830088607b4db84becbba153a283392',
@@ -1025,7 +1025,7 @@ describe('FlexSendProofVerifier', function () {
       '0x81a7287cb6819d35be18e8141820f920e005da0c0832895bbdd7c90595259794',
       '0x70ab6d7fb5e05d8f3cfe66c2d92ad16063dbc36e90aad06df4ad2021924f6ef6',
     ];
-    const orderTree = flexCalcTree({ leaves: orderHashes });
+    const orderTree = flexCalcTree({ leaves: orderComponentHashes });
     const orderBranch = flexCalcBranch({ tree: orderTree, leaf: sendHash });
     const orderHash = flexCalcBranchHash({ branch: orderBranch, leaf: sendHash });
 
@@ -1119,7 +1119,7 @@ describe('FlexSendProofVerifier', function () {
     });
     const sendHash = flexCalcSendNativeHash({ domain: sendDomain, data: sendData });
 
-    const orderHashes: Hex[] = [
+    const orderComponentHashes: Hex[] = [
       sendHash,
       '0xe93c632bf8243f5ce2d70d0d13e76a868573c74437cdc32fea4c0e3afccd6523',
       '0x9e3cefcd2210a275f810c0e956471e061830088607b4db84becbba153a283392',
@@ -1127,7 +1127,7 @@ describe('FlexSendProofVerifier', function () {
       '0x81a7287cb6819d35be18e8141820f920e005da0c0832895bbdd7c90595259794',
       '0x70ab6d7fb5e05d8f3cfe66c2d92ad16063dbc36e90aad06df4ad2021924f6ef6',
     ];
-    const orderTree = flexCalcTree({ leaves: orderHashes });
+    const orderTree = flexCalcTree({ leaves: orderComponentHashes });
     const orderBranch = flexCalcBranch({ tree: orderTree, leaf: sendHash });
     const orderHash = flexCalcBranchHash({ branch: orderBranch, leaf: sendHash });
 
