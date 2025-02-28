@@ -22,6 +22,7 @@ export * from './send';
 export * from './sendFloat';
 export * from './sendNative';
 export * from './sendNativeFloat';
+export * from './sendSave';
 export * from './sendToken';
 export * from './sendTokenFloat';
 export * from './settle';
