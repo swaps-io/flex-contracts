@@ -22,7 +22,6 @@ import {
     FlexProofEventError,
     FlexProofHashError,
     FlexProofSendSaveError,
-    FlexProofPresentedError,
     FlexProofAccumulatorPresenceError,
     FlexProofBasePresenceError,
     FlexProofDeadlinePresenceError
