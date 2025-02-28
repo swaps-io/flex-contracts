@@ -47,7 +47,7 @@ contract FlexSendProofVerifier is IFlexSendProofVerifier {
         } else {
             _verifyNotInAccumulator(data, hash_);
             _verifyNotOutsideRange(data);
-            bytes20 accumulator = _calcSkipAccumulator(data, data.failBaseHash);
+            bytes20 accumulator = _calcSkipAccumulator(data, data.failBaseState);
             bytes32 sendSave = _calcSendSave(data, accumulator);
             _verifySendSave(sendSave, data.saveBucket);
         }
@@ -91,7 +91,7 @@ contract FlexSendProofVerifier is IFlexSendProofVerifier {
 
     function _verifyNotOutsideRange(FlexSendProofData calldata data_) private pure {
         uint48 start = FlexSendData.readStart(data_.sendData1);
-        uint48 baseTime = FlexSendAccumulatorData.readStart(data_.failBaseHash);
+        uint48 baseTime = FlexSendAccumulatorData.readStart(data_.failBaseState);
         require(start > baseTime, FlexProofBasePresenceError());
 
         uint48 deadline = start + FlexSendData.readDuration(data_.sendData1);

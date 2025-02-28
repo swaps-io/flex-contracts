@@ -26,7 +26,7 @@ export function flexEncodeSendProof(params: FlexEncodeSendProofParams): Hex {
     flexAssignComponentDomain({ domain: params.domain, data: data[0] }), // #1: sendData0
     ...data.slice(1).map((d) => asHex(d, 32)), // #2: sendData1, #3: sendData2, #4: sendData3
     asHex(288, 32), // #5: orderBranch offset (#9x32)
-    asHex(0, 32), // #6: failBaseHash
+    asHex(0, 32), // #6: failBaseState
     asHex(params.saveBucket, 32), // #7: saveBucket
     concatHex([ // #8: saveTime
       asHex(0, 26),

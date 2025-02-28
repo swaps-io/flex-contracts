@@ -112,7 +112,7 @@ describe('FlexSendProofVerifier', function () {
     });
 
     const checkProof = encodeAbiParameters(
-      parseAbiParameters('uint256 variant, bytes32 sendData0, bytes32 sendData1, bytes32 sendData2, bytes32 sendData3, bytes32[] orderBranch, bytes32 failBaseHash, bytes32 saveBucket, uint48 saveTime'),
+      parseAbiParameters('uint256 variant, bytes32 sendData0, bytes32 sendData1, bytes32 sendData2, bytes32 sendData3, bytes32[] orderBranch, bytes32 failBaseState, bytes32 saveBucket, uint48 saveTime'),
       [
         // ProofHeader
         variant,
