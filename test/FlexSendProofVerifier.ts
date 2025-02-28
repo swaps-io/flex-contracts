@@ -13,6 +13,7 @@ import {
   flexCalcAccumulatorBranch,
   flexCalcBranch,
   flexCalcBranchHash,
+  flexCalcSendAccumulatorHash,
   flexCalcSendNativeHash,
   flexCalcSendTokenHash,
   flexCalcTree,
@@ -1042,8 +1043,8 @@ describe('FlexSendProofVerifier', function () {
       hashesAfter: [],
     });
 
-    expect(walletClient.account.address).equal(saver);
     {
+      expect(walletClient.account.address).equal(saver);
       const hash = await walletClient.writeContract({
         abi: flex.abi,
         address: flex.address,
@@ -1091,6 +1092,138 @@ describe('FlexSendProofVerifier', function () {
     });
 
     const sig = FLEX_SEND_FAIL_EVENT_SIGNATURE;
+    const hash = orderHash;
+    const chain = testChainId;
+
+    await verifier.read.verifyHashEventProof([sig, hash, chain, proof]);
+  });
+
+  it('Should verify valid send proof', async function () {
+    const { verifier, testChainId, flex, walletClient, publicClient } = await loadFixture(deployFixture);
+
+    const start = 123_456;
+    const duration = 4_003_002_001;
+    const group = 777;
+    const sender = walletClient.account.address;
+    const receiver = '0xc0debeefc0debeefc0debeefc0debeefc0debeef';
+    const amount = 123_456_789n;
+
+    const sendDomain = await flex.read.flexSendNativeDomain();
+    const sendData = flexEncodeSendNativeData({
+      sender,
+      receiver,
+      amount,
+      start,
+      duration,
+      group,
+    });
+    const sendHash = flexCalcSendNativeHash({ domain: sendDomain, data: sendData });
+
+    const orderHashes: Hex[] = [
+      sendHash,
+      '0xe93c632bf8243f5ce2d70d0d13e76a868573c74437cdc32fea4c0e3afccd6523',
+      '0x9e3cefcd2210a275f810c0e956471e061830088607b4db84becbba153a283392',
+      '0x5fafb9728bd8166de4388cc96e76776c11b84133f8a2db79df9f5dc8d1a15ec0',
+      '0x81a7287cb6819d35be18e8141820f920e005da0c0832895bbdd7c90595259794',
+      '0x70ab6d7fb5e05d8f3cfe66c2d92ad16063dbc36e90aad06df4ad2021924f6ef6',
+    ];
+    const orderTree = flexCalcTree({ leaves: orderHashes });
+    const orderBranch = flexCalcBranch({ tree: orderTree, leaf: sendHash });
+    const orderHash = flexCalcBranchHash({ branch: orderBranch, leaf: sendHash });
+
+    const variant = 133713371337n;
+    const saver = walletClient.account.address;
+    const slot = 999;
+    const saveBucket = flexEncodeSendSaveStateBucket({ saver, slot });
+    let saveTime: number;
+
+    const hashBefore = FLEX_UNALLOCATED_HASH;
+    const branch = flexCalcAccumulatorBranch({
+      branch: orderBranch,
+      hashBefore,
+      hashesAfter: [],
+    });
+
+    {
+      expect(walletClient.account.address).equal(sender);
+      const hash = await walletClient.writeContract({
+        abi: flex.abi,
+        address: flex.address,
+        functionName: 'flexSendNative',
+        args: [
+          sendData.sendData[1],
+          orderBranch,
+        ],
+        value: amount,
+      });
+
+      const receipt = await publicClient.getTransactionReceipt({ hash });
+
+      const logs = parseEventLogs({
+        abi: flex.abi,
+        logs: receipt.logs,
+        eventName: 'FlexSend',
+        args: {
+          orderHash,
+        },
+      });
+      expect(logs.length).equal(1);
+    }
+
+    {
+      expect(walletClient.account.address).equal(saver);
+      const hash = await walletClient.writeContract({
+        abi: flex.abi,
+        address: flex.address,
+        functionName: 'flexSaveSend',
+        args: [
+          flexEncodeSaveSendData({
+            group,
+            sender,
+            slot,
+          }),
+        ],
+      });
+
+      const receipt = await publicClient.getTransactionReceipt({ hash });
+      console.log(`flexSaveSend gas (1st): ${receipt.gasUsed}`);
+
+      const block = await publicClient.getBlock({ blockHash: receipt.blockHash });
+      saveTime = Number(block.timestamp);
+
+      const bucket = flexEncodeSendStateBucket({ sender, group });
+      const bucketState = flexEncodeSendBucketStateData({
+        hash: flexCalcSendAccumulatorHash({
+          hashBefore,
+          orderHash,
+          start,
+        }),
+        time: saveTime,
+      });
+
+      const logs = parseEventLogs({
+        abi: flex.abi,
+        logs: receipt.logs,
+        eventName: 'FlexSendSave',
+      });
+      expect(logs.length).equal(1);
+
+      const saveLog = logs[0];
+      expect(saveLog.args.bucket).equal(bucket);
+      expect(saveLog.args.bucketState).equal(bucketState);
+      expect(saveLog.args.saveBucket).equal(saveBucket);
+    }
+
+    const proof = flexEncodeSendProof({
+      variant,
+      domain: sendDomain,
+      data: sendData,
+      branch,
+      saveBucket,
+      saveTime,
+    });
+
+    const sig = FLEX_SEND_EVENT_SIGNATURE;
     const hash = orderHash;
     const chain = testChainId;
 
