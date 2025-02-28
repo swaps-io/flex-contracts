@@ -19,7 +19,7 @@ import {
   flexEncodeSendFailProof,
   flexEncodeSendNativeData,
   flexEncodeSendProof,
-  flexEncodeSendSaveBucket,
+  flexEncodeSendSaveStateBucket,
   flexEncodeSendTokenData,
 } from '../@swaps-io/flex-sdk';
 
@@ -109,7 +109,7 @@ describe('FlexSendProofVerifier', function () {
     const variant = 133713371337n;
     const saver = '0x5a7ef55a7ef55a7ef55a7ef55a7ef55a7ef55a7e';
     const slot = 999;
-    const saveBucket = flexEncodeSendSaveBucket({ saver, slot });
+    const saveBucket = flexEncodeSendSaveStateBucket({ saver, slot });
     const saveTime = 1_750_750_750;
 
     const branch = flexCalcAccumulatorBranch({
@@ -185,7 +185,7 @@ describe('FlexSendProofVerifier', function () {
     const variant = 133713371337n;
     const saver = '0x5a7ef55a7ef55a7ef55a7ef55a7ef55a7ef55a7e';
     const slot = 999;
-    const saveBucket = flexEncodeSendSaveBucket({ saver, slot });
+    const saveBucket = flexEncodeSendSaveStateBucket({ saver, slot });
     const saveTime = 1_750_750_750;
 
     const branch = flexCalcAccumulatorBranch({
@@ -263,7 +263,7 @@ describe('FlexSendProofVerifier', function () {
     const variant = 133713371337n;
     const saver = '0x5a7ef55a7ef55a7ef55a7ef55a7ef55a7ef55a7e';
     const slot = 999;
-    const saveBucket = flexEncodeSendSaveBucket({ saver, slot });
+    const saveBucket = flexEncodeSendSaveStateBucket({ saver, slot });
     const saveTime = 1_750_750_750;
 
     const failBaseHash = '0xafafafaf00000000000000000000000000000000000000000000000000000000';
@@ -341,7 +341,7 @@ describe('FlexSendProofVerifier', function () {
     const variant = 133713371337n;
     const saver = '0x5a7ef55a7ef55a7ef55a7ef55a7ef55a7ef55a7e';
     const slot = 999;
-    const saveBucket = flexEncodeSendSaveBucket({ saver, slot });
+    const saveBucket = flexEncodeSendSaveStateBucket({ saver, slot });
     const saveTime = 1_750_750_750;
 
     const failBaseHash = '0xafafafaf00000000000000000000000000000000000000000000000000000000';
@@ -423,7 +423,7 @@ describe('FlexSendProofVerifier', function () {
     const variant = 133713371337n;
     const saver = '0x5a7ef55a7ef55a7ef55a7ef55a7ef55a7ef55a7e';
     const slot = 999;
-    const saveBucket = flexEncodeSendSaveBucket({ saver, slot });
+    const saveBucket = flexEncodeSendSaveStateBucket({ saver, slot });
     const saveTime = 1_750_750_750;
 
     const branch = flexCalcAccumulatorBranch({
@@ -496,7 +496,7 @@ describe('FlexSendProofVerifier', function () {
     const variant = 133713371337n;
     const saver = '0x5a7ef55a7ef55a7ef55a7ef55a7ef55a7ef55a7e';
     const slot = 999;
-    const saveBucket = flexEncodeSendSaveBucket({ saver, slot });
+    const saveBucket = flexEncodeSendSaveStateBucket({ saver, slot });
     const saveTime = 1_750_750_750;
 
     const branch = flexCalcAccumulatorBranch({
@@ -569,7 +569,7 @@ describe('FlexSendProofVerifier', function () {
     const variant = 133713371337n;
     const saver = '0x5a7ef55a7ef55a7ef55a7ef55a7ef55a7ef55a7e';
     const slot = 999;
-    const saveBucket = flexEncodeSendSaveBucket({ saver, slot });
+    const saveBucket = flexEncodeSendSaveStateBucket({ saver, slot });
     const saveTime = 1_750_750_750;
 
     const failBaseHash = '0xafafafaf00000000000000000000000000000000000000000000000000000000';
@@ -644,7 +644,7 @@ describe('FlexSendProofVerifier', function () {
     const variant = 133713371337n;
     const saver = '0x5a7ef55a7ef55a7ef55a7ef55a7ef55a7ef55a7e';
     const slot = 999;
-    const saveBucket = flexEncodeSendSaveBucket({ saver, slot });
+    const saveBucket = flexEncodeSendSaveStateBucket({ saver, slot });
     const saveTime = 1_750_750_750;
 
     const failBaseHash = '0xafafafaf00000000000000000000000000000000000000000000000000000000';
@@ -719,7 +719,7 @@ describe('FlexSendProofVerifier', function () {
     const variant = 133713371337n;
     const saver = '0x5a7ef55a7ef55a7ef55a7ef55a7ef55a7ef55a7e';
     const slot = 999;
-    const saveBucket = flexEncodeSendSaveBucket({ saver, slot });
+    const saveBucket = flexEncodeSendSaveStateBucket({ saver, slot });
     const saveTime = 1_750_750_750;
 
     const failBaseHash = flexEncodeSendAccumulatorHash({ orderHash, start });
@@ -794,7 +794,7 @@ describe('FlexSendProofVerifier', function () {
     const variant = 133713371337n;
     const saver = '0x5a7ef55a7ef55a7ef55a7ef55a7ef55a7ef55a7e';
     const slot = 999;
-    const saveBucket = flexEncodeSendSaveBucket({ saver, slot });
+    const saveBucket = flexEncodeSendSaveStateBucket({ saver, slot });
     const saveTime = 1_750_750_750;
 
     const failBaseHash = flexEncodeSendAccumulatorHash({
@@ -872,7 +872,7 @@ describe('FlexSendProofVerifier', function () {
     const variant = 133713371337n;
     const saver = '0x5a7ef55a7ef55a7ef55a7ef55a7ef55a7ef55a7e';
     const slot = 999;
-    const saveBucket = flexEncodeSendSaveBucket({ saver, slot });
+    const saveBucket = flexEncodeSendSaveStateBucket({ saver, slot });
     const saveTime = start + duration; // The `deadline` value itself as a `save` time will cause the fail -
                                        // since send can still be submitted. At least `deadline+1` is required.
 
