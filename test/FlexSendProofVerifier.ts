@@ -18,7 +18,7 @@ import {
   flexCalcSendTokenHash,
   flexCalcTree,
   flexEncodeSaveSendData,
-  flexEncodeSendAccumulatorHash,
+  flexEncodeSendAccumulatorData,
   flexEncodeSendBucketStateData,
   flexEncodeSendFailProof,
   flexEncodeSendNativeData,
@@ -582,7 +582,7 @@ describe('FlexSendProofVerifier', function () {
       branch: orderBranch,
       hashBefore: '0xbef0bef0bef0bef0bef0bef0bef0bef0bef0bef0',
       hashesAfter: [
-        flexEncodeSendAccumulatorHash({ orderHash, start }),
+        flexEncodeSendAccumulatorData({ orderHash, start }),
         '0xafafafaf22222222222222222222222222222222222222222222222222222222',
         '0xafafafaf33333333333333333333333333333333333333333333333333333333',
         '0xafafafaf44444444444444444444444444444444444444444444444444444444',
@@ -661,7 +661,7 @@ describe('FlexSendProofVerifier', function () {
         '0xafafafaf22222222222222222222222222222222222222222222222222222222',
         '0xafafafaf33333333333333333333333333333333333333333333333333333333',
         '0xafafafaf44444444444444444444444444444444444444444444444444444444',
-        flexEncodeSendAccumulatorHash({ orderHash, start }),
+        flexEncodeSendAccumulatorData({ orderHash, start }),
       ],
     });
 
@@ -727,7 +727,7 @@ describe('FlexSendProofVerifier', function () {
     const saveBucket = flexEncodeSendSaveStateBucket({ saver, slot });
     const saveTime = 1_750_750_750;
 
-    const failBaseHash = flexEncodeSendAccumulatorHash({ orderHash, start });
+    const failBaseHash = flexEncodeSendAccumulatorData({ orderHash, start });
     const branch = flexCalcAccumulatorBranch({
       branch: orderBranch,
       hashBefore: '0xbef0bef0bef0bef0bef0bef0bef0bef0bef0bef0',
@@ -802,7 +802,7 @@ describe('FlexSendProofVerifier', function () {
     const saveBucket = flexEncodeSendSaveStateBucket({ saver, slot });
     const saveTime = 1_750_750_750;
 
-    const failBaseHash = flexEncodeSendAccumulatorHash({
+    const failBaseHash = flexEncodeSendAccumulatorData({
       orderHash: '0xafafafaf00000000000000000000000000000000000000000000000000000000',
       start, // The `start` value itself as `base` time will cause the fail - since there can be multiple orders with the same
     });      // `start`. To make sure no `start` hidden behind in chronological order, the verifier requires at least `start-1`.
@@ -881,7 +881,7 @@ describe('FlexSendProofVerifier', function () {
     const saveTime = start + duration; // The `deadline` value itself as a `save` time will cause the fail -
                                        // since send can still be submitted. At least `deadline+1` is required.
 
-    const failBaseHash = flexEncodeSendAccumulatorHash({
+    const failBaseHash = flexEncodeSendAccumulatorData({
       orderHash: '0xafafafaf00000000000000000000000000000000000000000000000000000000',
       start: start - 1, // Good `base` time
     });
@@ -959,7 +959,7 @@ describe('FlexSendProofVerifier', function () {
     const saveBucket = flexEncodeSendSaveStateBucket({ saver, slot });
     const saveTime = start + duration + 1; // Good `deadline` time
 
-    const failBaseHash = flexEncodeSendAccumulatorHash({
+    const failBaseHash = flexEncodeSendAccumulatorData({
       orderHash: '0xafafafaf00000000000000000000000000000000000000000000000000000000',
       start: start - 1, // Good `base` time
     });
