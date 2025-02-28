@@ -85,6 +85,7 @@ contract FlexSendProofVerifier is IFlexSendProofVerifier {
     }
 
     function _verifyNotInAccumulator(FlexSendProofData calldata data_, bytes32 hash_) private pure {
+        require(data_.failBaseState != hash_, FlexProofAccumulatorPresenceError());
         require(!FlexHashTree.accumulatorPartIncludes(data_.orderBranch, hash_), FlexProofAccumulatorPresenceError());
     }
 
