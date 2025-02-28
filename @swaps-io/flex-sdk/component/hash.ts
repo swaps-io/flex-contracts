@@ -1,4 +1,6 @@
-import { Hex, keccak256, AsHexValue, concatHex, asHex, sliceHex } from '../external';
+import { Hex, keccak256, AsHexValue, concatHex, asHex } from '../external';
+
+import { flexAssignComponentDomain } from './domain';
 
 export interface FlexCalcComponentHashParams {
   domain: AsHexValue;
@@ -8,8 +10,7 @@ export interface FlexCalcComponentHashParams {
 export function flexCalcComponentHash(params: FlexCalcComponentHashParams): Hex {
   return keccak256(
     concatHex([
-      asHex(params.domain, 8),
-      sliceHex(asHex(params.data[0], 32), 8),
+      flexAssignComponentDomain({ domain: params.domain, data: params.data[0] }),
       ...params.data.slice(1).map((d) => asHex(d, 32)),
     ]),
   );
