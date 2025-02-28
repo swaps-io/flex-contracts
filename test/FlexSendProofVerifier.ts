@@ -108,11 +108,23 @@ describe('FlexSendProofVerifier', function () {
     const saveBucket = flexEncodeSendSaveBucket({ saver, slot });
     const saveTime = 1_750_750_750;
 
+    const branch = flexCalcAccumulatorBranch({
+      branch: orderBranch,
+      hashBefore: '0xbef0bef0bef0bef0bef0bef0bef0bef0bef0bef0',
+      hashesAfter: [
+        '0xafafafaf11111111111111111111111111111111111111111111111111111111',
+        '0xafafafaf22222222222222222222222222222222222222222222222222222222',
+        '0xafafafaf33333333333333333333333333333333333333333333333333333333',
+        '0xafafafaf44444444444444444444444444444444444444444444444444444444',
+        '0xafafafaf55555555555555555555555555555555555555555555555555555555',
+      ],
+    });
+
     const proof = flexEncodeSendProof({
       variant,
       domain: sendDomain,
       data: sendData,
-      branch: orderBranch,
+      branch,
       saveBucket,
       saveTime,
     });
@@ -127,7 +139,7 @@ describe('FlexSendProofVerifier', function () {
         sendData.sendData[1],
         sendData.sendData[2],
         sendData.sendData[3],
-        orderBranch,
+        branch,
         zeroHash,
         saveBucket,
         saveTime,
@@ -172,11 +184,23 @@ describe('FlexSendProofVerifier', function () {
     const saveBucket = flexEncodeSendSaveBucket({ saver, slot });
     const saveTime = 1_750_750_750;
 
+    const branch = flexCalcAccumulatorBranch({
+      branch: orderBranch,
+      hashBefore: '0xbef0bef0bef0bef0bef0bef0bef0bef0bef0bef0',
+      hashesAfter: [
+        '0xafafafaf11111111111111111111111111111111111111111111111111111111',
+        '0xafafafaf22222222222222222222222222222222222222222222222222222222',
+        '0xafafafaf33333333333333333333333333333333333333333333333333333333',
+        '0xafafafaf44444444444444444444444444444444444444444444444444444444',
+        '0xafafafaf55555555555555555555555555555555555555555555555555555555',
+      ],
+    });
+
     const proof = flexEncodeSendProof({
       variant,
       domain: sendDomain,
       data: sendData,
-      branch: orderBranch,
+      branch,
       saveBucket,
       saveTime,
     });
@@ -191,7 +215,7 @@ describe('FlexSendProofVerifier', function () {
         sendData.sendData[1],
         sendData.sendData[2],
         zeroHash,
-        orderBranch,
+        branch,
         zeroHash,
         saveBucket,
         saveTime,
@@ -239,11 +263,23 @@ describe('FlexSendProofVerifier', function () {
     const saveTime = 1_750_750_750;
     const failBaseState = flexEncodeSendFailBaseState({ state: 'allocated' });
 
+    const branch = flexCalcAccumulatorBranch({
+      branch: orderBranch,
+      hashBefore: '0xbef0bef0bef0bef0bef0bef0bef0bef0bef0bef0',
+      hashesAfter: [
+        '0xafafafaf11111111111111111111111111111111111111111111111111111111',
+        '0xafafafaf22222222222222222222222222222222222222222222222222222222',
+        '0xafafafaf33333333333333333333333333333333333333333333333333333333',
+        '0xafafafaf44444444444444444444444444444444444444444444444444444444',
+        '0xafafafaf55555555555555555555555555555555555555555555555555555555',
+      ],
+    });
+
     const proof = flexEncodeSendFailProof({
       variant,
       domain: sendDomain,
       data: sendData,
-      branch: orderBranch,
+      branch,
       saveBucket,
       saveTime,
       failBaseState,
@@ -259,7 +295,7 @@ describe('FlexSendProofVerifier', function () {
         sendData.sendData[1],
         sendData.sendData[2],
         sendData.sendData[3],
-        orderBranch,
+        branch,
         failBaseState,
         saveBucket,
         saveTime,
@@ -305,11 +341,23 @@ describe('FlexSendProofVerifier', function () {
     const saveTime = 1_750_750_750;
     const failBaseState = flexEncodeSendFailBaseState({ state: 'allocated' });
 
+    const branch = flexCalcAccumulatorBranch({
+      branch: orderBranch,
+      hashBefore: '0xbef0bef0bef0bef0bef0bef0bef0bef0bef0bef0',
+      hashesAfter: [
+        '0xafafafaf11111111111111111111111111111111111111111111111111111111',
+        '0xafafafaf22222222222222222222222222222222222222222222222222222222',
+        '0xafafafaf33333333333333333333333333333333333333333333333333333333',
+        '0xafafafaf44444444444444444444444444444444444444444444444444444444',
+        '0xafafafaf55555555555555555555555555555555555555555555555555555555',
+      ],
+    });
+
     const proof = flexEncodeSendFailProof({
       variant,
       domain: sendDomain,
       data: sendData,
-      branch: orderBranch,
+      branch,
       saveBucket,
       saveTime,
       failBaseState,
@@ -325,7 +373,7 @@ describe('FlexSendProofVerifier', function () {
         sendData.sendData[1],
         sendData.sendData[2],
         zeroHash,
-        orderBranch,
+        branch,
         failBaseState,
         saveBucket,
         saveTime,
