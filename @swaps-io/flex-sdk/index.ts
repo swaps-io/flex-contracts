@@ -19,6 +19,7 @@ export * from './refundNativeProof';
 export * from './refundToken';
 export * from './refundTokenProof';
 export * from './send';
+export * from './sendFail';
 export * from './sendFloat';
 export * from './sendNative';
 export * from './sendNativeFloat';
