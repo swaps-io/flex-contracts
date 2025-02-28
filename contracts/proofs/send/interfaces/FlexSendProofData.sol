@@ -3,6 +3,7 @@
 pragma solidity ^0.8.26;
 
 struct FlexSendProofData {
+    uint256 variant; // ProofHeader
     bytes32 sendData0; // Must include domain
     bytes32 sendData1;
     bytes32 sendData2;

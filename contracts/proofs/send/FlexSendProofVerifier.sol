@@ -63,7 +63,7 @@ contract FlexSendProofVerifier is IFlexSendProofVerifier {
     }
 
     function _parseData(bytes calldata proof_) private pure returns (FlexSendProofData calldata data) {
-        assembly { data := add(proof_.offset, 64) } // prettier-ignore
+        assembly { data := proof_.offset } // prettier-ignore
     }
 
     function _verifyHash(FlexSendProofData calldata data_, bytes32 hash_) private pure returns (bytes32) {
