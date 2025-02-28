@@ -14,8 +14,8 @@ export interface FlexEncodeReceiveNativeDataParams {
 }
 
 export interface FlexReceiveNativeData {
-  receiveData: [Hex, Hex],
-  receiveFromData: [Hex, Hex],
+  receiveData: [Hex, Hex];
+  receiveFromData: [Hex, Hex];
 }
 
 export function flexEncodeReceiveNativeData(params: FlexEncodeReceiveNativeDataParams): FlexReceiveNativeData {

@@ -1,8 +1,8 @@
 import { Hex, SimpleMerkleTree } from '../external';
 
 export interface FlexTreeData {
-  tree: Hex[],
-  values: Record<Hex, number>,
+  tree: Hex[];
+  values: Record<Hex, number>;
 }
 
 export class FlexTree {

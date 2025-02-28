@@ -6,7 +6,7 @@ import { FlexSendTokenFloatData } from './data';
 
 export interface FlexCalcSendTokenFloatHashParams {
   domain: AsHexValue;
-  data: Pick<FlexSendTokenFloatData, 'sendData'>,
+  data: Pick<FlexSendTokenFloatData, 'sendData'>;
 }
 
 export function flexCalcSendTokenFloatHash(params: FlexCalcSendTokenFloatHashParams): Hex {

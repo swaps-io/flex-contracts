@@ -15,9 +15,9 @@ export interface FlexEncodeReceiveTokenFromDataParams {
 }
 
 export interface FlexReceiveTokenFromData {
-  receiveData: [Hex, Hex, Hex],
-  receiveFromData: [Hex, Hex],
-  receivePackData: [Hex],
+  receiveData: [Hex, Hex, Hex];
+  receiveFromData: [Hex, Hex];
+  receivePackData: [Hex];
 }
 
 export function flexEncodeReceiveTokenFromData(params: FlexEncodeReceiveTokenFromDataParams): FlexReceiveTokenFromData {

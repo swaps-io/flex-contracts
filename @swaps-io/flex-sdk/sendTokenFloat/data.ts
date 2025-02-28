@@ -15,7 +15,7 @@ export interface FlexEncodeSendTokenFloatDataParams {
 }
 
 export interface FlexSendTokenFloatData {
-  sendData: [Hex, Hex, Hex, Hex],
+  sendData: [Hex, Hex, Hex, Hex];
 }
 
 export function flexEncodeSendTokenFloatData(params: FlexEncodeSendTokenFloatDataParams): FlexSendTokenFloatData {

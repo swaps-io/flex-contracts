@@ -6,7 +6,7 @@ import { FlexSendNativeFloatData } from './data';
 
 export interface FlexCalcSendNativeFloatHashParams {
   domain: AsHexValue;
-  data: Pick<FlexSendNativeFloatData, 'sendData'>,
+  data: Pick<FlexSendNativeFloatData, 'sendData'>;
 }
 
 export function flexCalcSendNativeFloatHash(params: FlexCalcSendNativeFloatHashParams): Hex {

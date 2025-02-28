@@ -13,7 +13,7 @@ export interface FlexEncodeSendTokenDataParams {
 }
 
 export interface FlexSendTokenData {
-  sendData: [Hex, Hex, Hex, Hex],
+  sendData: [Hex, Hex, Hex, Hex];
 }
 
 export function flexEncodeSendTokenData(params: FlexEncodeSendTokenDataParams): FlexSendTokenData {

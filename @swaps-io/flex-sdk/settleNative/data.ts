@@ -16,8 +16,8 @@ export interface FlexEncodeSettleNativeDataParams {
 }
 
 export interface FlexSettleNativeData {
-  receiveData: [Hex, Hex],
-  settleData: [Hex, Hex, Hex],
+  receiveData: [Hex, Hex];
+  settleData: [Hex, Hex, Hex];
 }
 
 export function flexEncodeSettleNativeData(params: FlexEncodeSettleNativeDataParams): FlexSettleNativeData {

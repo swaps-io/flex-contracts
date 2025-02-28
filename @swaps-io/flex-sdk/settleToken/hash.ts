@@ -6,7 +6,7 @@ import { FlexSettleTokenData } from './data';
 
 export interface FlexCalcSettleTokenHashParams {
   domain: AsHexValue;
-  data: Pick<FlexSettleTokenData, 'settleData'>,
+  data: Pick<FlexSettleTokenData, 'settleData'>;
 }
 
 export function flexCalcSettleTokenHash(params: FlexCalcSettleTokenHashParams): Hex {

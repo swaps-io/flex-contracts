@@ -6,7 +6,7 @@ import { FlexReceiveTokenData } from './data';
 
 export interface FlexCalcReceiveTokenHashParams {
   domain: AsHexValue;
-  data: Pick<FlexReceiveTokenData, 'receiveFromData'>,
+  data: Pick<FlexReceiveTokenData, 'receiveFromData'>;
 }
 
 export function flexCalcReceiveTokenHash(params: FlexCalcReceiveTokenHashParams): Hex {

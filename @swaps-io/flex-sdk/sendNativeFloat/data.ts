@@ -14,7 +14,7 @@ export interface FlexEncodeSendNativeFloatDataParams {
 }
 
 export interface FlexSendNativeFloatData {
-  sendData: [Hex, Hex, Hex],
+  sendData: [Hex, Hex, Hex];
 }
 
 export function flexEncodeSendNativeFloatData(params: FlexEncodeSendNativeFloatDataParams): FlexSendNativeFloatData {

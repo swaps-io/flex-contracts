@@ -4,8 +4,8 @@ import { FlexBranch } from './data';
 
 export interface FlexCalcAccumulatorBranchParams {
   branch: Readonly<FlexBranch>;
-  hashBefore: Hex,
-  hashesAfter: readonly Hex[],
+  hashBefore: Hex;
+  hashesAfter: readonly Hex[];
 }
 
 export function flexCalcAccumulatorBranch({ branch, hashBefore, hashesAfter }: FlexCalcAccumulatorBranchParams): FlexBranch {

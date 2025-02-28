@@ -6,7 +6,7 @@ import { FlexSettleNativeData } from './data';
 
 export interface FlexCalcSettleNativeHashParams {
   domain: AsHexValue;
-  data: Pick<FlexSettleNativeData, 'settleData'>,
+  data: Pick<FlexSettleNativeData, 'settleData'>;
 }
 
 export function flexCalcSettleNativeHash(params: FlexCalcSettleNativeHashParams): Hex {

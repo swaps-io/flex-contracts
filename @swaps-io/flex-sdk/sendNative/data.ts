@@ -12,7 +12,7 @@ export interface FlexEncodeSendNativeDataParams {
 }
 
 export interface FlexSendNativeData {
-  sendData: [Hex, Hex, Hex],
+  sendData: [Hex, Hex, Hex];
 }
 
 export function flexEncodeSendNativeData(params: FlexEncodeSendNativeDataParams): FlexSendNativeData {

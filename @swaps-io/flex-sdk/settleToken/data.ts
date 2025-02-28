@@ -17,8 +17,8 @@ export interface FlexEncodeSettleTokenDataParams {
 }
 
 export interface FlexSettleTokenData {
-  receiveData: [Hex, Hex, Hex],
-  settleData: [Hex, Hex, Hex],
+  receiveData: [Hex, Hex, Hex];
+  settleData: [Hex, Hex, Hex];
 }
 
 export function flexEncodeSettleTokenData(params: FlexEncodeSettleTokenDataParams): FlexSettleTokenData {

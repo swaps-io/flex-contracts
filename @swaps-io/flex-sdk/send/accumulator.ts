@@ -3,9 +3,9 @@ import { asHex, AsHexValue, concatHex, Hex, sliceHex } from '../external';
 import { flexCalcAccumulatorHash } from '../accumulator';
 
 export interface FlexCalcSendAccumulatorHashParams {
-  hashBefore: Hex,
-  orderHash: Hex,
-  start: AsHexValue,
+  hashBefore: Hex;
+  orderHash: Hex;
+  start: AsHexValue;
 }
 
 export function flexCalcSendAccumulatorHash({ hashBefore, orderHash, start }: FlexCalcSendAccumulatorHashParams): Hex {

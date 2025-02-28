@@ -18,8 +18,8 @@ export interface FlexEncodeSettleTokenProofDataParams {
 }
 
 export interface FlexSettleTokenProofData {
-  receiveData: [Hex, Hex, Hex],
-  settleProofData: [Hex, Hex, Hex],
+  receiveData: [Hex, Hex, Hex];
+  settleProofData: [Hex, Hex, Hex];
 }
 
 export function flexEncodeSettleTokenProofData(params: FlexEncodeSettleTokenProofDataParams): FlexSettleTokenProofData {
