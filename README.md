@@ -15,10 +15,14 @@ Smart contracts of Flex protocol.
     - [Order Signature](#order-signature)
   - [Component](#component)
     - [Component Data](#component-data)
+    - [Component Domain](#component-domain)
     - [Component Hash](#component-hash)
   - [Facet](#facet)
   - [Flow](#flow)
-  - [Standalone](#standalone)
+  - [Miscellaneous](#miscellaneous)
+    - [Flags](#flags)
+    - [Accumulator](#accumulator)
+    - [Standalone](#standalone)
   - [Proof Verifier](#proof-verifier)
 - [Examples](#examples)
   - [EVM Token (Lock) to EVM Native](#evm-token-lock-to-evm-native)
@@ -155,20 +159,75 @@ Order hash can be computed using SDK functions:
 
 #### Order Signature
 
-Order signature by one of the [flow](#flow) parties may be needed for a component facet interaction as an operation
-authorization. Flex protocol supports contract signatures and EOA signatures:
+Order signature by one of the [flow](#flow) parties may be needed for a component as an operation authorization step.
+The signing party can be an Externally Owned Account (EOA) or a smart contract. In both cases the signed value is the
+[order hash](#order-hash) or derived from it.
 
-- _Contract signature_ must be provided according to [EIP-1271](https://eips.ethereum.org/EIPS/eip-1271) standard.
-  The `hash` parameter passed to `isValidSignature` is the [order hash](#order-hash), the `signature` is passed as-is
-  from facet calldata.
-- _EOA signature_ must an Ethereum-specific signature following [EIP-191](https://eips.ethereum.org/EIPS/eip-191)
-  standard. The _message_ signed by user is 32-byte [order hash](#order-hash).
+The _EOA signature_ is produced by the private key of the owner. The 32-byte order hash value can be signed with the
+_Ethereum message_ wrap according to the [EIP-191](https://eips.ethereum.org/EIPS/eip-191) standard or even signed
+_directly_ (non-default, requires _flag_ - see info below). The recovered signer must match the expected address from
+the [data](#component-data) of verifying component.
+
+> [!TIP]
+>
+> The EIP-191 signature can be obtained with:
+>
+> - [MetaMask](https://metamask.io)'s
+>   [`personal_sign`](https://docs.metamask.io/wallet/reference/json-rpc-methods/personal_sign)
+> - [`viem`](https://viem.sh)'s [`signMessage`](https://viem.sh/docs/actions/wallet/signMessage)
+> - [`ethers`](https://ethers.org)'s [`signMessage`](https://docs.ethers.org/v6/api/providers/#Signer-signMessage)
+
+> [!NOTE]
+>
+> The EIP-191 standard _should not_ be confused with [EIP-712](https://eips.ethereum.org/EIPS/eip-712). Providing the
+> typed data signature (for example, by using `eth_signTypedData_v4` instead of `personal_sign`) will result in signer
+> recovery failure.
+>
+> While EIP-712 standard is better than EIP-191 in terms of _observability_ of the structure being signed and _domain_
+> verification functionality, it's very limited in _dynamic_ and _tightly packed_ data support the protocol needs.
+> These issues are addressed with:
+>
+> - _thorough_ off-wallet verification of the Flex order structure component fields by both automated code logic & UI
+>   user, ensuring the calculated hash fully matches the hash displayed in wallet UI during signing.
+> - _custom per-component_ [_domain_](#component-domain) mechanism along with contract deployment rules for ensuring
+>   signature cannot be re-used in unexpected components.
+
+The _contract signature_ variant allows verification logic to be implemented by a smart contract. The verifying contract
+address comes from the [component data](#component-data). For successful flow, the contract must support
+[EIP-1271](https://eips.ethereum.org/EIPS/eip-1271) standard, i.e. provide `isValidSignature` function that returns the
+signature check result. The `hash` parameter passed to the function is the Flex order hash, the `signature` value is
+forwarded as-is from the facet calldata.
+
+The [`FlexSignatureConstraint`](./contracts/libraries/constraints/FlexSignatureConstraint.sol) library provides logic
+for validating all of the supported signature types. Besides the order hash and signature bytes, the library accepts
+pack of 3 [flags](#flags) that can be passed from the component data (i.e. configured during order formation and cannot
+be modified) to control the signature checks:
+
+- Contract signature flag (_#0_) - should the library _skip_ EOA signature check attempt and go straight to the contract
+  signature verification. Otherwise attempts to recover EOA signature first, and if it fails - does the contract
+  signature verification attempt (if allowed by flag _#2_). This flag is preferred to be set when it's known that
+  the contract signature verification flow should be used to save gas costs by skipping the EOA attempt.
+- No message signature wrap flag (_#1_) - should the library _skip_ the default wrap of order hash into the EIP-191
+  message. The flag should only be enabled when the original order hash was _directly_ signed with private key.
+- No retry as contract signature flag (_#2_) - should library _skip_ attempt to verify signature as the contract one
+  after EOA recovery failure. Enabling this flag asserts that the signature is expected _only_ as an EOA signature.
+  This flag is preferred to set when it's _know_ that EOA signature is provided for ensuring no extra logic run.
+
+> [!TIP]
+>
+> It's recommended to establish signing party capabilities beforehand and _setup the signature flags accordingly_
+>
+> ![Signature Flags](./data/images/signature-flags.svg)
 
 ### Component
 
 ...
 
 #### Component Data
+
+...
+
+#### Component Domain
 
 ...
 
@@ -184,7 +243,37 @@ authorization. Flex protocol supports contract signatures and EOA signatures:
 
 ...
 
-### Standalone
+### Miscellaneous
+
+#### Flags
+
+Flex flags are booleans encoded using single bit per value. Flags can be _packed_ - i.e. grouped together for easier
+access. Flag with index 0 occupies _least significant bit_, index 1 - next bit by significance after the previous value,
+and so on.
+
+Usually flag packing is done by higher-level SDK functions. However, it can be done manually using `flexPackFlags`.
+For example:
+
+```ts
+import { flexPackFlags } from '@swaps-io/flex-sdk';
+
+const value = flexPackFlags([
+  true,      // Flag #0
+  false,     // Flag #1
+  true,      // Flag #2
+  undefined, // Flag #3 (false)
+  null,      // Flag #4 (false)
+  true,      // Flag #5
+], 7);       // Shift to higher bits (optional)
+
+console.log(value); // Logs `5248n`: `0b1010010000000n`
+```
+
+#### Accumulator
+
+...
+
+#### Standalone
 
 The standalone version is a contract that includes all of the current Flex [facets](#facet). The
 [`FlexStandalone`](./contracts/standalone/FlexStandalone.sol) contract can be deployed on its own without the
