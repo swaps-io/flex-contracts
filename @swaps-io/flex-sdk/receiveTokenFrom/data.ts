@@ -6,6 +6,7 @@ import { flexEncodeReceiveFromData0, flexEncodeReceiveFromData1 } from '../recei
 export interface FlexEncodeReceiveTokenFromDataParams {
   sender: AsHexValue;
   senderContract: boolean;
+  senderNoMessageWrap?: boolean;
   senderNoRetryAsContract?: boolean;
   receiver: AsHexValue;
   token: AsHexValue;
@@ -24,6 +25,7 @@ export function flexEncodeReceiveTokenFromData(params: FlexEncodeReceiveTokenFro
   const receiveData: FlexReceiveTokenFromData['receiveData'] = [
     flexEncodeReceiveData0({
       contractSignature: params.senderContract,
+      noMessageSignatureWrap: params.senderNoMessageWrap,
       noRetryAsContractSignature: params.senderNoRetryAsContract,
       deadline: params.deadline,
       receiver: params.receiver,
@@ -49,6 +51,7 @@ export function flexEncodeReceiveTokenFromData(params: FlexEncodeReceiveTokenFro
   const receivePackData: FlexReceiveTokenFromData['receivePackData'] = [
     flexEncodeReceiveData0({
       contractSignature: params.senderContract,
+      noMessageSignatureWrap: params.senderNoMessageWrap,
       noRetryAsContractSignature: params.senderNoRetryAsContract,
       deadline: params.deadline,
       receiver: params.sender, // Replaced with receiver during unpack

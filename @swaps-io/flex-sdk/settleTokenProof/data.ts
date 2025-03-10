@@ -6,6 +6,7 @@ import { flexEncodeSettleProofData0, flexEncodeSettleProofData1, flexEncodeSettl
 export interface FlexEncodeSettleTokenProofDataParams {
   receiver: AsHexValue;
   receiverContract: boolean;
+  receiverNoMessageWrap?: boolean;
   receiverNoRetryAsContract?: boolean;
   token: AsHexValue;
   amount: AsHexValue;
@@ -26,6 +27,7 @@ export function flexEncodeSettleTokenProofData(params: FlexEncodeSettleTokenProo
   const receiveData: FlexSettleTokenProofData['receiveData'] = [
     flexEncodeReceiveData0({
       contractSignature: params.receiverContract,
+      noMessageSignatureWrap: params.receiverNoMessageWrap,
       noRetryAsContractSignature: params.receiverNoRetryAsContract,
       deadline: params.deadline,
       receiver: params.receiver,

@@ -7,6 +7,7 @@ export interface FlexEncodeReceiveNativeDataParams {
   sender: AsHexValue;
   receiver: AsHexValue;
   receiverContract: boolean;
+  receiverNoMessageWrap?: boolean;
   receiverNoRetryAsContract?: boolean;
   amount: AsHexValue;
   deadline: AsHexValue;
@@ -22,6 +23,7 @@ export function flexEncodeReceiveNativeData(params: FlexEncodeReceiveNativeDataP
   const receiveData: FlexReceiveNativeData['receiveData'] = [
     flexEncodeReceiveData0({
       contractSignature: params.receiverContract,
+      noMessageSignatureWrap: params.receiverNoMessageWrap,
       noRetryAsContractSignature: params.receiverNoRetryAsContract,
       deadline: params.deadline,
       receiver: params.receiver,

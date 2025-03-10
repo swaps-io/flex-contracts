@@ -6,6 +6,7 @@ import { flexPackFlags } from '../flags';
 
 export interface FlexEncodeReceiveData0Params {
   contractSignature: boolean;
+  noMessageSignatureWrap?: boolean;
   noRetryAsContractSignature?: boolean;
   deadline: AsHexValue;
   receiver: AsHexValue;
@@ -22,8 +23,9 @@ export function flexEncodeReceiveData0(params: FlexEncodeReceiveData0Params): He
     asHex(
       flexPackFlags([
         params.contractSignature,
+        params.noMessageSignatureWrap,
         params.noRetryAsContractSignature,
-      ], 46) | deadline,
+      ], 45) | deadline,
       6,
     ),
     asHex(params.nonce, 6),

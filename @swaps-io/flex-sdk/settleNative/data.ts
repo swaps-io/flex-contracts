@@ -6,6 +6,7 @@ import { flexEncodeSettleData0, flexEncodeSettleData1, flexEncodeSettleData2 } f
 export interface FlexEncodeSettleNativeDataParams {
   receiver: AsHexValue;
   receiverContract: boolean;
+  receiverNoMessageWrap?: boolean;
   receiverNoRetryAsContract?: boolean;
   amount: AsHexValue;
   deadline: AsHexValue;
@@ -24,6 +25,7 @@ export function flexEncodeSettleNativeData(params: FlexEncodeSettleNativeDataPar
   const receiveData: FlexSettleNativeData['receiveData'] = [
     flexEncodeReceiveData0({
       contractSignature: params.receiverContract,
+      noMessageSignatureWrap: params.receiverNoMessageWrap,
       noRetryAsContractSignature: params.receiverNoRetryAsContract,
       deadline: params.deadline,
       receiver: params.receiver,
