@@ -14,10 +14,11 @@ Smart contracts of Flex protocol.
     - [Order Hash](#order-hash)
     - [Order Signature](#order-signature)
   - [Component](#component)
+    - [Component Facet](#component-facet)
     - [Component Data](#component-data)
     - [Component Domain](#component-domain)
     - [Component Hash](#component-hash)
-  - [Facet](#facet)
+    - [Component Authorization](#component-authorization)
   - [Flow](#flow)
   - [Miscellaneous](#miscellaneous)
     - [Flags](#flags)
@@ -46,8 +47,8 @@ In short, the new Flex protocol allows to conduct order-based deals between part
 the issues of the previous version. The flexibility primarily comes from new _dynamic_ [order](#order) structure, that's
 made out of Flex [components](#component). The components can be selected, configured, and put together in
 [various ways](#flow) according to the current needs of the participating parties. Once an order is created, it's
-executed on-chain by an agreed party - for each component there is a designated Flex [facet](#facet) designed to work
-with it.
+executed on-chain by an agreed party - for each component there is a designated Flex [facet](#component-facet) designed
+to work with it.
 
 ### Rationale
 
@@ -187,9 +188,9 @@ the [data](#component-data) of verifying component.
 > verification functionality, it's very limited in _dynamic_ and _tightly packed_ data support the protocol needs.
 > These issues are addressed with:
 >
-> - _thorough_ off-wallet verification of the Flex order structure component fields by both automated code logic & UI
+> - _Thorough_ off-wallet verification of the Flex order structure component fields by both automated code logic & UI
 >   user, ensuring the calculated hash fully matches the hash displayed in wallet UI during signing.
-> - _custom per-component_ [_domain_](#component-domain) mechanism along with contract deployment rules for ensuring
+> - _Custom per-component_ [_domain_](#component-domain) mechanism along with contract deployment rules for ensuring
 >   signature cannot be re-used in unexpected components.
 
 The _contract signature_ variant allows verification logic to be implemented by a smart contract. The verifying contract
@@ -221,23 +222,167 @@ be modified) to control the signature checks:
 
 ### Component
 
-...
+Flex component provides a specific functionality. This functionality can be combined with functionalities of other
+components in one [order](#order) to achieve a specific [flow](#flow). The component consists of two main parts:
+
+- [_Facet_](#component-facet) - implements component logic
+- [_Data_](#component-data) - provides control of the logic
+
+#### Component Facet
+
+Component facet is a smart contract that implements logic of a Flex [component](#component). Each `Flex*Facet` has a
+_single_ `flex*` function for executing the logic. The _function selector_ should be unique across all Flex components
+(i.e. serves as _component type_ identifier). This is easily achieved by following the specified _naming convention_ in
+conjunction with the rest of the function signature.
+
+> [!TIP]
+>
+> Example of following the naming convention for "receive native" component:
+>
+> - `FlexReceiveNativeFacet` facet provides `flexReceiveNative` function
+> - function needs `bytes32`, `bytes32[]` and `bytes` parameters
+> - function signature is `flexReceiveNative(bytes32,bytes32[],bytes)`
+> - signature corresponds to the `0xb14c7338` function selector
+
+The facet contract is deployed on-chain and assigned unique (across chain, function selector, and implementation
+version) [domain](#component-domain) to distinguish [component data](#component-data) intended to be used with the
+particular facet deployment. The data is passed to facet contract during call and handled by the logic according to the
+implementation.
+
+Flex facets are designed in such a way that all accepted _deploy_ parameters are saved as _immutables_ with no extra
+initialization methods (those are common in more traditional _re-useable_ facet approach - see the note on the facet
+re-usability below). Parties don't interact with each individual facet, instead facets are bundled into a single _main_
+_Flex contract_. There are two primary ways this can be achieved:
+
+- Facets deployed as individual contracts and then added to main [diamond](https://eips.ethereum.org/EIPS/eip-2535)
+- Facets deployed as part of [standalone](#standalone) version of main contract
+
+> [!WARNING]
+>
+> Deployed facets _must never_ be re-used in more than one _active_ (i.e. _publicly_ available for parties to provide
+> _real asset_ allowance to) diamonds. This creates domain re-use situation which may pose _security risks_, for
+> example - double signature usage for extra asset collection from the signed party. If a _new diamond_ should become
+> public - a _new set of facets_ must be deployed for it.
+>
+> Parties should never approve a new diamond contract that has _any_ facet domain re-use. Multiple _standalone_ versions
+> are much safer to approve in domain re-use regard, since each new standalone contract is made out of a new set of
+> facets with new domains. While unlikely for small deploy counts, domain collisions are still possible even here - so
+> it's better to always verify domain uniqueness across _all_ approved Flex contracts.
 
 #### Component Data
 
-...
+Component data allows to control specific actions of the [facet](#component-facet) implementation during calls in
+accordance with the requirements of the [flow](#flow) parties. Usually the component data passes some form of
+[authorization](#component-authorization) first before sensitive operations are performed.
+
+The data is represented by an array of 32-byte words. The exact number of the elements is up to component
+implementation. Component data must at least fit the [domain](#component-domain), which is mixed-in on-chain by facet
+prior the [hash calculation](#component-hash), which serves as [order tree](#order-tree) leaf.
+
+Flex SDK provides a set of functions for encoding data for all currently supported components. These functions have
+recognizable `flexEncode*Data` names. For example:
+
+- `flexEncodeReceiveNativeData({ ... })`
+- `flexEncodeReceiveTokenData({ ... })`
+- `flexEncodeSendNativeFloatData({ ... })`
+- etc
+
+> [!TIP]
+>
+> Component data encoded with `flexEncode*Data` function is _[domain](#component-domain)-agnostic_, meaning it has
+> _zero_ value where domain is supposed to be. Such data _can_ be used for facet call (since domains are mixed-in
+> on-chain by [facets](#component-facet)). However, it won't produce correct [component hash](#component-hash) on its
+> own - the corresponding `flexCalc*Hash` function should be used to target the data to a specific domain.
+
+Individual components should be encoded with an entire [flow](#flow) in mind. See more [examples](#examples) of data
+encoding below.
 
 #### Component Domain
 
-...
+Flex component domain is an 8-byte value that allows to validate [component data](#component-data) target validity,
+i.e. that the data is used with parties-intended [facet contract](#component-facet). This is achieved by mixing-in
+domain value into the component data prior the [component hash](#component-hash) calculation.
+
+In current Flex contract, the domain value is calculated on-chain during the facet deployment and stored as _immutable_
+value (i.e. never changes after the assignment). The calculation implementation can be found in
+[FlexDomain](./contracts/libraries/utilities/FlexDomain.sol) library. In short, the first 8 bytes of `keccak256` hash
+function output are taken, which is a result of applying the hash to the data made out of concatenation of the following
+attributes:
+
+- `chainid` - ID of the current chain to ensure _uniqueness across chains_
+- `selector` - selector of the component function to ensure _uniqueness across components_
+- `target` - address of the facet contract to ensure _uniqueness across implementations_
+
+> [!NOTE]
+>
+> The described hash-based domain calculation algorithm is used by current EVM implementation of Flex protocol. Other
+> chains may operate on different data types for similar attributes. So it's _not a required_ way to implement the
+> domain assignment.
+>
+> The hash approach to implementation is _recommended_ to make collisions highly unlikely. But overall, the algorithm
+> can be as simple as passing domain value via the constructor. But in this case, collision management is a _much_
+> bigger concern.
+>
+> The main expectations for domain assignment implementation are:
+>
+> - Uniquely identifies component across all the attributes
+> - Initialized before exploitation phase
+> - Cannot be modified during exploitation
+> - Can be read from contract using view function
+>
+> Following these rules allow to safely _cache_ domain values as part of the deploy info. With the ability to store the
+> values, there is no need to read domains or compute them offline every time, and the specifics of the domain
+> assignment algorithm become not important.
+
+For each component's `Flex*Facet` contract, Flex provides `Flex*DomainFacet` contract with `flex*Domain` function for
+reading the assigned domain value. For example, `FlexReceiveNativeDomainFacet.flexReceiveNativeDomain()` corresponds
+to the `FlexReceiveNativeFacet.flexReceiveNative(...)` component.
 
 #### Component Hash
 
-...
+Component hash is calculated using `keccak256` function. The data for the hash is made out of concatenation of all
+32-byte words of the [component data](#component-data). Component hash serves as leaf in the [order tree](#order-tree).
 
-### Facet
+Generic component hash can be calculated using `flexCalcComponentHash({ domain, data })` SDK function. The `data` is
+the array of encoded component data words. Note that [component data](#component-data) encoded with `flexEncode*Data`
+functions of SDK does not contain the [domain](#component-domain) on its own, so the `domain` parameter should be
+provided.
 
-...
+> [!TIP]
+>
+> It's preferred to calculate hash using _component-specific_ function named `flexCalc*Hash`. For example:
+>
+> - `flexCalcReceiveNativeHash({ domain, data })`
+> - `flexCalcReceiveTokenHash({ domain, data })`
+> - `flexCalcConfirmNativeHash({ domain, data })`
+> - etc
+
+#### Component Authorization
+
+Component logic often requires operation authorization from one of the [flow](#flow) parties. The most common
+authorization patterns to be aware of are:
+
+- [Order signature](#order-signature) verification based on [order hash](#order-hash) calculated from the
+  [component hash](#component-hash)
+- Time constraints (i.e. deadline or earliness)
+- Providing unlock key held by other party so it matches key hash in the order
+- Providing proof for the [proof verifier](#proof-verifier)
+- Providing record with its [hash accumulator](#accumulator) history
+- Incentivize to produce correct [order hash](#order-hash) as result (as event argument or storage record):
+  - Enables successful event verification for the party that's interested in it due to some risk
+  - Can be verified by other party to reveal the unlock key or by [proofer](#proof-verifier)
+  - Any alteration of expected order flow produces _wrong_ order hash:
+    - Modifying any order field in calldata
+    - Calling facet with unexpected domain
+    - Using not agreed account as a contract caller
+    - Providing different message value
+    - etc
+
+> [!TIP]
+>
+> As shown in the [order tree](#order-tree) visualizations, the [order hash](#order-hash) is calculated on-chain using
+> the [hash](#component-hash) of [component data](#component-data) (bound to specific [domain](#component-domain)) and
+> the order branch.
 
 ### Flow
 
@@ -275,7 +420,7 @@ console.log(value); // Logs `5248n`: `0b1010010000000n`
 
 #### Standalone
 
-The standalone version is a contract that includes all of the current Flex [facets](#facet). The
+The standalone version is a contract that includes all of the current Flex [facets](#component-facet). The
 [`FlexStandalone`](./contracts/standalone/FlexStandalone.sol) contract can be deployed on its own without the
 [diamond](https://eips.ethereum.org/EIPS/eip-2535) for hosting the facets.
 
@@ -318,8 +463,8 @@ import {
 } from '@swaps-io/flex-sdk';
 
 // Flex contract instances on target chains
-const flexOnReceiveChain: ContractTypesMap['FlexStandalone'] = ...;
-const flexOnSendChain: ContractTypesMap['FlexStandalone'] = ...;
+const flexOnReceiveChain: FlexStandalone = ...;
+const flexOnSendChain: FlexStandalone = ...;
 
 // Time in seconds
 const now = BigInt(new Date().getTime()) / 1000n;
