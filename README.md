@@ -23,6 +23,7 @@ Smart contracts of Flex protocol.
   - [Miscellaneous](#miscellaneous)
     - [Flags](#flags)
     - [Accumulator](#accumulator)
+      - [Accumulator Branch](#accumulator-branch)
     - [Standalone](#standalone)
   - [Proof Verifier](#proof-verifier)
 - [Examples](#examples)
@@ -416,7 +417,63 @@ console.log(value); // Logs `5248n`: `0b1010010000000n`
 
 #### Accumulator
 
-...
+Flex accumulator is a data structure that allows to store sequence of _multiple_ 32-byte values in a _single_ 20-byte
+value. The stored values cannot be accessed _directly_, but their _presence_ at some point can be _proven_ using value
+history fragment from that moment and to the current value of the accumulator.
+
+> [!NOTE]
+>
+> The 20-byte size for accumulator is selected to have sufficient hash security (same size as EVM addresses use), while
+> leaving 12-byte space in a 32-byte word for arbitrary metadata storage (which _doesn't_ participate in accumulator
+> state calculation).
+
+Accumulator starts with the initial value - usually zero `0x00..00` (SDK's `FLEX_UNALLOCATED_HASH`), but can also be
+`0x11..11` (SDK's `FLEX_ALLOCATED_HASH`) if storage _pre-allocation_ was carried out. Then for each 32-byte value added,
+new accumulator state is calculated as `keccak256` hash of data made out of the current accumulator value + value to add
+(the implementation can be found in [`FlexHashAccumulator`](./contracts/libraries/utilities/FlexHashAccumulator.sol)).
+
+> [!TIP]
+>
+> _Accumulator Calculation Example_
+>
+> ![Accumulator Calculation Example](./data/images/accumulator-calc.svg)
+
+To prove the presence of a 32-byte value in the accumulator, the accumulator state _before_ the value should be
+provided, as well as the history array of 32-byte values recorded _after_ the target value until current known
+accumulator state. These values are usually passed as part of the [accumulator branch](#accumulator-branch).
+
+> [!NOTE]
+>
+> Accumulator calculation is _similar_ to [order hash](#order-hash) calculation from the [tree branch](#order-tree).
+> However, there are differences: the _shorter_ hash value of previous accumulator state and the fact that it's always
+> at the specific location in the data being hashed, i.e. the hash is _non-commutative_.
+
+Flex SDK provides `flexCalcAccumulatorHash({ hashBefore, hashToAdd })` function for generic calculation of updated
+accumulator state. There are more component-specific accumulator functions as well:
+
+- `flexCalcReceiveAccumulatorHash({ hashBefore, orderHash })` - for receive components
+- `flexCalcSendAccumulatorHash({ hashBefore, orderHash, start })` - for send components
+
+##### Accumulator Branch
+
+In Flex protocol, it's very common to have to compute [order hash](#order-hash) from the [branch](#order-tree) first,
+and then check if the resulting hash is contained in current [accumulator](#accumulator) state (known from contract
+storage). For this reason, the protocol has special "accumulator branch" data type that includes both of the parts. The
+implementation can be found in [`FlexHashTree`](./contracts/libraries/utilities/FlexHashTree.sol) utility library.
+
+The fist 32-byte word of the accumulator branch is _header_, containing 20-byte accumulator hash before and 12-byte
+_branch_ offset expressed in _number of the words_ before the first branch word (i.e. the header word _does contribute_
+to the offset). Between header and the branch there are _accumulator hashes after_. The _branch root_ calculated from
+the _branch leaf_ (i.e. component hash) is expected to be sandwiched between the before and after accumulator hashes.
+
+> [!TIP]
+>
+> _Accumulator Branch Example_
+>
+> ![_Accumulator Branch Example](./data/images/accumulator-branch.svg)
+
+The accumulator branch can be composed using SDK's `flexCalcAccumulatorBranch({ branch, hashBefore, hashesAfter })`.
+The `branch` value is obtainable using `flexCalcBranch({ tree, leaf })`.
 
 #### Standalone
 
