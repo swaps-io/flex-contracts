@@ -6,26 +6,25 @@ Smart contracts of Flex protocol.
 <!-- omit in toc -->
 ### Table of Contents
 
-- [Description](#description)
-  - [Overview](#overview)
-  - [Rationale](#rationale)
-  - [Order](#order)
-    - [Order Tree](#order-tree)
-    - [Order Hash](#order-hash)
-    - [Order Signature](#order-signature)
-  - [Component](#component)
-    - [Component Facet](#component-facet)
-    - [Component Data](#component-data)
-    - [Component Domain](#component-domain)
-    - [Component Hash](#component-hash)
-    - [Component Authorization](#component-authorization)
-  - [Flow](#flow)
-  - [Miscellaneous](#miscellaneous)
-    - [Flags](#flags)
-    - [Accumulator](#accumulator)
-      - [Accumulator Branch](#accumulator-branch)
-    - [Standalone](#standalone)
-  - [Proof Verifier](#proof-verifier)
+- [Overview](#overview)
+- [Rationale](#rationale)
+- [Order](#order)
+  - [Order Tree](#order-tree)
+  - [Order Hash](#order-hash)
+  - [Order Signature](#order-signature)
+- [Component](#component)
+  - [Component Facet](#component-facet)
+  - [Component Data](#component-data)
+  - [Component Domain](#component-domain)
+  - [Component Hash](#component-hash)
+  - [Component Authorization](#component-authorization)
+- [Proof Verifier](#proof-verifier)
+- [Flow](#flow)
+- [Miscellaneous](#miscellaneous)
+  - [Flags](#flags)
+  - [Accumulator](#accumulator)
+  - [Accumulator Branch](#accumulator-branch)
+  - [Standalone](#standalone)
 - [Examples](#examples)
   - [EVM Token (Lock) to EVM Native](#evm-token-lock-to-evm-native)
 - [Development](#development)
@@ -34,9 +33,7 @@ Smart contracts of Flex protocol.
   - [Build](#build)
   - [Test](#test)
 
-## Description
-
-### Overview
+## Overview
 
 _"Flex" protocol_ is the superior successor to the "Flash Trade" protocol.
 
@@ -51,7 +48,7 @@ made out of Flex [components](#component). The components can be selected, confi
 executed on-chain by an agreed party - for each component there is a designated Flex [facet](#component-facet) designed
 to work with it.
 
-### Rationale
+## Rationale
 
 The main source of the previous Flash Trade protocol issues was the _monolithic_ order structure. The old structure
 consisted of _all_ order fields that are required for the protocol flow. This meant an _entire_ order must be presented
@@ -83,7 +80,7 @@ facet implementation. An example of such dynamic data can be [order signature](#
 order parties to authorize an operation, or [proof verifier](#proof-verifier) data for confirming an operation
 success.
 
-### Order
+## Order
 
 Flex order is composed out of multiple [components](#component). The selected set of components specifies
 possible [flows](#flow) for the order. The order composure [examples](#examples) can be found in sections below.
@@ -92,7 +89,7 @@ The components form the [order tree](#order-tree). The tree can be then hashed, 
 that can be used as a unique identifier of the order. Order hash is also essential for producing the
 [order signature](#order-signature).
 
-#### Order Tree
+### Order Tree
 
 Flex order is represented by the [Merle tree](https://en.wikipedia.org/wiki/Merkle_tree) data structure. The "data
 blocks" of the tree correspond to the [component data](#component-data), that is then [hashed](#component-hash) to
@@ -138,7 +135,7 @@ Currently the multi-branches are _never_ used in the facet implementations - all
 components as shown above. If supporting multi-branches is not a concern - the tree can be constructed even _manually_,
 putting leaves on different levels for fine-tuning branch lengths (for example, according to chain cost expectations).
 
-#### Order Hash
+### Order Hash
 
 Flex order hash is a 32-byte value equal to the [order tree](#order) root hash. Flex protocol uses `keccak256` as the
 hash function for producing order tree leaves and intermediate tree node hashes. See the section above for the visual
@@ -159,7 +156,7 @@ Order hash can be computed using SDK functions:
 - `flexCalcTreeHash({ tree })` - returns the root hash of the `tree`
 - `flexCalcBranchHash({ leaf, branch })` - calculates the root hash from `leaf` and its `branch` in the tree
 
-#### Order Signature
+### Order Signature
 
 Order signature by one of the [flow](#flow) parties may be needed for a component as an operation authorization step.
 The signing party can be an Externally Owned Account (EOA) or a smart contract. In both cases the signed value is the
@@ -221,7 +218,7 @@ be modified) to control the signature checks:
 >
 > ![Signature Flags](./data/images/signature-flags.svg)
 
-### Component
+## Component
 
 Flex component provides a specific functionality. This functionality can be combined with functionalities of other
 components in one [order](#order) to achieve a specific [flow](#flow). The component consists of two main parts:
@@ -229,7 +226,7 @@ components in one [order](#order) to achieve a specific [flow](#flow). The compo
 - [_Facet_](#component-facet) - implements component logic
 - [_Data_](#component-data) - provides control of the logic
 
-#### Component Facet
+### Component Facet
 
 Component facet is a smart contract that implements logic of a Flex [component](#component). Each `Flex*Facet` has a
 _single_ `flex*` function for executing the logic. The _function selector_ should be unique across all Flex components
@@ -270,7 +267,7 @@ _Flex contract_. There are two primary ways this can be achieved:
 > facets with new domains. While unlikely for small deploy counts, domain collisions are still possible even here - so
 > it's better to always verify domain uniqueness across _all_ approved Flex contracts.
 
-#### Component Data
+### Component Data
 
 Component data allows to control specific actions of the [facet](#component-facet) implementation during calls in
 accordance with the requirements of the [flow](#flow) parties. Usually the component data passes some form of
@@ -298,7 +295,7 @@ recognizable `flexEncode*Data` names. For example:
 Individual components should be encoded with an entire [flow](#flow) in mind. See more [examples](#examples) of data
 encoding below.
 
-#### Component Domain
+### Component Domain
 
 Flex component domain is an 8-byte value that allows to validate [component data](#component-data) target validity,
 i.e. that the data is used with parties-intended [facet contract](#component-facet). This is achieved by mixing-in
@@ -339,7 +336,7 @@ For each component's `Flex*Facet` contract, Flex provides `Flex*DomainFacet` con
 reading the assigned domain value. For example, `FlexReceiveNativeDomainFacet.flexReceiveNativeDomain()` corresponds
 to the `FlexReceiveNativeFacet.flexReceiveNative(...)` component.
 
-#### Component Hash
+### Component Hash
 
 Component hash is calculated using `keccak256` function. The data for the hash is made out of concatenation of all
 32-byte words of the [component data](#component-data). Component hash serves as leaf in the [order tree](#order-tree).
@@ -358,7 +355,7 @@ provided.
 > - `flexCalcConfirmNativeHash({ domain, data })`
 > - etc
 
-#### Component Authorization
+### Component Authorization
 
 Component logic often requires operation authorization from one of the [flow](#flow) parties. The most common
 authorization patterns to be aware of are:
@@ -385,13 +382,17 @@ authorization patterns to be aware of are:
 > the [hash](#component-hash) of [component data](#component-data) (bound to specific [domain](#component-domain)) and
 > the order branch.
 
-### Flow
+## Proof Verifier
 
 ...
 
-### Miscellaneous
+## Flow
 
-#### Flags
+...
+
+## Miscellaneous
+
+### Flags
 
 Flex flags are booleans encoded using single bit per value. Flags can be _packed_ - i.e. grouped together for easier
 access. Flag with index 0 occupies _least significant bit_, index 1 - next bit by significance after the previous value,
@@ -415,7 +416,7 @@ const value = flexPackFlags([
 console.log(value); // Logs `5248n`: `0b1010010000000n`
 ```
 
-#### Accumulator
+### Accumulator
 
 Flex accumulator is a data structure that allows to store sequence of _multiple_ 32-byte values in a _single_ 20-byte
 value. The stored values cannot be accessed _directly_, but their _presence_ at some point can be _proven_ using value
@@ -454,7 +455,7 @@ accumulator state. There are more component-specific accumulator functions as we
 - `flexCalcReceiveAccumulatorHash({ hashBefore, orderHash })` - for receive components
 - `flexCalcSendAccumulatorHash({ hashBefore, orderHash, start })` - for send components
 
-##### Accumulator Branch
+### Accumulator Branch
 
 In Flex protocol, it's very common to have to compute [order hash](#order-hash) from the [branch](#order-tree) first,
 and then check if the resulting hash is contained in current [accumulator](#accumulator) state (known from contract
@@ -475,7 +476,7 @@ the _branch leaf_ (i.e. component hash) is expected to be sandwiched between the
 The accumulator branch can be composed using SDK's `flexCalcAccumulatorBranch({ branch, hashBefore, hashesAfter })`.
 The `branch` value is obtainable using `flexCalcBranch({ tree, leaf })`.
 
-#### Standalone
+### Standalone
 
 The standalone version is a contract that includes all of the current Flex [facets](#component-facet). The
 [`FlexStandalone`](./contracts/standalone/FlexStandalone.sol) contract can be deployed on its own without the
@@ -488,10 +489,6 @@ The standalone version is a contract that includes all of the current Flex [face
 >
 > This comes with a feature that it is not possible to modify the set of facets without redeploying the contract,
 > i.e. standalone deploy is immutable.
-
-### Proof Verifier
-
-...
 
 ## Examples
 
