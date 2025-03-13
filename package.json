@@ -10,6 +10,7 @@
     "@nomicfoundation/hardhat-viem": "^2.0.6",
     "@openzeppelin/contracts": "^5.2.0",
     "@openzeppelin/merkle-tree": "^1.0.8",
+    "@swaps-io/flex-sdk": "./packages/swaps-io/flex-sdk/v1.0.0/flex-sdk-v1.0.0.tgz",
     "@types/chai": "^4.3.20",
     "@types/chai-as-promised": "^7.1.8",
     "@types/mocha": "^10.0.10",
@@ -31,6 +32,8 @@
     "t": "yarn test",
     "tg": "yarn test --grep",
     "tn": "yarn test --no-compile",
-    "cv": "SOLIDITY_COVERAGE=true hardhat coverage"
+    "cv": "SOLIDITY_COVERAGE=true hardhat coverage",
+    "packageman": "./tools/packageman.mjs && yarn",
+    "pm": "yarn packageman"
   }
 }
