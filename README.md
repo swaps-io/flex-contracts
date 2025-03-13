@@ -384,7 +384,23 @@ authorization patterns to be aware of are:
 
 ## Proof Verifier
 
-...
+Most of the protocol [Flows](#flow) rely on _proof_ verification. With a proof, a party can confirm presence of some
+event on other blockchain to the protocol contract, unlocking some related operations in it (e.g. getting asset). For
+the proof verification, protocol contract has a link to main _proof verifier_ contract that implements
+[`IProofVerifier`](./contracts/externals/proofs/interfaces/IProofVerifier.sol) interface.
+
+> [!NOTE]
+>
+> Behind the main `IProofVerifier` contract, there is a variety of _routed_ solutions to deliver proof information
+> between networks, including light clients, 3-rd party cross-chain messaging transports, etc.
+
+While proofs are reliable and decentralized, the process of delivering one can be time consuming and costly. For this
+reason, proof [components](#component) are likely to be _coupled_ with other more _collaborative_ components for
+operation [authorization](#component-authorization). Those components are based on assumption of _good intentions_
+between parties to make a fear deal and no reason to block other party by _not_ doing something with zero actual cost
+(e.g. reveal an operation key whose hash is included in the order). While these approaches are _effective_, they cannot
+be used on their own - only with proof verifier component as _fallback_ - for security reasons (e.g. one party going
+offline for some reason).
 
 ## Flow
 
