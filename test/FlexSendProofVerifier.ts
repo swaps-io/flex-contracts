@@ -26,7 +26,7 @@ import {
   flexEncodeSendSaveStateBucket,
   flexEncodeSendStateBucket,
   flexEncodeSendTokenData,
-} from '../@swaps-io/flex-sdk';
+} from '@swaps-io/flex-sdk';
 
 describe('FlexSendProofVerifier', function () {
   async function deployFixture() {

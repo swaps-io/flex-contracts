@@ -11,7 +11,7 @@ import {
   flexCalcBranch,
   FLEX_UNALLOCATED_HASH,
   flexCalcSendAccumulatorHash,
-} from '../@swaps-io/flex-sdk';
+} from '@swaps-io/flex-sdk';
 
 const IMAGINARY_COMPONENTS = 3; // Implied in order, but not used here
 

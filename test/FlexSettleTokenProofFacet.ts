@@ -19,7 +19,7 @@ import {
   flexCalcRefundTokenProofHash,
   flexCalcReceiveAccumulatorHash,
   FLEX_UNALLOCATED_HASH,
-} from '../@swaps-io/flex-sdk';
+} from '@swaps-io/flex-sdk';
 
 const IMAGINARY_COMPONENTS = 2; // Implied in order, but not used here
 const IMAGINARY_RECEIVER_SIGNATURE_BYTES = 65; // Not verified, dummy contract call

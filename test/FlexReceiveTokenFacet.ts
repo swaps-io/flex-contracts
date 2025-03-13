@@ -13,7 +13,7 @@ import {
   FLEX_RECEIVE_STATE_RECEIVED,
   flexCalcReceiveAccumulatorHash,
   FLEX_UNALLOCATED_HASH,
-} from '../@swaps-io/flex-sdk';
+} from '@swaps-io/flex-sdk';
 
 const IMAGINARY_COMPONENTS = 3; // Implied in order, but not used here
 const IMAGINARY_RECEIVER_SIGNATURE_BYTES = 65;

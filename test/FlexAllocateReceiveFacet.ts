@@ -8,7 +8,7 @@ import {
   FLEX_RECEIVE_NONCES_PER_BUCKET,
   FLEX_UNALLOCATED_HASH,
   FLEX_ALLOCATED_HASH,
-} from '../@swaps-io/flex-sdk';
+} from '@swaps-io/flex-sdk';
 
 const TOTAL_ALLOCATE_BUCKETS = 5n;
 
