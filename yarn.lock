@@ -1074,9 +1074,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@swaps-io/flex-sdk@file:./packages/swaps-io/flex-sdk/v1.0.0/flex-sdk-v1.0.0.tgz::locator=flex-contracts%40workspace%3A.":
-  version: 1.0.0
-  resolution: "@swaps-io/flex-sdk@file:./packages/swaps-io/flex-sdk/v1.0.0/flex-sdk-v1.0.0.tgz#./packages/swaps-io/flex-sdk/v1.0.0/flex-sdk-v1.0.0.tgz::hash=3c2043&locator=flex-contracts%40workspace%3A."
+"@swaps-io/flex-sdk@file:./packages/swaps-io/flex-sdk/v1.0.1/flex-sdk-v1.0.1.tgz::locator=flex-contracts%40workspace%3A.":
+  version: 1.0.1
+  resolution: "@swaps-io/flex-sdk@file:./packages/swaps-io/flex-sdk/v1.0.1/flex-sdk-v1.0.1.tgz#./packages/swaps-io/flex-sdk/v1.0.1/flex-sdk-v1.0.1.tgz::hash=89b697&locator=flex-contracts%40workspace%3A."
   peerDependencies:
     "@openzeppelin/merkle-tree": ">=1 <2"
     viem: ">=2 <3"
@@ -1085,7 +1085,7 @@ __metadata:
       optional: true
     viem:
       optional: true
-  checksum: 10c0/8f8c9b080ddb6a5ddf043f6d778f8fb1a7df8ab4e3aff4830176ac4b89c886668f94e6a31f8e0fad5b751a44d3e386bfc3e3586547305082432cd311e8ae65a1
+  checksum: 10c0/989ad1ec6ff7ab8d384768c4e9665a82b61102fea5a349ab56385b2a201a67d08931c3276fc7374ce6932c4c79f2cbc64682ad8a83969b8d565539962721fcf7
   languageName: node
   linkType: hard
 
@@ -2584,7 +2584,7 @@ __metadata:
     "@nomicfoundation/hardhat-viem": "npm:^2.0.6"
     "@openzeppelin/contracts": "npm:^5.2.0"
     "@openzeppelin/merkle-tree": "npm:^1.0.8"
-    "@swaps-io/flex-sdk": ./packages/swaps-io/flex-sdk/v1.0.0/flex-sdk-v1.0.0.tgz
+    "@swaps-io/flex-sdk": ./packages/swaps-io/flex-sdk/v1.0.1/flex-sdk-v1.0.1.tgz
     "@types/chai": "npm:^4.3.20"
     "@types/chai-as-promised": "npm:^7.1.8"
     "@types/mocha": "npm:^10.0.10"
