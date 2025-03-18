@@ -1074,18 +1074,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@swaps-io/flex-sdk@file:./packages/swaps-io/flex-sdk/v1.0.2/flex-sdk-v1.0.2.tgz::locator=flex-contracts%40workspace%3A.":
-  version: 1.0.2
-  resolution: "@swaps-io/flex-sdk@file:./packages/swaps-io/flex-sdk/v1.0.2/flex-sdk-v1.0.2.tgz#./packages/swaps-io/flex-sdk/v1.0.2/flex-sdk-v1.0.2.tgz::hash=c53cce&locator=flex-contracts%40workspace%3A."
+"@swaps-io/flex-sdk@file:./packages/swaps-io/flex-sdk/v1.0.3/flex-sdk-v1.0.3.tgz::locator=flex-contracts%40workspace%3A.":
+  version: 1.0.3
+  resolution: "@swaps-io/flex-sdk@file:./packages/swaps-io/flex-sdk/v1.0.3/flex-sdk-v1.0.3.tgz#./packages/swaps-io/flex-sdk/v1.0.3/flex-sdk-v1.0.3.tgz::hash=b6596c&locator=flex-contracts%40workspace%3A."
   peerDependencies:
-    "@openzeppelin/merkle-tree": ">=1 <2"
-    viem: ">=2 <3"
-  peerDependenciesMeta:
-    "@openzeppelin/merkle-tree":
-      optional: true
-    viem:
-      optional: true
-  checksum: 10c0/29f66931dabcc2835dcd9a3fa104022d6a2818510814428fc6c6bc6f3330bc5cad8f0b2ac301e64e64f4f798f3639acf4d9af70ffc5aab26a0fdd5009ff0477d
+    "@noble/hashes": ">=1 <2"
+  checksum: 10c0/e15b31121f005f5af53c7123b11a381691be0786826db633364d3bb283a88f8cdab5a8907c46b89736e0dfe71b8381d77d67c0059a7baa12e8485d4e669a5daf
   languageName: node
   linkType: hard
 
@@ -2584,7 +2578,7 @@ __metadata:
     "@nomicfoundation/hardhat-viem": "npm:^2.0.6"
     "@openzeppelin/contracts": "npm:^5.2.0"
     "@openzeppelin/merkle-tree": "npm:^1.0.8"
-    "@swaps-io/flex-sdk": ./packages/swaps-io/flex-sdk/v1.0.2/flex-sdk-v1.0.2.tgz
+    "@swaps-io/flex-sdk": ./packages/swaps-io/flex-sdk/v1.0.3/flex-sdk-v1.0.3.tgz
     "@types/chai": "npm:^4.3.20"
     "@types/chai-as-promised": "npm:^7.1.8"
     "@types/mocha": "npm:^10.0.10"
@@ -2596,7 +2590,7 @@ __metadata:
     solidity-coverage: "npm:^0.8.14"
     ts-node: "npm:^10.9.2"
     typescript: "npm:~5.8.2"
-    viem: "npm:^2.23.10"
+    viem: "npm:^2.23.12"
   languageName: unknown
   linkType: soft
 
@@ -5225,9 +5219,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"viem@npm:^2.23.10":
-  version: 2.23.10
-  resolution: "viem@npm:2.23.10"
+"viem@npm:^2.23.12":
+  version: 2.23.12
+  resolution: "viem@npm:2.23.12"
   dependencies:
     "@noble/curves": "npm:1.8.1"
     "@noble/hashes": "npm:1.7.1"
@@ -5242,7 +5236,7 @@ __metadata:
   peerDependenciesMeta:
     typescript:
       optional: true
-  checksum: 10c0/85f2f36ca586c5f6a0c50a052170b5c7a1a07fa7336fd0a1daa1fc627d9724202c66b3ddb7ccc76d6eb0f8402210ed154a74db942122cee44b1da778b366e07c
+  checksum: 10c0/4bed6d5266879ce49e4a4d3cbd8ef310505fb4c605e4ae59a539a7387ce2d7bfa7c5dcad2e3a5adb6fb282d547fb5a5efbf6aeb27042490384e864798aeb751d
   languageName: node
   linkType: hard
 
