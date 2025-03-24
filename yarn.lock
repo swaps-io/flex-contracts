@@ -1074,12 +1074,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@swaps-io/flex-sdk@file:./packages/swaps-io/flex-sdk/v1.0.3/flex-sdk-v1.0.3.tgz::locator=flex-contracts%40workspace%3A.":
-  version: 1.0.3
-  resolution: "@swaps-io/flex-sdk@file:./packages/swaps-io/flex-sdk/v1.0.3/flex-sdk-v1.0.3.tgz#./packages/swaps-io/flex-sdk/v1.0.3/flex-sdk-v1.0.3.tgz::hash=b6596c&locator=flex-contracts%40workspace%3A."
+"@swaps-io/flex-sdk@file:./packages/swaps-io/flex-sdk/v1.0.4/flex-sdk-v1.0.4.tgz::locator=flex-contracts%40workspace%3A.":
+  version: 1.0.4
+  resolution: "@swaps-io/flex-sdk@file:./packages/swaps-io/flex-sdk/v1.0.4/flex-sdk-v1.0.4.tgz#./packages/swaps-io/flex-sdk/v1.0.4/flex-sdk-v1.0.4.tgz::hash=52bf42&locator=flex-contracts%40workspace%3A."
   peerDependencies:
     "@noble/hashes": ">=1 <2"
-  checksum: 10c0/e15b31121f005f5af53c7123b11a381691be0786826db633364d3bb283a88f8cdab5a8907c46b89736e0dfe71b8381d77d67c0059a7baa12e8485d4e669a5daf
+  checksum: 10c0/46f1e4f46946c14f9630aab9419846b4ff972e46f21704b7feebef85fbd08f43096ffd45e154d96c4003908fa470bffce6b3d9c58448302627fbef3481a0c771
   languageName: node
   linkType: hard
 
@@ -1139,11 +1139,11 @@ __metadata:
   linkType: hard
 
 "@types/chai@npm:*":
-  version: 5.2.0
-  resolution: "@types/chai@npm:5.2.0"
+  version: 5.2.1
+  resolution: "@types/chai@npm:5.2.1"
   dependencies:
     "@types/deep-eql": "npm:*"
-  checksum: 10c0/7eda3feab531bded0e9be35ea165c05946cc683ef3c4e807fc27e073021e3751e9467ab1c38a2f6a10786f236593978bbdc02e48b3589265f28fdc4ceebe879d
+  checksum: 10c0/f8a03c9f8450b7ab8df11f658c4194be17a6316b870490d5ffaf5289a3c0c0591ed6291b2d6551e181887c3eed89d0490744b3e569d9b23cf611b05f93e775b6
   languageName: node
   linkType: hard
 
@@ -1208,12 +1208,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/node@npm:*, @types/node@npm:^22.13.10":
-  version: 22.13.10
-  resolution: "@types/node@npm:22.13.10"
+"@types/node@npm:*, @types/node@npm:^22.13.13":
+  version: 22.13.13
+  resolution: "@types/node@npm:22.13.13"
   dependencies:
     undici-types: "npm:~6.20.0"
-  checksum: 10c0/a3865f9503d6f718002374f7b87efaadfae62faa499c1a33b12c527cfb9fd86f733e1a1b026b80c5a0e4a965701174bc3305595a7d36078aa1abcf09daa5dee9
+  checksum: 10c0/daf792ba5dcff1316abf4b33680f94b792f8d54d6ae495efc8929531e0ba1284a248d29aab117d2259f9280284d986ad5799b193b0516e2b926d713aab835f7d
   languageName: node
   linkType: hard
 
@@ -1520,13 +1520,13 @@ __metadata:
   linkType: hard
 
 "axios@npm:^1.6.7":
-  version: 1.8.3
-  resolution: "axios@npm:1.8.3"
+  version: 1.8.4
+  resolution: "axios@npm:1.8.4"
   dependencies:
     follow-redirects: "npm:^1.15.6"
     form-data: "npm:^4.0.0"
     proxy-from-env: "npm:^1.1.0"
-  checksum: 10c0/de75da9859adf0a6481d4af2b687db357a054d20f0d69b99d502b71dae3578326b1fdc0951dabaef769827484941cda93d3f89150bf9e04f05f6615fb8316780
+  checksum: 10c0/450993c2ba975ffccaf0d480b68839a3b2435a5469a71fa2fb0b8a55cdb2c2ae47e609360b9c1e2b2534b73dfd69e2733a1cf9f8215bee0bcd729b72f801b0ce
   languageName: node
   linkType: hard
 
@@ -2424,8 +2424,8 @@ __metadata:
   linkType: hard
 
 "ethers@npm:^6.7.0":
-  version: 6.13.5
-  resolution: "ethers@npm:6.13.5"
+  version: 6.13.6
+  resolution: "ethers@npm:6.13.6"
   dependencies:
     "@adraffy/ens-normalize": "npm:1.10.1"
     "@noble/curves": "npm:1.2.0"
@@ -2434,7 +2434,7 @@ __metadata:
     aes-js: "npm:4.0.0-beta.5"
     tslib: "npm:2.7.0"
     ws: "npm:8.17.1"
-  checksum: 10c0/64bc7b8907de199392b8a88c15c9a085892919cff7efa2e5326abc7fe5c426001726c51d91e10c74e5fc5e2547188297ce4127f6e52ea42a97ade0b2ae474677
+  checksum: 10c0/e757b2995e1298396d120e9cb92a07c4308e93ea28eedb577d4e7a43b0b1cdf4be2460a6722294e42c1da9a9b1dddd9f2c885c9e6120fa845ccdd1b706e0ec04
   languageName: node
   linkType: hard
 
@@ -2578,11 +2578,11 @@ __metadata:
     "@nomicfoundation/hardhat-viem": "npm:^2.0.6"
     "@openzeppelin/contracts": "npm:^5.2.0"
     "@openzeppelin/merkle-tree": "npm:^1.0.8"
-    "@swaps-io/flex-sdk": ./packages/swaps-io/flex-sdk/v1.0.3/flex-sdk-v1.0.3.tgz
+    "@swaps-io/flex-sdk": ./packages/swaps-io/flex-sdk/v1.0.4/flex-sdk-v1.0.4.tgz
     "@types/chai": "npm:^4.3.20"
     "@types/chai-as-promised": "npm:^7.1.8"
     "@types/mocha": "npm:^10.0.10"
-    "@types/node": "npm:^22.13.10"
+    "@types/node": "npm:^22.13.13"
     chai: "npm:^4.5.0"
     hardhat: "npm:^2.22.19"
     hardhat-contract-sizer: "npm:^2.10.0"
@@ -2590,7 +2590,7 @@ __metadata:
     solidity-coverage: "npm:^0.8.14"
     ts-node: "npm:^10.9.2"
     typescript: "npm:~5.8.2"
-    viem: "npm:^2.23.12"
+    viem: "npm:^2.23.14"
   languageName: unknown
   linkType: soft
 
@@ -5112,11 +5112,11 @@ __metadata:
   linkType: hard
 
 "undici@npm:^5.14.0":
-  version: 5.28.5
-  resolution: "undici@npm:5.28.5"
+  version: 5.29.0
+  resolution: "undici@npm:5.29.0"
   dependencies:
     "@fastify/busboy": "npm:^2.0.0"
-  checksum: 10c0/4dfaa13089fe4c0758f84ec0d34b257e58608e6be3aa540f493b9864b39e3fdcd0a1ace38e434fe79db55f833aa30bcfddd8d6cbe3e0982b0dcae8ec17b65e08
+  checksum: 10c0/e4e4d631ca54ee0ad82d2e90e7798fa00a106e27e6c880687e445cc2f13b4bc87c5eba2a88c266c3eecffb18f26e227b778412da74a23acc374fca7caccec49b
   languageName: node
   linkType: hard
 
@@ -5219,9 +5219,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"viem@npm:^2.23.12":
-  version: 2.23.12
-  resolution: "viem@npm:2.23.12"
+"viem@npm:^2.23.14":
+  version: 2.23.14
+  resolution: "viem@npm:2.23.14"
   dependencies:
     "@noble/curves": "npm:1.8.1"
     "@noble/hashes": "npm:1.7.1"
@@ -5236,7 +5236,7 @@ __metadata:
   peerDependenciesMeta:
     typescript:
       optional: true
-  checksum: 10c0/4bed6d5266879ce49e4a4d3cbd8ef310505fb4c605e4ae59a539a7387ce2d7bfa7c5dcad2e3a5adb6fb282d547fb5a5efbf6aeb27042490384e864798aeb751d
+  checksum: 10c0/65859ec0d6fd0d3b766ddbcda808a4d251b614611685b7f90f7c0f401e589bd21d129bca869f62f77acf743dc0dd2b6a244eba5e3b8f7f7ddd2c0c5e9f8eaf4a
   languageName: node
   linkType: hard
 

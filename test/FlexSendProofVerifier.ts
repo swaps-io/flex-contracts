@@ -17,7 +17,7 @@ import {
   flexCalcSendNativeHash,
   flexCalcSendTokenHash,
   flexCalcTree,
-  flexEncodeSaveSendData,
+  flexEncodeSaveSendData0,
   flexEncodeSendAccumulatorData,
   flexEncodeSendBucketStateData,
   flexEncodeSendFailProof,
@@ -1050,7 +1050,7 @@ describe('FlexSendProofVerifier', function () {
         address: flex.address,
         functionName: 'flexSaveSend',
         args: [
-          flexEncodeSaveSendData({
+          flexEncodeSaveSendData0({
             group,
             sender,
             slot,
@@ -1177,7 +1177,7 @@ describe('FlexSendProofVerifier', function () {
         address: flex.address,
         functionName: 'flexSaveSend',
         args: [
-          flexEncodeSaveSendData({
+          flexEncodeSaveSendData0({
             group,
             sender,
             slot,
