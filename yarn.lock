@@ -421,10 +421,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@noble/ciphers@npm:1.2.1":
-  version: 1.2.1
-  resolution: "@noble/ciphers@npm:1.2.1"
-  checksum: 10c0/00e414da686ddba00f6e9bed124abb698bfe076658d40cc4e3b67b51fc7582fc3c2a7002ef33f154ea8cbf45e7783cfd48325cf3885d577ce8c0ae8bdd648069
+"@noble/ciphers@npm:1.3.0":
+  version: 1.3.0
+  resolution: "@noble/ciphers@npm:1.3.0"
+  checksum: 10c0/3ba6da645ce45e2f35e3b2e5c87ceba86b21dfa62b9466ede9edfb397f8116dae284f06652c0cd81d99445a2262b606632e868103d54ecc99fd946ae1af8cd37
   languageName: node
   linkType: hard
 
@@ -446,21 +446,21 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@noble/curves@npm:1.8.1":
-  version: 1.8.1
-  resolution: "@noble/curves@npm:1.8.1"
-  dependencies:
-    "@noble/hashes": "npm:1.7.1"
-  checksum: 10c0/84902c7af93338373a95d833f77981113e81c48d4bec78f22f63f1f7fdd893bc1d3d7a3ee78f01b9a8ad3dec812a1232866bf2ccbeb2b1560492e5e7d690ab1f
-  languageName: node
-  linkType: hard
-
-"@noble/curves@npm:^1.6.0, @noble/curves@npm:~1.8.1":
+"@noble/curves@npm:1.8.2, @noble/curves@npm:~1.8.1":
   version: 1.8.2
   resolution: "@noble/curves@npm:1.8.2"
   dependencies:
     "@noble/hashes": "npm:1.7.2"
   checksum: 10c0/e7ef119b114681d6b7530b29a21f9bbea6fa6973bc369167da2158d05054cc6e6dbfb636ba89fad7707abacc150de30188b33192f94513911b24bdb87af50bbd
+  languageName: node
+  linkType: hard
+
+"@noble/curves@npm:1.9.0, @noble/curves@npm:^1.6.0, @noble/curves@npm:~1.9.0":
+  version: 1.9.0
+  resolution: "@noble/curves@npm:1.9.0"
+  dependencies:
+    "@noble/hashes": "npm:1.8.0"
+  checksum: 10c0/a76d57444b4d136f43363eb19229d990df15a00fb0e2efbf08a7a4cbaee655f73e46eb29b6ad07b8749be5f7b890c0a7a06a19f4324a4b149b06b3da1def8593
   languageName: node
   linkType: hard
 
@@ -485,17 +485,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@noble/hashes@npm:1.7.1":
-  version: 1.7.1
-  resolution: "@noble/hashes@npm:1.7.1"
-  checksum: 10c0/2f8ec0338ccc92b576a0f5c16ab9c017a3a494062f1fbb569ae641c5e7eab32072f9081acaa96b5048c0898f972916c818ea63cbedda707886a4b5ffcfbf94e3
-  languageName: node
-  linkType: hard
-
-"@noble/hashes@npm:1.7.2, @noble/hashes@npm:^1.3.1, @noble/hashes@npm:^1.4.0, @noble/hashes@npm:^1.5.0, @noble/hashes@npm:~1.7.1":
+"@noble/hashes@npm:1.7.2, @noble/hashes@npm:~1.7.1":
   version: 1.7.2
   resolution: "@noble/hashes@npm:1.7.2"
   checksum: 10c0/b1411eab3c0b6691d847e9394fe7f1fcd45eeb037547c8f97e7d03c5068a499b4aef188e8e717eee67389dca4fee17d69d7e0f58af6c092567b0b76359b114b2
+  languageName: node
+  linkType: hard
+
+"@noble/hashes@npm:1.8.0, @noble/hashes@npm:^1.3.1, @noble/hashes@npm:^1.4.0, @noble/hashes@npm:^1.5.0, @noble/hashes@npm:~1.8.0":
+  version: 1.8.0
+  resolution: "@noble/hashes@npm:1.8.0"
+  checksum: 10c0/06a0b52c81a6fa7f04d67762e08b2c476a00285858150caeaaff4037356dd5e119f45b2a530f638b77a5eeca013168ec1b655db41bae3236cb2e9d511484fc77
   languageName: node
   linkType: hard
 
@@ -852,10 +852,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@scure/base@npm:^1.1.3, @scure/base@npm:~1.2.2, @scure/base@npm:~1.2.4":
-  version: 1.2.4
-  resolution: "@scure/base@npm:1.2.4"
-  checksum: 10c0/469c8aee80d6d6973e1aac6184befa04568f1b4016e40c889025f4a721575db9c1ca0c2ead80613896cce929392740322a18da585a427f157157e797dc0a42a9
+"@scure/base@npm:^1.1.3, @scure/base@npm:~1.2.2, @scure/base@npm:~1.2.4, @scure/base@npm:~1.2.5":
+  version: 1.2.5
+  resolution: "@scure/base@npm:1.2.5"
+  checksum: 10c0/078928dbcdd21a037b273b81b8b0bd93af8a325e2ffd535b7ccaadd48ee3c15bab600ec2920a209fca0910abc792cca9b01d3336b472405c407440e6c0aa8bd6
   languageName: node
   linkType: hard
 
@@ -888,7 +888,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@scure/bip32@npm:1.6.2, @scure/bip32@npm:^1.5.0":
+"@scure/bip32@npm:1.6.2":
   version: 1.6.2
   resolution: "@scure/bip32@npm:1.6.2"
   dependencies:
@@ -896,6 +896,17 @@ __metadata:
     "@noble/hashes": "npm:~1.7.1"
     "@scure/base": "npm:~1.2.2"
   checksum: 10c0/a0abd62d1fe34b4d90b84feb25fa064ad452fd51be9fd7ea3dcd376059c0e8d08d4fe454099030f43fb91a1bee85cd955f093f221bbc522178919f779fbe565c
+  languageName: node
+  linkType: hard
+
+"@scure/bip32@npm:1.7.0, @scure/bip32@npm:^1.5.0":
+  version: 1.7.0
+  resolution: "@scure/bip32@npm:1.7.0"
+  dependencies:
+    "@noble/curves": "npm:~1.9.0"
+    "@noble/hashes": "npm:~1.8.0"
+    "@scure/base": "npm:~1.2.5"
+  checksum: 10c0/e3d4c1f207df16abcd79babcdb74d36f89bdafc90bf02218a5140cc5cba25821d80d42957c6705f35210cc5769714ea9501d4ae34732cdd1c26c9ff182a219f7
   languageName: node
   linkType: hard
 
@@ -919,13 +930,23 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@scure/bip39@npm:1.5.4, @scure/bip39@npm:^1.4.0":
+"@scure/bip39@npm:1.5.4":
   version: 1.5.4
   resolution: "@scure/bip39@npm:1.5.4"
   dependencies:
     "@noble/hashes": "npm:~1.7.1"
     "@scure/base": "npm:~1.2.4"
   checksum: 10c0/0b398b8335b624c16dfb0d81b0e79f80f098bb98e327f1d68ace56636e0c56cc09a240ed3ba9c1187573758242ade7000260d65c15d3a6bcd95ac9cb284b450a
+  languageName: node
+  linkType: hard
+
+"@scure/bip39@npm:1.6.0, @scure/bip39@npm:^1.4.0":
+  version: 1.6.0
+  resolution: "@scure/bip39@npm:1.6.0"
+  dependencies:
+    "@noble/hashes": "npm:~1.8.0"
+    "@scure/base": "npm:~1.2.5"
+  checksum: 10c0/73a54b5566a50a3f8348a5cfd74d2092efeefc485efbed83d7a7374ffd9a75defddf446e8e5ea0385e4adb49a94b8ae83c5bad3e16333af400e932f7da3aaff8
   languageName: node
   linkType: hard
 
@@ -1018,12 +1039,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@swaps-io/flex-sdk@file:./packages/swaps-io/flex-sdk/v1.0.4/flex-sdk-v1.0.4.tgz::locator=flex-contracts%40workspace%3A.":
-  version: 1.0.4
-  resolution: "@swaps-io/flex-sdk@file:./packages/swaps-io/flex-sdk/v1.0.4/flex-sdk-v1.0.4.tgz#./packages/swaps-io/flex-sdk/v1.0.4/flex-sdk-v1.0.4.tgz::hash=52bf42&locator=flex-contracts%40workspace%3A."
+"@swaps-io/flex-sdk@file:./packages/swaps-io/flex-sdk/v1.1.0/flex-sdk-v1.1.0.tgz::locator=flex-contracts%40workspace%3A.":
+  version: 1.1.0
+  resolution: "@swaps-io/flex-sdk@file:./packages/swaps-io/flex-sdk/v1.1.0/flex-sdk-v1.1.0.tgz#./packages/swaps-io/flex-sdk/v1.1.0/flex-sdk-v1.1.0.tgz::hash=970fc4&locator=flex-contracts%40workspace%3A."
   peerDependencies:
     "@noble/hashes": ">=1 <2"
-  checksum: 10c0/46f1e4f46946c14f9630aab9419846b4ff972e46f21704b7feebef85fbd08f43096ffd45e154d96c4003908fa470bffce6b3d9c58448302627fbef3481a0c771
+  checksum: 10c0/559d158b820a250497f60f11dd92a42e268c732c3f672bff733c2c855207271fa31d8ea9efc245089f80e0a6c53236e17daaf8c88955cc07bbd349af5ed9504b
   languageName: node
   linkType: hard
 
@@ -1074,11 +1095,11 @@ __metadata:
   linkType: hard
 
 "@types/chai@npm:*":
-  version: 5.2.1
-  resolution: "@types/chai@npm:5.2.1"
+  version: 5.2.2
+  resolution: "@types/chai@npm:5.2.2"
   dependencies:
     "@types/deep-eql": "npm:*"
-  checksum: 10c0/f8a03c9f8450b7ab8df11f658c4194be17a6316b870490d5ffaf5289a3c0c0591ed6291b2d6551e181887c3eed89d0490744b3e569d9b23cf611b05f93e775b6
+  checksum: 10c0/49282bf0e8246800ebb36f17256f97bd3a8c4fb31f92ad3c0eaa7623518d7e87f1eaad4ad206960fcaf7175854bdff4cb167e4fe96811e0081b4ada83dd533ec
   languageName: node
   linkType: hard
 
@@ -1143,12 +1164,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/node@npm:*, @types/node@npm:22.14.1":
-  version: 22.14.1
-  resolution: "@types/node@npm:22.14.1"
+"@types/node@npm:*, @types/node@npm:22.15.12":
+  version: 22.15.12
+  resolution: "@types/node@npm:22.15.12"
   dependencies:
     undici-types: "npm:~6.21.0"
-  checksum: 10c0/d49c4d00403b1c2348cf0701b505fd636d80aabe18102105998dc62fdd36dcaf911e73c7a868c48c21c1022b825c67b475b65b1222d84b704d8244d152bb7f86
+  checksum: 10c0/b9c34f8089764edf229576e4b7d51681a4dfaf0893bf08cd884aec2e76a79a2a74d4ce114590a61cf4419e6818185730ed6165b015c5e552b4ad4444eb2f06db
   languageName: node
   linkType: hard
 
@@ -1440,13 +1461,13 @@ __metadata:
   linkType: hard
 
 "axios@npm:^1.6.7":
-  version: 1.8.4
-  resolution: "axios@npm:1.8.4"
+  version: 1.9.0
+  resolution: "axios@npm:1.9.0"
   dependencies:
     follow-redirects: "npm:^1.15.6"
     form-data: "npm:^4.0.0"
     proxy-from-env: "npm:^1.1.0"
-  checksum: 10c0/450993c2ba975ffccaf0d480b68839a3b2435a5469a71fa2fb0b8a55cdb2c2ae47e609360b9c1e2b2534b73dfd69e2733a1cf9f8215bee0bcd729b72f801b0ce
+  checksum: 10c0/9371a56886c2e43e4ff5647b5c2c3c046ed0a3d13482ef1d0135b994a628c41fbad459796f101c655e62f0c161d03883454474d2e435b2e021b1924d9f24994c
   languageName: node
   linkType: hard
 
@@ -1488,16 +1509,16 @@ __metadata:
   linkType: hard
 
 "bn.js@npm:^4.11.9":
-  version: 4.12.1
-  resolution: "bn.js@npm:4.12.1"
-  checksum: 10c0/b7f37a0cd5e4b79142b6f4292d518b416be34ae55d6dd6b0f66f96550c8083a50ffbbf8bda8d0ab471158cb81aa74ea4ee58fe33c7802e4a30b13810e98df116
+  version: 4.12.2
+  resolution: "bn.js@npm:4.12.2"
+  checksum: 10c0/09a249faa416a9a1ce68b5f5ec8bbca87fe54e5dd4ef8b1cc8a4969147b80035592bddcb1e9cc814c3ba79e573503d5c5178664b722b509fb36d93620dba9b57
   languageName: node
   linkType: hard
 
 "bn.js@npm:^5.1.2, bn.js@npm:^5.2.0, bn.js@npm:^5.2.1":
-  version: 5.2.1
-  resolution: "bn.js@npm:5.2.1"
-  checksum: 10c0/bed3d8bd34ec89dbcf9f20f88bd7d4a49c160fda3b561c7bb227501f974d3e435a48fb9b61bc3de304acab9215a3bda0803f7017ffb4d0016a0c3a740a283caa
+  version: 5.2.2
+  resolution: "bn.js@npm:5.2.2"
+  checksum: 10c0/cb97827d476aab1a0194df33cd84624952480d92da46e6b4a19c32964aa01553a4a613502396712704da2ec8f831cf98d02e74ca03398404bd78a037ba93f2ab
   languageName: node
   linkType: hard
 
@@ -2293,15 +2314,15 @@ __metadata:
   linkType: hard
 
 "ethereum-cryptography@npm:^3.0.0":
-  version: 3.1.0
-  resolution: "ethereum-cryptography@npm:3.1.0"
+  version: 3.2.0
+  resolution: "ethereum-cryptography@npm:3.2.0"
   dependencies:
-    "@noble/ciphers": "npm:1.2.1"
-    "@noble/curves": "npm:1.8.1"
-    "@noble/hashes": "npm:1.7.1"
-    "@scure/bip32": "npm:1.6.2"
-    "@scure/bip39": "npm:1.5.4"
-  checksum: 10c0/557f72f8680a3856836e88685266c9c81c2277839060b7b9d6eb1d87f9f9a85d10b44a482877f4638906149cae955841320bfbafbfaa9479a41fe3399a60e67c
+    "@noble/ciphers": "npm:1.3.0"
+    "@noble/curves": "npm:1.9.0"
+    "@noble/hashes": "npm:1.8.0"
+    "@scure/bip32": "npm:1.7.0"
+    "@scure/bip39": "npm:1.6.0"
+  checksum: 10c0/55e9d7378f6660045a5f0f659eab2d92b232f4288b8415ed243f23c5b65ee1ad868124b20bb4a7c45d99b212316f746423b0cf4cac946590e5ae91a4ac45d7b0
   languageName: node
   linkType: hard
 
@@ -2319,8 +2340,8 @@ __metadata:
   linkType: hard
 
 "ethers@npm:^6.7.0":
-  version: 6.13.6
-  resolution: "ethers@npm:6.13.6"
+  version: 6.13.7
+  resolution: "ethers@npm:6.13.7"
   dependencies:
     "@adraffy/ens-normalize": "npm:1.10.1"
     "@noble/curves": "npm:1.2.0"
@@ -2329,7 +2350,7 @@ __metadata:
     aes-js: "npm:4.0.0-beta.5"
     tslib: "npm:2.7.0"
     ws: "npm:8.17.1"
-  checksum: 10c0/e757b2995e1298396d120e9cb92a07c4308e93ea28eedb577d4e7a43b0b1cdf4be2460a6722294e42c1da9a9b1dddd9f2c885c9e6120fa845ccdd1b706e0ec04
+  checksum: 10c0/bb693e8714c6082ee2c1d2af8a209bbc10d83ca4a686de368e169bf1dc804e926be58280c4bdaf0c2e9a4d021317f0db694ecfa4040381728ca46d45427db2a7
   languageName: node
   linkType: hard
 
@@ -2463,11 +2484,11 @@ __metadata:
     "@nomicfoundation/hardhat-viem": "npm:2.0.6"
     "@openzeppelin/contracts": "npm:5.3.0"
     "@openzeppelin/merkle-tree": "npm:1.0.8"
-    "@swaps-io/flex-sdk": ./packages/swaps-io/flex-sdk/v1.0.4/flex-sdk-v1.0.4.tgz
+    "@swaps-io/flex-sdk": ./packages/swaps-io/flex-sdk/v1.1.0/flex-sdk-v1.1.0.tgz
     "@types/chai": "npm:4.3.20"
     "@types/chai-as-promised": "npm:7.1.8"
     "@types/mocha": "npm:10.0.10"
-    "@types/node": "npm:22.14.1"
+    "@types/node": "npm:22.15.12"
     chai: "npm:4.5.0"
     hardhat: "npm:2.23.0"
     hardhat-contract-sizer: "npm:2.10.0"
@@ -2475,7 +2496,7 @@ __metadata:
     solidity-coverage: "npm:0.8.15"
     ts-node: "npm:10.9.2"
     typescript: "npm:~5.8.3"
-    viem: "npm:2.27.2"
+    viem: "npm:2.29.0"
   languageName: unknown
   linkType: soft
 
@@ -3527,11 +3548,11 @@ __metadata:
   linkType: hard
 
 "micro-packed@npm:~0.7.2":
-  version: 0.7.2
-  resolution: "micro-packed@npm:0.7.2"
+  version: 0.7.3
+  resolution: "micro-packed@npm:0.7.3"
   dependencies:
-    "@scure/base": "npm:~1.2.2"
-  checksum: 10c0/0671f834b576a51a381ca8e98631459412de37c5265df7d26241a93c252a08a8483bc9d84834b0856476b535c85abd66b2b9437fcd865c19820d3ebf0cfa2e42
+    "@scure/base": "npm:~1.2.5"
+  checksum: 10c0/1fde48a96d8d5606d3298ff36717bf7483d6d59e2d96f50cb88727379127a4d52881f48e7e1ce0d4906b2711b1902fb04d2128576326ce4d07e171ac022a4c2d
   languageName: node
   linkType: hard
 
@@ -5065,12 +5086,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"viem@npm:2.27.2, viem@npm:^2.27.0":
-  version: 2.27.2
-  resolution: "viem@npm:2.27.2"
+"viem@npm:2.29.0, viem@npm:^2.27.0":
+  version: 2.29.0
+  resolution: "viem@npm:2.29.0"
   dependencies:
-    "@noble/curves": "npm:1.8.1"
-    "@noble/hashes": "npm:1.7.1"
+    "@noble/curves": "npm:1.8.2"
+    "@noble/hashes": "npm:1.7.2"
     "@scure/bip32": "npm:1.6.2"
     "@scure/bip39": "npm:1.5.4"
     abitype: "npm:1.0.8"
@@ -5082,7 +5103,7 @@ __metadata:
   peerDependenciesMeta:
     typescript:
       optional: true
-  checksum: 10c0/8265d47a9fa3a7f60a9971b2f03896f18b30561bdaf8744bc6588b7bae35acfa2b5af3a830147ae917ea1c57437adda7a126beb06b1b6d79f122529af146d30a
+  checksum: 10c0/0cc5c71fed5b8833cff69d875a472048969ca35054dc588445dcd0a2f23033d0b2c24e7af80d9cc823555bceece4f956adf2933870ae4e2126f4884d248aadb8
   languageName: node
   linkType: hard
 

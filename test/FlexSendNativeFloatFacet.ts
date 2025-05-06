@@ -11,6 +11,8 @@ import {
   flexCalcBranch,
   flexCalcSendAccumulatorHash,
   FLEX_UNALLOCATED_HASH,
+  FLEX_SEND_STATE_NONE,
+  FLEX_SEND_STATE_SENT,
 } from '@swaps-io/flex-sdk';
 
 const IMAGINARY_COMPONENTS = 3; // Implied in order, but not used here
@@ -34,9 +36,8 @@ describe('FlexSendNativeFloatFacet', function () {
   it('Should send native', async function () {
     const { publicClient, walletClient, resolverClient, flex } = await loadFixture(deployFixture);
 
-    const start = 123_456;
-    const duration = 4_000_000_000n;
-    const group = 0;
+    const deadline = 4_000_123_456n;
+    const nonce = 0n;
     const sender = resolverClient.account.address;
     const receiver = walletClient.account.address;
     const amount = 123_456_789n;
@@ -53,9 +54,8 @@ describe('FlexSendNativeFloatFacet', function () {
       sender,
       receiver,
       amount,
-      start,
-      duration,
-      group,
+      deadline,
+      nonce,
       skipAmountEmit,
     });
     const sendNativeFloatHash = flexCalcSendNativeFloatHash({
@@ -76,16 +76,16 @@ describe('FlexSendNativeFloatFacet', function () {
 
     let expectedSendHash: Hex;
     {
-      const time = await publicClient.readContract({
+      const state = await publicClient.readContract({
         abi: flex.abi,
         address: flex.address,
-        functionName: 'flexSendTime',
+        functionName: 'flexSendState',
         args: [
           sender,
-          group,
+          nonce,
         ],
       });
-      expect(time).equal(0);
+      expect(state).equal(FLEX_SEND_STATE_NONE);
 
       expectedSendHash = FLEX_UNALLOCATED_HASH;
 
@@ -95,7 +95,7 @@ describe('FlexSendNativeFloatFacet', function () {
         functionName: 'flexSendHash',
         args: [
           sender,
-          group,
+          nonce,
         ],
       });
       expect(hash).equal(expectedSendHash);
@@ -155,21 +155,20 @@ describe('FlexSendNativeFloatFacet', function () {
     }
 
     {
-      const time = await publicClient.readContract({
+      const state = await publicClient.readContract({
         abi: flex.abi,
         address: flex.address,
-        functionName: 'flexSendTime',
+        functionName: 'flexSendState',
         args: [
           sender,
-          group,
+          nonce,
         ],
       });
-      expect(time).equal(start);
+      expect(state).equal(FLEX_SEND_STATE_SENT);
 
       expectedSendHash = flexCalcSendAccumulatorHash({
         hashBefore: expectedSendHash,
         orderHash,
-        start,
       });
 
       const hash = await publicClient.readContract({
@@ -178,7 +177,7 @@ describe('FlexSendNativeFloatFacet', function () {
         functionName: 'flexSendHash',
         args: [
           sender,
-          group,
+          nonce,
         ],
       });
       expect(hash).equal(expectedSendHash);
@@ -189,9 +188,8 @@ describe('FlexSendNativeFloatFacet', function () {
         sender,
         receiver,
         amount,
-        start: start - 1, // Note - bad start
-        duration,
-        group,
+        deadline,
+        nonce, // Note - bad nonce (already used)
         skipAmountEmit,
       });
       const newSendNativeFloatHash = flexCalcSendNativeFloatHash({
@@ -216,7 +214,7 @@ describe('FlexSendNativeFloatFacet', function () {
           value: actualAmount,
         }),
       ).rejectedWith(
-        'FlexChronologyError()', // Start time less than previous order in group is not allowed
+        'FlexStateError()', // Nonce is already in "sent" state
       );
     }
 
@@ -228,9 +226,8 @@ describe('FlexSendNativeFloatFacet', function () {
         sender,
         receiver,
         amount,
-        start: start + 1, // Note - new start
-        duration,
-        group,
+        deadline,
+        nonce: nonce + 1n, // Note - new nonce
         skipAmountEmit,
       });
       const newSendNativeFloatHash = flexCalcSendNativeFloatHash({
@@ -294,21 +291,20 @@ describe('FlexSendNativeFloatFacet', function () {
     }
 
     {
-      const time = await publicClient.readContract({
+      const state = await publicClient.readContract({
         abi: flex.abi,
         address: flex.address,
-        functionName: 'flexSendTime',
+        functionName: 'flexSendState',
         args: [
           sender,
-          group,
+          nonce + 1n,
         ],
       });
-      expect(time).equal(start + 1);
+      expect(state).equal(FLEX_SEND_STATE_SENT);
 
       expectedSendHash = flexCalcSendAccumulatorHash({
         hashBefore: expectedSendHash,
         orderHash: newOrderHash,
-        start: start + 1,
       });
 
       const hash = await publicClient.readContract({
@@ -317,7 +313,7 @@ describe('FlexSendNativeFloatFacet', function () {
         functionName: 'flexSendHash',
         args: [
           sender,
-          group,
+          nonce,
         ],
       });
       expect(hash).equal(expectedSendHash);

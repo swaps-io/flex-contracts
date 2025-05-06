@@ -7,9 +7,10 @@ import {
   flexEncodeAllocateSendData0,
   FLEX_UNALLOCATED_HASH,
   FLEX_ALLOCATED_HASH,
+  FLEX_SEND_NONCES_PER_BUCKET,
 } from '@swaps-io/flex-sdk';
 
-const TOTAL_ALLOCATE_BUCKETS = 5;
+const TOTAL_ALLOCATE_BUCKETS = 5n;
 
 describe('FlexAllocateSendFacet', function () {
   async function deployFixture() {
@@ -35,43 +36,48 @@ describe('FlexAllocateSendFacet', function () {
     const { publicClient, walletClient, flex } = await loadFixture(deployFixture);
 
     const sender = '0xdeadbeefdeadbeefdeadbeefdeadbeefdeadbeef';
-    const startGroup = 3; // Included
+    const startNonce = 3n * FLEX_SEND_NONCES_PER_BUCKET + 5n;
     const totalBuckets = TOTAL_ALLOCATE_BUCKETS;
 
-    const endGroup = startGroup + totalBuckets; // Excluded
+    const startBucket = startNonce / FLEX_SEND_NONCES_PER_BUCKET; // Included
+    const endBucket = startBucket + totalBuckets; // Excluded
 
     const allocateData0 = flexEncodeAllocateSendData0({
       sender,
-      startGroup,
+      startNonce,
       totalBuckets,
     });
 
-    async function readSendHash(group: number): Promise<Hex> {
+    async function readSendHash(nonce: bigint): Promise<Hex> {
       const hash = await publicClient.readContract({
         abi: flex.abi,
         address: flex.address,
         functionName: 'flexSendHash',
         args: [
           sender,
-          group,
+          nonce,
         ],
       });
       return hash;
     }
 
+
     {
       {
-        const hash = await readSendHash(startGroup - 1);
+        const nonce = (startBucket - 1n) * FLEX_SEND_NONCES_PER_BUCKET;
+        const hash = await readSendHash(nonce);
         expect(hash).equal(FLEX_UNALLOCATED_HASH);
       }
 
-      for (let group = startGroup; group < endGroup; group++) {
-        const hash = await readSendHash(group);
+      for (let i = startBucket; i < endBucket; i++) {
+        const nonce = i * FLEX_SEND_NONCES_PER_BUCKET;
+        const hash = await readSendHash(nonce);
         expect(hash).equal(FLEX_UNALLOCATED_HASH);
       }
 
       {
-        const hash = await readSendHash(endGroup);
+        const nonce = endBucket * FLEX_SEND_NONCES_PER_BUCKET;
+        const hash = await readSendHash(nonce);
         expect(hash).equal(FLEX_UNALLOCATED_HASH);
       }
     }
@@ -92,17 +98,20 @@ describe('FlexAllocateSendFacet', function () {
 
     {
       {
-        const hash = await readSendHash(startGroup - 1);
+        const nonce = (startBucket - 1n) * FLEX_SEND_NONCES_PER_BUCKET;
+        const hash = await readSendHash(nonce);
         expect(hash).equal(FLEX_UNALLOCATED_HASH);
       }
 
-      for (let group = startGroup; group < endGroup; group++) {
-        const hash = await readSendHash(group);
+      for (let i = startBucket; i < endBucket; i++) {
+        const nonce = i * FLEX_SEND_NONCES_PER_BUCKET;
+        const hash = await readSendHash(nonce);
         expect(hash).equal(FLEX_ALLOCATED_HASH);
       }
 
       {
-        const hash = await readSendHash(endGroup);
+        const nonce = endBucket * FLEX_SEND_NONCES_PER_BUCKET;
+        const hash = await readSendHash(nonce);
         expect(hash).equal(FLEX_UNALLOCATED_HASH);
       }
     }

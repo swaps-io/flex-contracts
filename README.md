@@ -471,7 +471,7 @@ Flex SDK provides `flexCalcAccumulatorHash({ hashBefore, hashToAdd })` function 
 accumulator state. There are more component-specific accumulator functions as well:
 
 - `flexCalcReceiveAccumulatorHash({ hashBefore, orderHash })` - for receive components
-- `flexCalcSendAccumulatorHash({ hashBefore, orderHash, start })` - for send components
+- `flexCalcSendAccumulatorHash({ hashBefore, orderHash })` - for send components
 
 ### Accumulator Branch
 

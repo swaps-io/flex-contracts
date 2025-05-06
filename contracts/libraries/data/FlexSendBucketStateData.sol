@@ -2,16 +2,18 @@
 
 pragma solidity ^0.8.26;
 
+import {FlexSendState} from "../../interfaces/enums/FlexSendState.sol";
+
 library FlexSendBucketStateData {
     // Content:
-    // - bucket state: hash (160), <unused> (48), time (48)
+    // - bucket state: hash (160), state (1) [x96]
 
     function readHash(bytes32 bucketState_) internal pure returns (bytes20) {
         return bytes20(bucketState_);
     }
 
-    function readTime(bytes32 bucketState_) internal pure returns (uint48) {
-        return uint48(uint256(bucketState_));
+    function readState(bytes32 bucketState_, uint8 offset_) internal pure returns (FlexSendState) {
+        return FlexSendState((uint256(bucketState_) >> offset_) & 1);
     }
 
     //
@@ -20,13 +22,7 @@ library FlexSendBucketStateData {
         return bytes32(uint256(uint96(uint256(bucketState_)))) | hash_;
     }
 
-    function writeTime(bytes32 bucketState_, uint48 time_) internal pure returns (bytes32) {
-        return bytes26(bucketState_) | bytes32(uint256(time_));
-    }
-
-    //
-
-    function make(bytes20 hash_, uint48 time_) internal pure returns (bytes32) {
-        return hash_ | bytes32(uint256(time_));
+    function writeStateSent(bytes32 bucketState_, uint8 offset_) internal pure returns (bytes32) {
+        return bucketState_ | bytes32(1 << offset_);
     }
 }

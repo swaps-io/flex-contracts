@@ -2,16 +2,16 @@
 
 pragma solidity ^0.8.26;
 
-import {IFlexSendHash} from "../../interfaces/views/IFlexSendHash.sol";
+import {IFlexSendState, FlexSendState} from "../../interfaces/views/IFlexSendState.sol";
 
 import {FlexSendBucketStateData} from "../../libraries/data/FlexSendBucketStateData.sol";
 
 import {FlexSendStateBucket} from "../../libraries/storages/FlexSendStateBucket.sol";
 import {FlexSendStateStorage} from "../../libraries/storages/FlexSendStateStorage.sol";
 
-contract FlexSendHashFacet is IFlexSendHash {
-    function flexSendHash(address sender_, uint96 nonce_) external view override returns (bytes20) {
+contract FlexSendStateFacet is IFlexSendState {
+    function flexSendState(address sender_, uint96 nonce_) external view override returns (FlexSendState) {
         bytes32 bucketState = FlexSendStateStorage.data()[FlexSendStateBucket.calcBucket(sender_, nonce_)];
-        return FlexSendBucketStateData.readHash(bucketState);
+        return FlexSendBucketStateData.readState(bucketState, FlexSendStateBucket.calcOffset(nonce_));
     }
 }

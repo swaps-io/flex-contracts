@@ -2,4 +2,7 @@
 
 pragma solidity ^0.8.26;
 
-error FlexChronologyError();
+enum FlexSendState {
+    None,
+    Sent
+}

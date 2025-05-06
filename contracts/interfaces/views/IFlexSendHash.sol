@@ -3,5 +3,5 @@
 pragma solidity ^0.8.26;
 
 interface IFlexSendHash {
-    function flexSendHash(address sender, uint48 group) external view returns (bytes20);
+    function flexSendHash(address sender, uint96 nonce) external view returns (bytes20);
 }

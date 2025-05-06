@@ -6,7 +6,7 @@ import {SafeERC20, IERC20} from "@openzeppelin/contracts/token/ERC20/utils/SafeE
 
 import {IFlexSendToken} from "../interfaces/IFlexSendToken.sol";
 
-import {FlexSendPeriodConstraint} from "../libraries/constraints/FlexSendPeriodConstraint.sol";
+import {FlexDeadlineConstraint} from "../libraries/constraints/FlexDeadlineConstraint.sol";
 
 import {FlexSendData} from "../libraries/data/FlexSendData.sol";
 
@@ -19,13 +19,12 @@ contract FlexSendTokenFacet is IFlexSendToken {
     bytes8 private immutable _domain = FlexDomain.calc(IFlexSendToken.flexSendToken.selector);
 
     function flexSendToken(bytes32 sendData1_, bytes32 sendData2_, bytes32 sendData3_, bytes32[] calldata orderBranch_) external override {
-        uint48 start = FlexSendData.readStart(sendData1_);
-        FlexSendPeriodConstraint.validate(start, FlexSendData.readDuration(sendData1_));
+        FlexDeadlineConstraint.validate(FlexSendData.readDeadline(sendData1_));
 
         bytes32 orderHash = FlexEfficientHash.calc(FlexSendData.make0(_domain, msg.sender), sendData1_, sendData2_, sendData3_);
         orderHash = FlexHashTree.calcBranch(orderBranch_, orderHash);
 
-        FlexSendStateUpdate.toSent(msg.sender, FlexSendData.readGroup(sendData1_), start, orderHash);
+        FlexSendStateUpdate.toSent(msg.sender, FlexSendData.readNonce(sendData1_), orderHash);
 
         SafeERC20.safeTransferFrom(IERC20(FlexSendData.readToken(sendData3_)), msg.sender, FlexSendData.readReceiver(sendData1_), FlexSendData.readAmount(sendData2_));
     }
