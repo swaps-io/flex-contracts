@@ -22,7 +22,7 @@ library FlexSendBucketStateData {
         return bytes32(uint256(uint96(uint256(bucketState_)))) | hash_;
     }
 
-    function writeState(bytes32 bucketState_, uint8 offset_) internal pure returns (bytes32) {
+    function writeStateSent(bytes32 bucketState_, uint8 offset_) internal pure returns (bytes32) {
         return bucketState_ | bytes32(1 << offset_);
     }
 }

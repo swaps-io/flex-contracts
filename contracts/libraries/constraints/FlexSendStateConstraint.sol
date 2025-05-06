@@ -7,7 +7,7 @@ import {FlexStateError} from "../../interfaces/errors/FlexStateError.sol";
 import {FlexSendBucketStateData, FlexSendState} from "../data/FlexSendBucketStateData.sol";
 
 library FlexSendStateConstraint {
-    function validate(bytes32 bucketState_, uint8 offset_) internal pure {
-        require(FlexSendBucketStateData.readState(bucketState_, offset_) == FlexSendState.None, FlexStateError());
+    function validate(bytes32 bucketState_, uint8 offset_, FlexSendState state_) internal pure {
+        require(FlexSendBucketStateData.readState(bucketState_, offset_) == state_, FlexStateError());
     }
 }
