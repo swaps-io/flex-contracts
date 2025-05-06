@@ -57,20 +57,15 @@ const config: HardhatUserConfig = {
       'contracts/facets/FlexSendTokenFloatFacet.sol',
       'contracts/facets/views/domains/FlexSendTokenFloatDomainFacet.sol',
 
-      'contracts/facets/views/FlexSendTimeFacet.sol',
+      'contracts/facets/views/FlexSendStateFacet.sol',
       'contracts/facets/views/FlexSendHashFacet.sol',
 
       'contracts/facets/FlexAllocateReceiveFacet.sol',
       'contracts/facets/FlexAllocateSendFacet.sol',
 
-      'contracts/facets/FlexSaveSendFacet.sol',
-      'contracts/facets/views/FlexSendSaveFacet.sol',
-
       'contracts/facets/views/FlexProofVerifierFacet.sol',
 
       'contracts/standalone/FlexStandalone.sol',
-
-      'contracts/proofs/send/FlexSendProofVerifier.sol',
     ],
   },
   gasReporter: {
