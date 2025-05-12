@@ -65,6 +65,10 @@ const config: HardhatUserConfig = {
 
       'contracts/facets/views/FlexProofVerifierFacet.sol',
 
+      'contracts/facets/FlexSwapNativeToTokenFacet.sol',
+      'contracts/facets/FlexSwapTokenToNativeFacet.sol',
+      'contracts/facets/FlexSwapTokenToTokenFacet.sol',
+
       'contracts/standalone/FlexStandalone.sol',
     ],
   },
