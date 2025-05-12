@@ -8,7 +8,7 @@ import {MessageHashUtils} from "@openzeppelin/contracts/utils/cryptography/Messa
 import {FlexSignatureError} from "../../interfaces/errors/FlexSignatureError.sol";
 
 library FlexSignatureConstraint {
-    function validate(uint256 flags_, address signer_, bytes32 hash_, bytes calldata signature_) internal view {
+    function validate(uint256 flags_, address signer_, bytes32 hash_, bytes memory signature_) internal view {
         if (flags_ & 1 == 0) { // Flag #0 - validate as contract signature
             if (flags_ & 2 == 0) hash_ = MessageHashUtils.toEthSignedMessageHash(hash_); // Flag #1 - no message signature wrap
             (address recovered, ECDSA.RecoverError err,) = ECDSA.tryRecover(hash_, signature_);
